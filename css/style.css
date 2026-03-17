@@ -1,4 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
 body {
+font-family: 'Patrick Hand', cursive;
+    color: #f7d117;
+  -webkit-text-stroke: 6px black; 
+  paint-order: stroke fill; 
+  
+  text-shadow: 4px 4px 0 rgba(0,0,0,0.5); 
+  letter-spacing: 1px;
+
   margin: 0;
   padding: 0;
   background-color: green;
@@ -53,8 +64,8 @@ header {
   align-items: center;
 }
 
- 
-.power-btn{
+
+.power-btn {
   height: 80%;
   width: 80%;
   background-color: green;
@@ -68,8 +79,8 @@ header {
   height: 60%;
   border: 6px solid white;
   border-radius: 50%;
-  border-top-color: transparent; 
-  
+  border-top-color: transparent;
+
   position: relative;
   display: inline-block;
 }
