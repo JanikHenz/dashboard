@@ -1,22 +1,60 @@
 body {
-  display: block;
-  margin: 0rem;
+  margin: 0;
+  padding: 0;
   background-color: green;
 }
 
-.header > div {
+.header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: purple;
+}
+
+#main {
+  background-color: red;
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+#power {
+  background-color: blue;
+  width: 20rem;
+  height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: red;
+  clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 2rem 100%, 0% calc(100% - 2rem));
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
-.header #main{
-  height: 10rem;
+.content {
+  background-color: whitesmoke;
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.header #power {
-  width: 30rem;
-  height: 12rem;
+.apps {
+  background-color: yellow;
+  width: 100%;
+  max-width: 60rem;
+  min-height: 40vh;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
-
