@@ -9,3 +9,6 @@ This Repo contains a self programed dashboard for my homelab.
 - Implement monitoring on Kubernetes
 
 
+header mit main-header und da mit clippath und grid arbeiten fuer den oberen controlpanel
+
+main mit applications und da flex oder grid verwenden (damit man spaeter noch apps hinzufuegen kann.)
