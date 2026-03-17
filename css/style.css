@@ -1,0 +1,22 @@
+body {
+  display: block;
+  margin: 0rem;
+  background-color: green;
+}
+
+.header > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+}
+
+.header #main{
+  height: 10rem;
+}
+
+.header #power {
+  width: 30rem;
+  height: 12rem;
+}
+
