@@ -17,14 +17,14 @@ header {
   background-color: lightslategrey;
   width: 100%;
   height: 100%;
-clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65%, 0% 65%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65%, 0% 65%);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
 
 
-.timer{
+.timer {
   height: 65%;
   justify-self: start;
   display: flex;
@@ -33,7 +33,7 @@ clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65
   font-size: 2vw;
 }
 
-.mode{
+.mode {
   height: 65%;
   justify-self: right;
   display: flex;
@@ -48,7 +48,7 @@ clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65
   font-size: 2vw;
 }
 
-main{
+main {
   background-color: whitesmoke;
   width: 100%;
   flex-grow: 1;
@@ -59,20 +59,29 @@ main{
 
 .apps {
   background-color: yellow;
-  width: 80%;
-  margin-top: 6rem;
+  margin: 6rem auto auto auto;
+  width: fit-content;
+  max-width: 80vw;
+  gap: 2rem;
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+
 }
 
-.app{
+.app {
   background-color: burlywood;
-  max-width: 80%;
-  width: 20%;
+  min-width: 15rem;
   height: 20rem;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.icon{
+.icon {
   background-color: black;
+  width: 10rem;
+  height: 10rem;
 }
