@@ -2,53 +2,56 @@ body {
   margin: 0;
   padding: 0;
   background-color: green;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  height: 9vw;
+  background-color: whitesmoke;
 }
 
 .header {
-  position: relative;
+  background-color: lightslategrey;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: purple;
+  height: 100%;
+clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65%, 0% 65%);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-#main {
-  background-color: red;
-  height: 10vh;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1;
-}
+
 
 .timer{
-  margin-left: 2rem;
+  height: 65%;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  margin-left: 1vw;
+  font-size: 2vw;
 }
 
 .mode{
-  margin-right: 2rem;
-}
-
-#power {
-  background-color: blue;
-  width: 20rem;
-  height: 15vh;
+  height: 65%;
+  justify-self: right;
   display: flex;
-  justify-content: center;
   align-items: center;
-  clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 2rem), calc(100% - 2rem) 100%, 2rem 100%, 0% calc(100% - 2rem));
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+  margin-right: 1vw;
+  font-size: 2vw;
 }
 
-.content {
+.power {
+  justify-self: center;
+  align-self: center;
+  font-size: 2vw;
+}
+
+main{
   background-color: whitesmoke;
-  min-height: 90vh;
   width: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,17 +59,18 @@ body {
 
 .apps {
   background-color: yellow;
-  width: 100%;
-  max-width: 100rem;
-  min-height: 70vh;
+  width: 80%;
   margin-top: 6rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .app{
   background-color: burlywood;
+  max-width: 80%;
+  width: 20%;
+  height: 20rem;
+
 }
 
 .icon{
