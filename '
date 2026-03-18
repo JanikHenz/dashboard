@@ -16,7 +16,7 @@
 button {
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
-  border-radius: 20px;
+  border-radius: 20px 20px 20px 20px;
   transition: transform 0.1s ease;
 }
 
@@ -31,15 +31,16 @@ body {
   color: #f7d117;
   -webkit-text-stroke: 6px black;
   paint-order: stroke fill;
+
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
   letter-spacing: 1px;
+
   margin: 0;
   padding: 0;
   background-color: green;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 header {
@@ -48,13 +49,8 @@ header {
   background-color: lightslategrey;
 }
 
-.shadow {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.4));
-}
 
-.border {
+.border{
   background-color: black;
   width: 100%;
   height: 100%;
@@ -64,19 +60,12 @@ header {
 .header {
   background-color: lightslategrey;
   width: 100%;
-  height: 100%;
-  clip-path: polygon(
-    4px              4px,
-    calc(100% - 4px) 4px,
-    calc(100% - 4px) calc(65% - 4px),
-    calc(60% + 2px)  calc(65% - 4px),
-    55%              calc(100% - 4px),
-    45%              calc(100% - 4px),
-    calc(40% - 2px)  calc(65% - 4px),
-    4px              calc(65% - 4px)
-  );
+  height: 95%;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 60% 60%, 55% 95%, 45% 95%, 40% 60%, 0% 60%);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
 }
 
 .timer {
@@ -110,6 +99,7 @@ header {
   align-items: center;
 }
 
+
 .power-btn {
   height: 80%;
   width: 80%;
@@ -125,6 +115,7 @@ header {
   border: 6px solid white;
   border-radius: 50%;
   border-top-color: transparent;
+
   position: relative;
   display: inline-block;
 }
@@ -142,7 +133,7 @@ header {
 }
 
 main {
-  background-color: lightslategrey;
+  background-color:  lightslategrey;
   width: 100%;
   flex-grow: 1;
   display: flex;
@@ -157,9 +148,8 @@ main {
   grid-template-columns: repeat(auto-fit, 15rem);
   gap: 4rem;
   width: fit-content;
-  max-width: 100%;
+  max-width: calc(100vw - 4rem);
   padding: 4rem;
-  box-sizing: border-box;
 }
 
 .app {
@@ -172,7 +162,7 @@ main {
   align-items: center;
 }
 
-.appinfo {
+.appinfo{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
@@ -180,7 +170,7 @@ main {
   max-height: 20%;
 }
 
-.status {
+.status{
   height: 1rem;
   width: 1rem;
   border-radius: 50%;
@@ -196,6 +186,6 @@ main {
   margin: 1rem;
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--neg-shadow);
-  border-radius: 20px;
+  border-radius: 20px 20px 20px 20px;
   transition: transform 0.1s ease;
 }
