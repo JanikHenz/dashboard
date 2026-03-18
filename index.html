@@ -14,7 +14,6 @@
       <div class="border">
         <div class="header">
           <div class="timer">
-
             <div class="segment">
               <!-- DAYS -->
               <div class="group">
@@ -23,9 +22,7 @@
                   <div class="digit" id="d1"></div>
                 </div>
               </div>
-
               <div class="separator">:</div>
-
               <!-- HOURS -->
               <div class="group">
                 <div class="digits">
@@ -33,9 +30,7 @@
                   <div class="digit" id="h1"></div>
                 </div>
               </div>
-
               <div class="separator">:</div>
-
               <!-- MINUTES -->
               <div class="group">
                 <div class="digits">
@@ -167,14 +162,12 @@
       });
     }
 
-    // Statische Zeit: 23d 12h 44m
-    renderDigit(document.getElementById('d0'), 2);
-    renderDigit(document.getElementById('d1'), 3);
-
+    // statische Zeit z.B. 12:34
+    renderDigit(document.getElementById('d0'), 1);
+    renderDigit(document.getElementById('d1'), 2);
     renderDigit(document.getElementById('h0'), 1);
     renderDigit(document.getElementById('h1'), 2);
-
-    renderDigit(document.getElementById('m0'), 4);
+    renderDigit(document.getElementById('m0'), 3);
     renderDigit(document.getElementById('m1'), 4);
   </script>
 </body>

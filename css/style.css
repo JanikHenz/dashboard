@@ -11,8 +11,8 @@
 
   --on:  #f7d117;
   --off: rgba(247, 209, 23, 0.08);
-  --seg-w: 0.3vw;
-  --seg-l: 1.8vw;
+  --seg-w: 0.4vw;
+  --seg-l: 1.6vw;
   --gap: 0.1vw;
   --digit-w: calc(var(--seg-l) + var(--seg-w) * 2 + var(--gap) * 2);
   --digit-h: calc(var(--seg-l) * 2 + var(--seg-w) * 3 + var(--gap) * 4);
@@ -88,7 +88,7 @@ header {
 }
 
 .timer{
-  max-width: 50%;
+  max-width: 90%;
   height: 65%;
   justify-self: start;
   display: flex;
@@ -297,7 +297,7 @@ main {
   position: relative;
   height: var(--digit-h);
   margin: var(--gap);
-  aspect-ratio: 1/5;
+  aspect-ratio: 1/2;
 }
 
 .seg {
