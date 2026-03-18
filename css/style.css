@@ -9,7 +9,7 @@
   --comic-font: 'Patrick Hand', cursive;
   --neg-shadow: inset 8px 8px 0px rgba(0, 0, 0, 0.2);
 
-  --on:  #f7d117;
+  --on: #f7d117;
   --off: rgba(247, 209, 23, 0.08);
   --seg-w: 0.4vw;
   --seg-l: 1.6vw;
@@ -52,7 +52,7 @@ body {
 
 header {
   width: 100%;
-  height: clamp(13vh, 12vw, 12vw );
+  height: clamp(13vh, 12vw, 12vw);
   background-color: lightslategrey;
 }
 
@@ -73,27 +73,25 @@ header {
   background-color: rgb(93, 106, 119);
   width: 100%;
   height: 100%;
-  clip-path: polygon(
-    4px              4px,
-    calc(100% - 4px) 4px,
-    calc(100% - 4px) calc(65% - 4px),
-    calc(60% + 2px)  calc(65% - 4px),
-    55%              calc(100% - 4px),
-    45%              calc(100% - 4px),
-    calc(40% - 2px)  calc(65% - 4px),
-    4px              calc(65% - 4px)
-  );
+  clip-path: polygon(4px 4px,
+      calc(100% - 4px) 4px,
+      calc(100% - 4px) calc(65% - 4px),
+      calc(60% + 2px) calc(65% - 4px),
+      55% calc(100% - 4px),
+      45% calc(100% - 4px),
+      calc(40% - 2px) calc(65% - 4px),
+      4px calc(65% - 4px));
   display: grid;
   grid-template-columns: 1fr auto 1fr;
 }
 
-.timer{
+.timer {
   max-width: 90%;
   height: 65%;
   justify-self: start;
   display: flex;
   align-items: center;
-  margin-left: clamp(1vw, 2vw, 2vw );
+  margin-left: clamp(1vw, 2vw, 2vw);
 }
 
 .segment {
@@ -111,11 +109,69 @@ header {
 
 .mode {
   height: 65%;
+  aspect-ratio: 1;
   justify-self: right;
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-right: clamp(1vw, 2vw, 2vw );
-  font-size: clamp(2vh, 2vw, 2vw );
+  margin-right: clamp(1vw, 2vw, 2vw);
+  font-size: clamp(2vh, 2vw, 2vw);
+  position: relative;
+}
+
+
+.sign {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  background: conic-gradient(var(--simpson-blue) 0deg 90deg,
+      transparent 90deg 270deg,
+      var(--simpson-yellow) 270deg 360deg);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  display: flex;
+  justify-content: space-between;
+  padding: 5% 20%;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.icon-sun {
+  font-size: 50%;
+  text-shadow: none;
+  z-index: 5;
+}
+
+.icon-moon {
+  font-size: 50%;
+  text-shadow: none;
+  z-index: 5;
+}
+
+.drehteil {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  border-radius: 50%;
+  background-color: rgb(135, 148, 161);
+  border: var(--outline-width) solid var(--outline-color);
+  z-index: 10;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-style: preserve-3d;
+}
+
+.spitze {
+  position: absolute;
+  top: -50%;
+  height: 100%;
+  aspect-ratio: 1;
+
+  background-color: red;
+  clip-path: polygon(50% 0%, 55% 80%, 45% 80%);
+  transform: translateZ(-1px);
 }
 
 .power {
@@ -170,7 +226,7 @@ main {
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  max-height: calc(100vh - clamp(13vh, 9vw, 9vw ));
+  max-height: calc(100vh - clamp(13vh, 9vw, 9vw));
 }
 
 .apps {
@@ -184,11 +240,11 @@ main {
   gap: 4rem;
   justify-content: center;
 }
- 
+
 .apps-inner {
   display: contents;
 }
- 
+
 .app {
   background-color: rgb(74, 85, 88);
   width: 15rem;
@@ -229,7 +285,7 @@ main {
   transition: transform 0.1s ease;
 }
 
-.hint{
+.hint {
   background-color: transparent;
   border: none;
   display: flex;
@@ -247,9 +303,12 @@ main {
 }
 
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -261,7 +320,7 @@ main {
   border-right: 4px solid black;
   border-bottom: 4px solid black;
   transform: rotate(45deg);
-  border-radius: 2px; 
+  border-radius: 2px;
 }
 
 .group {
@@ -282,6 +341,7 @@ main {
   -webkit-text-stroke: 0px;
   align-self: center;
 }
+
 .separator {
   color: var(--on);
   display: flex;
@@ -310,46 +370,54 @@ main {
   background: var(--on);
   box-shadow: var(--glow);
 }
-.seg-a, .seg-g, .seg-d {
+
+.seg-a,
+.seg-g,
+.seg-d {
   width: var(--seg-l);
   height: var(--seg-w);
   left: calc(var(--seg-w) + var(--gap));
 }
 
-.seg-b, .seg-c, .seg-e, .seg-f {
+.seg-b,
+.seg-c,
+.seg-e,
+.seg-f {
   width: var(--seg-w);
   height: var(--seg-l);
 }
 
 /* horizontale */
-.seg-a { top: 0; }
+.seg-a {
+  top: 0;
+}
 
-.seg-g { 
+.seg-g {
   top: calc(50% - var(--seg-w) / 2);
 }
 
-.seg-d { 
+.seg-d {
   bottom: 0;
 }
 
 /* rechte Seite */
-.seg-b { 
+.seg-b {
   top: calc(var(--seg-w) + var(--gap));
   right: 0;
 }
 
-.seg-c { 
+.seg-c {
   bottom: calc(var(--seg-w) + var(--gap));
   right: 0;
 }
 
 /* linke Seite */
-.seg-f { 
+.seg-f {
   top: calc(var(--seg-w) + var(--gap));
   left: 0;
 }
 
-.seg-e { 
+.seg-e {
   bottom: calc(var(--seg-w) + var(--gap));
   left: 0;
 }
