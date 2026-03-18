@@ -13,14 +13,14 @@
 .app,
 .power,
 .threed,
-button {
+.power-btn {
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   border-radius: 20px;
   transition: transform 0.1s ease;
 }
 
-button:active,
+.power-btn:active,
 .app:active {
   transform: translate(-1px, -2px);
   box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
@@ -28,7 +28,7 @@ button:active,
 
 body {
   font-family: 'Patrick Hand', cursive;
-  color: #f7d117;
+  color: #fbfbfb;
   -webkit-text-stroke: 6px black;
   paint-order: stroke fill;
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
@@ -51,7 +51,7 @@ header {
 .shadow {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(8px 8px 0px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(15px 8px 0px rgba(0, 0, 0, 0.4));
 }
 
 .border {
@@ -62,7 +62,7 @@ header {
 }
 
 .header {
-  background-color: lightslategrey;
+  background-color: rgb(93, 106, 119);
   width: 100%;
   height: 100%;
   clip-path: polygon(
@@ -113,7 +113,7 @@ header {
 .power-btn {
   height: 80%;
   width: 80%;
-  background-color: green;
+  background-color: rgb(2, 170, 2);
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -148,22 +148,31 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
+  max-height: calc(100vh - 9vw);
 }
 
 .apps {
-  background-color: lightslategrey;
   margin: 5rem auto auto auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 15rem);
-  gap: 4rem;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   padding: 4rem;
   box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
 }
 
+.apps-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+  justify-content: flex-start;
+  width: fit-content;
+  max-width: 100%;
+}
 .app {
-  background-color: burlywood;
+  background-color: rgb(74, 85, 88);
   width: 15rem;
   height: 20rem;
   display: flex;
@@ -190,7 +199,7 @@ main {
 }
 
 .icon {
-  background-color: lightcoral;
+  background-color: rgb(105, 155, 62);
   width: 10rem;
   height: 10rem;
   margin: 1rem;
@@ -198,4 +207,39 @@ main {
   box-shadow: var(--neg-shadow);
   border-radius: 20px;
   transition: transform 0.1s ease;
+}
+
+.hint{
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  font-family: 'Patrick Hand', cursive;
+  color: #fbfbfb;
+  -webkit-text-stroke: 6px black;
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.arrow {
+  width: 16px;
+  height: 16px;
+  border-right: 4px solid black;
+  border-bottom: 4px solid black;
+  transform: rotate(45deg);
+  border-radius: 2px; 
 }
