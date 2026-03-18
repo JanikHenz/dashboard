@@ -1,13 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
+:root {
+  --simpson-yellow: #f7d117;
+  --simpson-blue: #1271b5;
+  --outline-color: #000000;
+  --outline-width: 4px;
+  --hard-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+  --comic-font: 'Patrick Hand', cursive;
+}
+
+.header,
+.app,
+button {
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  background-color: var(--simpson-yellow);
+
+  border-radius: 18px 25px 15px 22px;
+  transition: transform 0.1s ease;
+}
+
+button:active,
+.app:active {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
 body {
-font-family: 'Patrick Hand', cursive;
-    color: #f7d117;
-  -webkit-text-stroke: 6px black; 
-  paint-order: stroke fill; 
-  
-  text-shadow: 4px 4px 0 rgba(0,0,0,0.5); 
+  font-family: 'Patrick Hand', cursive;
+  color: #f7d117;
+  -webkit-text-stroke: 6px black;
+  paint-order: stroke fill;
+
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
   letter-spacing: 1px;
 
   margin: 0;
@@ -24,11 +49,19 @@ header {
   background-color: whitesmoke;
 }
 
-.header {
-  background-color: lightslategrey;
+
+.border{
+  background-color: black;
   width: 100%;
   height: 100%;
   clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65%, 0% 65%);
+}
+
+.header {
+  background-color: lightslategrey;
+  width: 100%;
+  height: 95%;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 60%, 60% 60%, 55% 95%, 45% 95%, 40% 60%, 0% 60%);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
@@ -53,8 +86,8 @@ header {
 
 .power {
   background-color: darkgrey;
-  height: 9vw;
-  width: 9vw;
+  height: 8vw;
+  width: 8vw;
   border-radius: 50%;
   justify-self: center;
   align-self: center;
