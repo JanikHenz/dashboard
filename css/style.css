@@ -9,13 +9,35 @@
   --comic-font: 'Patrick Hand', cursive;
   --neg-shadow: inset 8px 8px 0px rgba(0, 0, 0, 0.2);
 
-  --on: #f7d117;
-  --off: rgba(247, 209, 23, 0.08);
+  --on: #00ff41;
+  --off: rgba(0, 255, 65, 0.1);
   --seg-w: 0.4vw;
   --seg-l: 1.6vw;
   --gap: 0.1vw;
   --digit-w: calc(var(--seg-l) + var(--seg-w) * 2 + var(--gap) * 2);
   --digit-h: calc(var(--seg-l) * 2 + var(--seg-w) * 3 + var(--gap) * 4);
+
+  --bg-main: #2c9e4a;
+  --bg-header: #8ca8b3;
+  --bg-header-inner: #7da8b8;
+  --bg-segment: #2d3e2e;
+  --bg-main-area: #8ca8b3;
+  --bg-app-card: #5a6b70;
+  --bg-power-outer: #707c85;
+  --bg-power-btn: #00cc44;
+}
+
+body.dark-mode {
+  --bg-main: #1a1f2e;
+  --bg-header: #252d3a;
+  --bg-header-inner: #3d4a5c;
+  --bg-segment: #0f1419;
+  --bg-main-area: #252d3a;
+  --bg-app-card: #1e2530;
+  --bg-power-outer: #3d4654;
+  --bg-power-btn: #00aa66;
+  --on: #00d4ff;
+  --off: rgba(0, 212, 255, 0.1);
 }
 
 .app,
@@ -42,18 +64,37 @@ body {
   letter-spacing: 1px;
   margin: 0;
   padding: 0;
-  background-color: green;
+  background-color: var(--bg-main);
   display: flex;
   flex-direction: column;
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
   min-height: 100vh;
+  max-height: 200vh;
+  transition: background-color 0.5s ease;
+}
+
+.content{
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.monitoring{
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
   width: 100%;
   height: clamp(13vh, 12vw, 12vw);
-  background-color: lightslategrey;
+  background-color: var(--bg-header);
 }
 
 .shadow {
@@ -70,7 +111,7 @@ header {
 }
 
 .header {
-  background-color: rgb(93, 106, 119);
+  background-color: var(--bg-header-inner);
   width: 100%;
   height: 100%;
   clip-path: polygon(4px 4px,
@@ -95,7 +136,7 @@ header {
 }
 
 .segment {
-  background-color: olive;
+  background-color: var(--bg-segment);
   max-width: 100%;
   height: 70%;
   justify-self: center;
@@ -105,6 +146,7 @@ header {
   box-shadow: var(--neg-shadow);
   border-radius: 20px;
   padding: 0 var(--digit-w) 0 var(--digit-w);
+  transition: background-color 0.5s ease;
 }
 
 .mode {
@@ -126,9 +168,10 @@ header {
   height: 100%;
 
   border-radius: 50%;
-  background: conic-gradient(var(--simpson-blue) 0deg 90deg,
-      transparent 90deg 270deg,
-      var(--simpson-yellow) 270deg 360deg);
+  background: conic-gradient(
+      #1a2f6b 0deg 60deg,
+      #5a6268 60deg 300deg,
+      #b3ebff 300deg 360deg);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   display: flex;
@@ -152,30 +195,42 @@ header {
 
 .drehteil {
   position: absolute;
-  width: 50%;
-  height: 50%;
-  top: 25%;
+  height: 60%;
+  aspect-ratio: 1;
+  top: 21%;
+  left: 17%;
+  transform-origin: center center;
   border-radius: 50%;
-  background-color: rgb(135, 148, 161);
+  background: repeating-conic-gradient(
+    from 0deg,
+    #c4d4e0 0deg 8deg,
+    #8a9ca8 8deg 10deg
+  );
   border: var(--outline-width) solid var(--outline-color);
   z-index: 10;
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: rotate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-style: preserve-3d;
+  cursor: pointer;
+  rotate: 330deg;
+}
+
+.drehteil.rotated {
+  rotate: 390deg;
 }
 
 .spitze {
   position: absolute;
-  top: -50%;
+  top: -40%;
   height: 100%;
   aspect-ratio: 1;
 
-  background-color: red;
-  clip-path: polygon(50% 0%, 55% 80%, 45% 80%);
+  background-color: #ff3b3b;
+  clip-path: polygon(50% 0%, 65% 80%, 35% 80%);
   transform: translateZ(-1px);
 }
 
 .power {
-  background-color: darkgrey;
+  background-color: var(--bg-power-outer);
   height: 90%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -185,15 +240,17 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.5s ease;
 }
 
 .power-btn {
   height: 80%;
   width: 80%;
-  background-color: rgb(2, 170, 2);
+  background-color: var(--bg-power-btn);
   border-radius: 50%;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.5s ease;
 }
 
 .power-icon {
@@ -219,14 +276,15 @@ header {
 }
 
 main {
-  background-color: lightslategrey;
+  background-color: var(--bg-main-area);
   width: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  max-height: calc(100vh - clamp(13vh, 9vw, 9vw));
+  max-height: calc(100vh - clamp(13vh, 12vw, 12vw));
+  transition: background-color 0.5s ease;
 }
 
 .apps {
@@ -246,7 +304,7 @@ main {
 }
 
 .app {
-  background-color: rgb(74, 85, 88);
+  background-color: var(--bg-app-card);
   width: 15rem;
   height: 20rem;
   display: flex;
@@ -254,6 +312,7 @@ main {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  transition: background-color 0.5s ease;
 }
 
 .appinfo {
@@ -295,7 +354,6 @@ main {
   margin-bottom: 2rem;
   font-family: 'Patrick Hand', cursive;
   color: #fbfbfb;
-  -webkit-text-stroke: 6px black;
   paint-order: stroke fill;
   text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
   letter-spacing: 1px;
@@ -420,4 +478,33 @@ main {
 .seg-e {
   bottom: calc(var(--seg-w) + var(--gap));
   left: 0;
+}
+
+
+.chart {
+  background-color: white;
+  display: flex;
+  min-width: 15rem;
+  aspect-ratio: 2/1 ;
+  width: 40vw;
+  justify-self: center;
+}
+
+#charts{
+  grid-template-columns: repeat(auto-fill, 40vw);
+}
+
+#hidden > *{
+  color: transparent;
+  border: none;
+  background-color: transparent;
+  border-color: transparent;
+  text-shadow: none;
+  -webkit-text-stroke: transparent;
+}
+
+#monitoring-header{
+  background-color: var(--bg-header-inner);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: 20px 20px 0px rgba(0, 0, 0, 0.2);
 }
