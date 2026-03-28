@@ -1,9 +1,19 @@
 const express = require('express');
 const ping = require('ping');
 const pigpioClient = require('pigpio-client');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+const projectRoot = path.join(__dirname, '..');
+
+app.use('/css', express.static(path.join(projectRoot, 'css')));
+app.use('/js', express.static(path.join(projectRoot, 'js')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(projectRoot, 'index.html'));
+});
 
 const PC_IP = process.env.PC_IP || "192.168.1.9"; 
 const PI_IP = process.env.PI_IP || "192.168.1.10";
@@ -12,16 +22,14 @@ const pi = pigpioClient.pigpio({ host: PI_IP });
 
 const ready = new Promise((resolve, reject) => {
     pi.once('connected', () => {
-        console.log(`✅ Verbunden mit GPIO-Daemon auf ${PI_IP}`);
+        console.log(`Verbunden mit GPIO-Daemon auf ${PI_IP}`);
         resolve();
     });
     pi.once('error', (err) => {
-        console.error(`❌ Fehler bei GPIO-Verbindung: ${err.message}`);
+        console.error(`Fehler bei GPIO-Verbindung: ${err.message}`);
         reject(err);
     });
 });
-
-app.use(express.static('public'));
 
 app.get('/api/status', async (req, res) => {
     try {
@@ -49,5 +57,5 @@ app.get('/api/press-button', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 K8s Dashboard läuft auf Port ${PORT}`);
+    console.log(`K8s Dashboard läuft auf Port ${PORT}`);
 });
