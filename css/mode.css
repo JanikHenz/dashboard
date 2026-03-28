@@ -1,12 +1,3 @@
-.header-right {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 1vw;
-  margin-right: clamp(1vw, 2vw, 2vw);
-  height: 65%;
-}
-
 .pwr-status {
   display: flex;
   flex-direction: column;

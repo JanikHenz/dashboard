@@ -1,16 +1,17 @@
-
 .power {
   background-color: var(--bg-power-outer);
   height: 90%;
   aspect-ratio: 1;
   border-radius: 50%;
+  justify-self: center;
+  align-self: center;
   font-size: 2vw;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.power-btn {
+vpower-btn {
   height: 80%;
   width: 80%;
   background-color: var(--bg-power-btn);

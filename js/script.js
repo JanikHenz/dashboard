@@ -33,12 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const powerBtn = document.querySelector('.power-btn');
-  if (powerBtn) {
-    powerBtn.addEventListener('click', () => {
-      alert('System wird heruntergefahren...');
-    });
-  }
 
   const hintBtn = document.querySelector('.hint');
   if (hintBtn) {
@@ -47,6 +41,52 @@ document.addEventListener('DOMContentLoaded', () => {
         top: window.innerHeight,
         behavior: 'smooth'
       });
+    });
+  }
+
+  const powerBtn = document.querySelector('.power-btn');
+  const pwrLed = document.querySelector('.pwr-led');
+  let isPcOn = false;
+
+  async function fetchPcStatus() {
+    try {
+      const response = await fetch('/api/status');
+      const data = await response.json();
+      isPcOn = data.is_on;
+      
+      if (pwrLed) {
+        if (isPcOn) {
+          pwrLed.style.backgroundColor = '#00ff00';
+          pwrLed.style.boxShadow = '0 0 10px #00ff00';
+        } else {
+          pwrLed.style.backgroundColor = '#ff0000';
+          pwrLed.style.boxShadow = 'none';
+        }
+      }
+    } catch (error) {
+      console.error('Fehler beim Status-Check:', error);
+      if(pwrLed) pwrLed.style.backgroundColor = '#888';
+    }
+  }
+
+  fetchPcStatus();
+  setInterval(fetchPcStatus, 5000);
+
+  if (powerBtn) {
+    powerBtn.addEventListener('click', async () => {
+      const aktionText = isPcOn ? 'ausschalten' : 'einschalten';
+      if (!confirm(`Möchtest du den PC wirklich ${aktionText}?`)) return;
+      
+      powerBtn.style.opacity = '0.5';
+
+      try {
+        await fetch('/api/press-button');
+        setTimeout(fetchPcStatus, 2000);
+      } catch (error) {
+        alert('Fehler beim Senden des Befehls.');
+      } finally {
+        powerBtn.style.opacity = '1';
+      }
     });
   }
 });

@@ -1,9 +1,12 @@
-FROM nginx:latest
+FROM node:18-alpine
 
-COPY index.html /usr/share/nginx/html/
-COPY css/ /usr/share/nginx/html/css/
-COPY js/ /usr/share/nginx/html/js/
+WORKDIR /usr/src/app
 
-EXPOSE 80
+COPY package*.json ./
+RUN npm install --omit=dev
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY . .
+
+EXPOSE 8080
+
+CMD ["npm", "start"]
