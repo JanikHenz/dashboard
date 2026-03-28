@@ -1,5 +1,28 @@
+
 .chart {
-  background-color: rosybrown;
+  background-color: white;
   display: flex;
+  min-width: 15rem;
+  aspect-ratio: 2/1;
+  width: 40vw;
   justify-self: center;
+}
+
+#charts {
+  grid-template-columns: repeat(auto-fill, 40vw);
+}
+
+#hidden>* {
+  color: transparent;
+  border: none;
+  background-color: transparent;
+  border-color: transparent;
+  text-shadow: none;
+  -webkit-text-stroke: transparent;
+}
+
+#monitoring-header {
+  background-color: var(--bg-header-inner);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: 20px 20px 0px rgba(0, 0, 0, 0.2);
 }

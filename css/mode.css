@@ -1,0 +1,111 @@
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1vw;
+  margin-right: clamp(1vw, 2vw, 2vw);
+  height: 65%;
+}
+
+.pwr-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3vw;
+}
+
+.pwr-label {
+  font-family: var(--comic-font);
+  font-size: clamp(0.8rem, 1.5vw, 1.5vw);
+  color: #fbfbfb;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.pwr-led {
+  width: clamp(0.6rem, 1.2vw, 1.2vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--on);
+  box-shadow: 0 0 6px var(--on), 0 0 14px var(--on);
+  border: var(--outline-width) solid var(--outline-color);
+  flex-shrink: 0;
+}
+
+.mode {
+  height: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(2vh, 2vw, 2vw);
+  position: relative;
+}
+
+
+.sign {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  background: conic-gradient(#1a2f6b 0deg 60deg,
+      #5a6268 60deg 300deg,
+      #b3ebff 300deg 360deg);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  display: flex;
+  justify-content: space-between;
+  padding: 5% 20%;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.icon-sun {
+  font-size: 50%;
+  text-shadow: none;
+  z-index: 5;
+}
+
+.icon-moon {
+  font-size: 50%;
+  text-shadow: none;
+  z-index: 5;
+}
+
+.drehteil {
+  position: absolute;
+  height: 60%;
+  aspect-ratio: 1;
+  top: 21%;
+  left: 17%;
+  transform-origin: center center;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg,
+      #c4d4e0 0deg 8deg,
+      #8a9ca8 8deg 10deg);
+  border: var(--outline-width) solid var(--outline-color);
+  z-index: 10;
+  transition: rotate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-style: preserve-3d;
+  cursor: pointer;
+  rotate: 330deg;
+}
+
+.drehteil.rotated {
+  rotate: 390deg;
+}
+
+.spitze {
+  position: absolute;
+  top: -40%;
+  height: 100%;
+  aspect-ratio: 1;
+
+  background-color: #ff3b3b;
+  clip-path: polygon(50% 0%, 65% 80%, 35% 80%);
+  transform: translateZ(-1px);
+}

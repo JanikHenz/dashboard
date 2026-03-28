@@ -9,54 +9,67 @@
   <link href="css/monitoring.css" rel="stylesheet">
   <link href="css/timer.css" rel="stylesheet">
   <link href="css/mode.css" rel="stylesheet">
+  <link href="css/power.css" rel="stylesheet">
+  <link href="css/apps.css" rel="stylesheet">
   <script src="js/script.js"></script>
 </head>
 
 <body>
+    
   <div class="content">
 
     <header>
       <div class="shadow">
         <div class="border">
           <div class="header">
-            <div class="timer">
-              <div class="segment">
-                <!-- DAYS -->
-                <div class="group">
-                  <div class="digits">
-                    <div class="digit" id="d0"></div>
-                    <div class="digit" id="d1"></div>
+            <div class="header-left">
+              <div class="timer">
+                <div class="segment">
+                  <!-- DAYS -->
+                  <div class="group">
+                    <div class="digits">
+                      <div class="digit" id="d0"></div>
+                      <div class="digit" id="d1"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="separator">:</div>
-                <!-- HOURS -->
-                <div class="group">
-                  <div class="digits">
-                    <div class="digit" id="h0"></div>
-                    <div class="digit" id="h1"></div>
+                  <div class="separator">:</div>
+                  <!-- HOURS -->
+                  <div class="group">
+                    <div class="digits">
+                      <div class="digit" id="h0"></div>
+                      <div class="digit" id="h1"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="separator">:</div>
-                <!-- MINUTES -->
-                <div class="group">
-                  <div class="digits">
-                    <div class="digit" id="m0"></div>
-                    <div class="digit" id="m1"></div>
+                  <div class="separator">:</div>
+                  <!-- MINUTES -->
+                  <div class="group">
+                    <div class="digits">
+                      <div class="digit" id="m0"></div>
+                      <div class="digit" id="m1"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="power">
-              <button class="power-btn">
-                <div class="power-icon"></div>
-              </button>
+            <div class="header-center">
+              <div class="power">
+                <button class="power-btn">
+                  <div class="power-icon"></div>
+                </button>
+              </div>
             </div>
-            <div class="mode" id="theme-toggle">
-              <div class="sign">
-                <div class="icon-sun">☀️</div>
-                <div class="icon-moon">🌙</div>
-                <div class="drehteil">
-                  <div class="spitze">
+            <div class="header-right">
+              <div class="pwr-status">
+                <span class="pwr-label">Power</span>
+                <div class="pwr-led"></div>
+              </div>
+              <div class="mode" id="theme-toggle">
+                <div class="sign">
+                  <div class="icon-sun">☀️</div>
+                  <div class="icon-moon">🌙</div>
+                  <div class="drehteil">
+                    <div class="spitze">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -129,6 +142,7 @@
       </button>
     </main>
   </div>
+
   <div class="content">
     <header id="monitoring-header">
     </header>
