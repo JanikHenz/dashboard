@@ -1,12 +1,36 @@
 apps:
-- name: "Jellyfin"
-  url: "https://jellyfin.janikhenz.ch"
-  icon: "/img/icons/jellyfin.png" 
-  
-- name: "Plex"
-  url: "https://plex.janikhenz.ch"
-  icon: "/img/icons/plex.png"
+  media:
+    - name: "Jellyfin"
+      url: "https://jellyfin.janikhenz.ch"
+      icon: "/img/icons/jellyfin.png"
+      deployment: "jellyfin-deployment"
 
-- name: "Jellyseerr"
-  url: "https://jellyseerr.janikhenz.ch"
-  icon: "/img/icons/jellyseerr.png"
+    - name: "Plex"
+      url: "https://plex.janikhenz.ch"
+      icon: "/img/icons/plex.png"
+      deployment: "plex-deployment"
+
+    - name: "Jellyseerr"
+      url: "https://jellyseerr.janikhenz.ch"
+      icon: "/img/icons/jellyseerr.png"
+      deployment: "jellyseerr"
+
+    - name: "Sonarr"
+      url: "https://sonarr.janikhenz.ch"
+      icon: "/img/icons/sonarr.png"
+      deployment: "sonarr"
+
+    - name: "Prowlarr"
+      url: "https://prowlarr.janikhenz.ch"
+      icon: "/img/icons/prowlarr.png"
+      deployment: "prowlarr"
+
+    - name: "qbittorrent"
+      url: "https://qbt.janikhenz.ch"
+      icon: "/img/icons/qbittorrent.png"
+      deployment: "qbittorrent"
+  fitness:
+    - name: "Wger"
+      url: "https://wger.janikhenz.ch"
+      icon: "/img/icons/jellyseerr.png"
+      deployment: "wger-web"

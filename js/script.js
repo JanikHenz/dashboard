@@ -110,28 +110,95 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!grid) return;
 
     try {
-      const response = await fetch('/api/apps');
-      const apps = await response.json();
+      const [appsResponse, deploymentsResponse] = await Promise.all([
+        fetch('/api/apps'),
+        fetch('/api/k8s/deployments')
+      ]);
+      
+      const apps = await appsResponse.json();
+      const deployments = await deploymentsResponse.json();
       
       grid.innerHTML = ''; 
       
       apps.forEach(app => {
+        const deploymentKey = `${app.namespace}/${app.deployment}`;
+        const deploymentInfo = deployments[deploymentKey] || {};
+        
         const appDiv = document.createElement('div');
         appDiv.className = "app";
-        appDiv.style.cursor = "pointer";
-        appDiv.addEventListener('click', () => {
-          window.open(app.url, '_blank');
-        });
+        
+        let ledColor = '#808080';
+        if (deploymentInfo.readyReplicas && deploymentInfo.desiredReplicas) {
+          if (deploymentInfo.readyReplicas === deploymentInfo.desiredReplicas) {
+            ledColor = '#00ff00';
+          } else if (deploymentInfo.readyReplicas > 0) {
+            ledColor = '#ffaa00';
+          } else {
+            ledColor = '#ff0000';
+          }
+        }
+        
+        const maxReplicas = 5;
+        const currentReplicas = deploymentInfo.desiredReplicas || 1;
         
         appDiv.innerHTML = `
-          <div class="threed">
+          <div class="app-header" onclick="window.open('${app.url}', '_blank')">
             <div class="icon" style="background-image: url('${app.icon}')"></div>
+            <div class="status-led" style="background-color: ${ledColor}; box-shadow: 0 0 10px ${ledColor}"></div>
           </div>
-          <div class="appinfo">
-            <div class="status"></div>
-            <h1>${app.name}</h1>
+          <div class="app-info">
+            <h2 class="app-name">${app.name}</h2>
+            <div class="replica-info">
+              <span class="replica-count">${deploymentInfo.readyReplicas || 0}/${deploymentInfo.desiredReplicas || 1}</span>
+              <span class="replica-label">Pods</span>
+            </div>
+            <div class="replica-slider">
+              <input 
+                type="range" 
+                min="0" 
+                max="${maxReplicas}" 
+                value="${currentReplicas}" 
+                class="slider"
+                data-namespace="${app.namespace}"
+                data-deployment="${app.deployment}"
+              >
+              <span class="slider-value">${currentReplicas}</span>
+            </div>
           </div>
         `;
+        
+        // Add slider event listener
+        const slider = appDiv.querySelector('.slider');
+        const sliderValue = appDiv.querySelector('.slider-value');
+        
+        slider.addEventListener('input', (e) => {
+          sliderValue.textContent = e.target.value;
+        });
+        
+        slider.addEventListener('change', async (e) => {
+          const newReplicas = parseInt(e.target.value);
+          try {
+            const response = await fetch('/api/k8s/scale', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                namespace: slider.dataset.namespace,
+                deployment: slider.dataset.deployment,
+                replicas: newReplicas
+              })
+            });
+            
+            if (response.ok) {
+              console.log(`Scaled ${slider.dataset.deployment} to ${newReplicas} replicas`);
+              setTimeout(() => loadApps(), 2000);
+            } else {
+              alert('Scaling fehlgeschlagen!');
+            }
+          } catch (err) {
+            console.error('Scale error:', err);
+            alert('Konnte nicht skalieren!');
+          }
+        });
         
         grid.appendChild(appDiv);
       });
@@ -143,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadApps();
 
-  // Theme Toggle
   const themeToggle = document.getElementById('theme-toggle');
   const drehteil = document.querySelector('.drehteil');
   const savedTheme = localStorage.getItem('theme') || 'light';
