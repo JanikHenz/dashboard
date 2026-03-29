@@ -1,12 +1,12 @@
 apps:
 - name: "Jellyfin"
   url: "https://jellyfin.janikhenz.ch"
-  icon: "/css/icons/jellyfin.png" 
+  icon: "/img/icons/jellyfin.png" 
   
-- name: "Nextcloud"
-  url: "https://cloud.janikhenz.ch"
-  icon: "/css/icons/nextcloud.png"
+- name: "Plex"
+  url: "https://plex.janikhenz.ch"
+  icon: "/img/icons/plex.png"
 
-- name: "Proxmox"
-  url: "https://pve.janikhenz.ch"
-  icon: "/css/icons/proxmox.png"
+- name: "Jellyseerr"
+  url: "https://jellyseerr.janikhenz.ch"
+  icon: "/img/icons/jellyseerr.png"
