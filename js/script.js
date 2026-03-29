@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pattern = DIGITS[number] || DIGITS[0];
 
     segmentClasses.forEach((segClass, index) => {
-      const segment = digitEl.querySelector(`.segment.${segClass}`);
+      const segment = digitEl.querySelector(`.seg-${segClass}`);
       if (segment) {
         if (pattern[index]) {
           segment.classList.add('on');
@@ -116,17 +116,24 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.innerHTML = ''; 
       
       apps.forEach(app => {
-        const link = document.createElement('a');
-        link.href = app.url;
-        link.target = "_blank"; 
-        link.className = "app-item"; 
+        const appDiv = document.createElement('div');
+        appDiv.className = "app";
+        appDiv.style.cursor = "pointer";
+        appDiv.addEventListener('click', () => {
+          window.open(app.url, '_blank');
+        });
         
-        link.innerHTML = `
-          <img src="${app.icon}" alt="${app.name} Icon">
-          <span>${app.name}</span>
+        appDiv.innerHTML = `
+          <div class="threed">
+            <div class="icon" style="background-image: url('${app.icon}')"></div>
+          </div>
+          <div class="appinfo">
+            <div class="status"></div>
+            <h1>${app.name}</h1>
+          </div>
         `;
         
-        grid.appendChild(link);
+        grid.appendChild(appDiv);
       });
     } catch (error) {
       console.error('Fehler beim Laden der Apps:', error);

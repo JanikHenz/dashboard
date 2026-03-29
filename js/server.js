@@ -14,6 +14,7 @@ const projectRoot = path.join(__dirname, '..');
 
 app.use('/css', express.static(path.join(projectRoot, 'css')));
 app.use('/js', express.static(path.join(projectRoot, 'js')));
+app.use('/img', express.static(path.join(projectRoot, 'img')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(projectRoot, 'index.html'));

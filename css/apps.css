@@ -51,4 +51,7 @@
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--neg-shadow);
   border-radius: 20px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }

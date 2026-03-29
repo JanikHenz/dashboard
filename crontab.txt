@@ -1,0 +1,5 @@
+Server (uptime)
+* * * * * /home/janik/send_uptime.sh
+
+Raspy (automatic off)
+0 2 * * * /home/janik/pc_off.sh
