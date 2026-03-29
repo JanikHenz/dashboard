@@ -2,6 +2,8 @@ const express = require('express');
 const ping = require('ping');
 const pigpioClient = require('pigpio-client');
 const path = require('path');
+const fs = require('fs');
+const yaml = require('js-yaml');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -83,6 +85,17 @@ app.get('/api/press-button', async (req, res) => {
   } catch (error) {
     console.error(`Fehler beim Schalten:`, error);
     res.status(500).json({ success: false, error: 'Hardware Fehler' });
+  }
+});
+
+app.get('/api/apps', (req, res) => {
+  try {
+    const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
+    const data = yaml.load(fileContents);
+    res.json(data.apps || []);
+  } catch (e) {
+    console.error("Fehler beim Lesen der apps.yml:", e);
+    res.status(500).json([]);
   }
 });
 

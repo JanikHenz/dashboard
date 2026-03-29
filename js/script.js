@@ -104,4 +104,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  async function loadApps() {
+    const grid = document.getElementById('app-grid');
+    if (!grid) return;
+
+    try {
+      const response = await fetch('/api/apps');
+      const apps = await response.json();
+      
+      grid.innerHTML = ''; 
+      
+      apps.forEach(app => {
+        const link = document.createElement('a');
+        link.href = app.url;
+        link.target = "_blank"; 
+        link.className = "app-item"; 
+        
+        link.innerHTML = `
+          <img src="${app.icon}" alt="${app.name} Icon">
+          <span>${app.name}</span>
+        `;
+        
+        grid.appendChild(link);
+      });
+    } catch (error) {
+      console.error('Fehler beim Laden der Apps:', error);
+      grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Konnte Apps nicht laden.</p>';
+    }
+  }
+
+  loadApps();
 });
