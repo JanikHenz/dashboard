@@ -4,6 +4,11 @@
   --gap: 0.1vw;
   --digit-w: calc(var(--seg-l) + var(--seg-w) * 2 + var(--gap) * 2);
   --digit-h: calc(var(--seg-l) * 2 + var(--seg-w) * 3 + var(--gap) * 4);
+
+  /* LCD palette */
+  --lcd-bg: #9bbc0f;
+  --lcd-on: #0f380f;
+  --lcd-off: rgba(15, 56, 15, 0.2);
 }
 
 .group {
@@ -19,22 +24,44 @@
 }
 
 .segment {
-  background-color: var(--bg-segment);
+  /* Override global vars inside this scope */
+  --on: var(--lcd-on);
+  --off: var(--lcd-off);
+
+  background-color: var(--lcd-bg);
   max-width: 100%;
   height: 70%;
   justify-self: center;
   display: flex;
   align-items: center;
   border: var(--outline-width) solid var(--outline-color);
-  box-shadow: var(--neg-shadow);
+  box-shadow: var(--neg-shadow), inset 0 0 12px rgba(0,0,0,0.15);
   border-radius: 20px;
   padding: 0 var(--digit-w) 0 var(--digit-w);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pixel grid overlay */
+.segment::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: inherit;
 }
 
 .digits {
   display: flex;
   gap: var(--gap * 2);
   max-width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .separator {
@@ -43,10 +70,12 @@
   text-shadow: none;
   -webkit-text-stroke: 0px;
   align-self: center;
+  position: relative;
+  z-index: 1;
 }
 
 .separator {
-  color: var(--on);
+  color: var(--lcd-on);
   display: flex;
   align-items: center;
   margin-right: var(--gap);
@@ -71,7 +100,7 @@
 
 .seg.on {
   background: var(--on);
-  box-shadow: var(--glow);
+  box-shadow: none;
 }
 
 .seg-a,

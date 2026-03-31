@@ -19,6 +19,9 @@ body {
   --bg-power-btn: #00cc44;
   --on: #00ff41;
   --off: rgba(0, 255, 65, 0.1);
+  --online: #00ff41;
+  --offline: #ff2222;
+  --pending: #FFA500;
 }
 
 body.dark-mode {
@@ -32,6 +35,9 @@ body.dark-mode {
   --bg-power-btn: #00aa66;
   --on: #00d4ff;
   --off: rgba(0, 212, 255, 0.1);
+  --online: #00d4ff;
+  --offline: #ff4444;
+  --pending: #FFA500;
 }
 
 .app,
