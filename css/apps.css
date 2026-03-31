@@ -5,8 +5,8 @@
   box-sizing: border-box;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fill, 15rem);
+  gap: 4rem;
   justify-content: center;
 }
 
@@ -16,56 +16,69 @@
 
 .app {
   background-color: var(--bg-app-card);
-  border: var(--outline-width) solid var(--outline-color);
-  box-shadow: var(--hard-shadow);
-  border-radius: 20px;
-  padding: 1.5rem;
+  width: 15rem;
+  height: 20rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  transition: transform 0.2s;
-}
-
-.app:hover {
-  transform: translateY(-4px);
-}
-
-.app-header {
-  display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.appinfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  max-height: 20%;
+}
+
+.status {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.2);
+  background-color: greenyellow;
 }
 
 .icon {
-  width: 5rem;
-  height: 5rem;
-  background-color: transparent;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: rgb(105, 155, 62);
+  width: 10rem;
+  aspect-ratio: 1;
+  height: 10rem;
+  margin: 1rem;
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--neg-shadow);
-  border-radius: 15px;
-  flex-shrink: 0;
+  border-radius: 20px;
 }
 
-.status-led {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
-  flex-shrink: 0;
-}
 
-.app-info {
+.icon a {
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
-.app-name {
+.icon img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.3));
+}
+
+.appinfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  max-height: 20%;
+  width: 100%;
+}
+
+.appinfo h1 {
   font-family: var(--comic-font);
   font-size: 1.3rem;
   color: #fbfbfb;
@@ -73,7 +86,50 @@
   paint-order: stroke fill;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
   margin: 0;
+  grid-column: 2;
+}
+
+.status {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.2);
+  grid-column: 1;
+}
+
+.replica-control {
+  background-color: var(--bg-app-card);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: calc(100vh - clamp(13vh, 12vw, 12vw) - 6rem);
+}
+
+.replica-control h2 {
+  font-family: var(--comic-font);
+  font-size: 1.5rem;
+  color: #fbfbfb;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  margin: 0;
   text-align: center;
+}
+
+.replica-control .app-name {
+  font-family: var(--comic-font);
+  font-size: 1.2rem;
+  color: var(--on);
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  text-align: center;
+  word-break: break-word;
 }
 
 .replica-info {
@@ -85,7 +141,7 @@
 
 .replica-count {
   font-family: var(--comic-font);
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: #fbfbfb;
   -webkit-text-stroke: 2px black;
   paint-order: stroke fill;
@@ -103,16 +159,13 @@
 
 .replica-slider {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   gap: 1rem;
-  padding: 0 0.5rem;
 }
 
 .slider {
-  flex: 1;
-  height: 0.8rem;
-  -webkit-appearance: none;
-  appearance: none;
+  width: 1rem;
+  height: 100%;
   background: var(--bg-segment);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 10px;
@@ -123,32 +176,31 @@
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   background: var(--on);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 8px var(--on);
+  box-shadow: 0 0 10px var(--on);
 }
 
 .slider::-moz-range-thumb {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   background: var(--on);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 8px var(--on);
+  box-shadow: 0 0 10px var(--on);
 }
 
 .slider-value {
   font-family: var(--comic-font);
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #fbfbfb;
   -webkit-text-stroke: 2px black;
   paint-order: stroke fill;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-  min-width: 2rem;
   text-align: center;
 }

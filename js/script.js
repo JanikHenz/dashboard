@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const powerBtn = document.querySelector('.power-btn');
   const pwrLed = document.querySelector('.pwr-led');
   let isPcOn = false;
+  let wasOn = false; 
+  let wasPressed = false;
 
   async function fetchPcStatus() {
     try {
@@ -68,8 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
       isPcOn = data.is_on;
 
       if (pwrLed) {
-        pwrLed.style.backgroundColor = isPcOn ? '#00ff00' : '#ff0000';
-        pwrLed.style.boxShadow = isPcOn ? '0 0 10px #00ff00' : 'none';
+        if (wasPressed && isPcOn === wasOn) {
+          pwrLed.style.backgroundColor = 'var(--pending)';
+          pwrLed.style.boxShadow = '0 0 6px var(--pending), 0 0 14px var(--pending)';
+        } else {
+          wasPressed = false;
+          pwrLed.style.backgroundColor = isPcOn ? 'var(--online)' : 'var(--offline)';
+          pwrLed.style.boxShadow = isPcOn ? '0 0 6px var(--online), 0 0 14px var(--online)' : '0 0 6px var(--offline), 0 0 14px var(--offline)';
+        }
       }
 
       updateTimerDisplay(data.uptime_ms);
@@ -88,22 +96,34 @@ document.addEventListener('DOMContentLoaded', () => {
       powerBtn.style.transform = 'scale(0.95)';
       setTimeout(() => powerBtn.style.transform = 'scale(1)', 150);
 
-      if (confirm(isPcOn ? "Ubuntu-Server hart ausschalten?" : "Ubuntu-Server einschalten?")) {
+      const action = isPcOn ? "Ubuntu-Server hart ausschalten?" : "Ubuntu-Server einschalten?";
+
+      if (confirm(action)) {
         try {
+          wasOn = isPcOn;
+
           const response = await fetch('/api/press-button');
           if (response.ok) {
-            console.log("Knopf erfolgreich gedrückt!");
+            console.log("Befehl gesendet, warte auf Statusänderung...");
+            wasPressed = true;
+            if (pwrLed) pwrLed.style.backgroundColor = '#FFA500';
             setTimeout(fetchPcStatus, 1500);
           } else {
-            alert("Backend-Fehler beim Drücken des Knopfes!");
+            wasPressed = false;
+            alert("Backend-Fehler!");
           }
         } catch (err) {
-          console.error("Netzwerkfehler beim Klicken:", err);
+          console.error("Netzwerkfehler:", err);
+          wasPressed = false;
           alert("Konnte den Befehl nicht senden.");
         }
       }
     });
   }
+
+  let selectedApp = null;
+  let appsData = [];
+  let deploymentsData = {};
 
   async function loadApps() {
     const grid = document.getElementById('app-grid');
@@ -114,106 +134,162 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/api/apps'),
         fetch('/api/k8s/deployments')
       ]);
-      
-      const apps = await appsResponse.json();
-      const deployments = await deploymentsResponse.json();
-      
-      grid.innerHTML = ''; 
-      
-      apps.forEach(app => {
-        const deploymentKey = `${app.namespace}/${app.deployment}`;
-        const deploymentInfo = deployments[deploymentKey] || {};
-        
-        const appDiv = document.createElement('div');
-        appDiv.className = "app";
-        
-        let ledColor = '#808080';
-        if (deploymentInfo.readyReplicas && deploymentInfo.desiredReplicas) {
-          if (deploymentInfo.readyReplicas === deploymentInfo.desiredReplicas) {
-            ledColor = '#00ff00';
-          } else if (deploymentInfo.readyReplicas > 0) {
-            ledColor = '#ffaa00';
-          } else {
-            ledColor = '#ff0000';
-          }
-        }
-        
-        const maxReplicas = 5;
-        const currentReplicas = deploymentInfo.desiredReplicas || 1;
-        
-        appDiv.innerHTML = `
-          <div class="app-header" onclick="window.open('${app.url}', '_blank')">
-            <div class="icon" style="background-image: url('${app.icon}')"></div>
-            <div class="status-led" style="background-color: ${ledColor}; box-shadow: 0 0 10px ${ledColor}"></div>
-          </div>
-          <div class="app-info">
-            <h2 class="app-name">${app.name}</h2>
-            <div class="replica-info">
-              <span class="replica-count">${deploymentInfo.readyReplicas || 0}/${deploymentInfo.desiredReplicas || 1}</span>
-              <span class="replica-label">Pods</span>
-            </div>
-            <div class="replica-slider">
-              <input 
-                type="range" 
-                min="0" 
-                max="${maxReplicas}" 
-                value="${currentReplicas}" 
-                class="slider"
-                data-namespace="${app.namespace}"
-                data-deployment="${app.deployment}"
-              >
-              <span class="slider-value">${currentReplicas}</span>
-            </div>
-          </div>
-        `;
-        
-        // Add slider event listener
-        const slider = appDiv.querySelector('.slider');
-        const sliderValue = appDiv.querySelector('.slider-value');
-        
-        slider.addEventListener('input', (e) => {
-          sliderValue.textContent = e.target.value;
-        });
-        
-        slider.addEventListener('change', async (e) => {
-          const newReplicas = parseInt(e.target.value);
-          try {
-            const response = await fetch('/api/k8s/scale', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                namespace: slider.dataset.namespace,
-                deployment: slider.dataset.deployment,
-                replicas: newReplicas
-              })
-            });
-            
-            if (response.ok) {
-              console.log(`Scaled ${slider.dataset.deployment} to ${newReplicas} replicas`);
-              setTimeout(() => loadApps(), 2000);
-            } else {
-              alert('Scaling fehlgeschlagen!');
-            }
-          } catch (err) {
-            console.error('Scale error:', err);
-            alert('Konnte nicht skalieren!');
-          }
-        });
-        
-        grid.appendChild(appDiv);
-      });
+
+      appsData = await appsResponse.json();
+      deploymentsData = await deploymentsResponse.json();
+
+      renderApps();
     } catch (error) {
       console.error('Fehler beim Laden der Apps:', error);
       grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Konnte Apps nicht laden.</p>';
     }
   }
 
+  function renderApps() {
+    const grid = document.getElementById('app-grid');
+    grid.innerHTML = '';
+
+    appsData.forEach(app => {
+      const deploymentKey = `${app.namespace}/${app.deployment}`;
+      const deployment = deploymentsData[deploymentKey];
+
+      const appDiv = document.createElement('div');
+      appDiv.className = 'app';
+      if (selectedApp && selectedApp.name === app.name) {
+        appDiv.classList.add('selected');
+      }
+
+      const statusIndicator = document.createElement('div');
+      statusIndicator.className = 'status-indicator';
+      if (deployment) {
+        const isReady = deployment.readyReplicas === deployment.replicas && deployment.replicas > 0;
+        statusIndicator.classList.add(isReady ? 'ready' : 'not-ready');
+      } else {
+        statusIndicator.classList.add('unknown');
+      }
+
+      const threed = document.createElement('div');
+      threed.className = 'threed';
+
+      const icon = document.createElement('div');
+      icon.className = 'icon';
+
+      const link = document.createElement('a');
+      link.href = app.url;
+      link.target = '_blank';
+
+      const img = document.createElement('img');
+      img.src = app.icon;
+      img.alt = app.name;
+
+      const title = document.createElement('h3');
+      title.textContent = app.name;
+
+      link.appendChild(img);
+      icon.appendChild(link);
+      threed.appendChild(icon);
+
+      appDiv.appendChild(statusIndicator);
+      appDiv.appendChild(threed);
+      appDiv.appendChild(title);
+
+      // Click handler to select app
+      appDiv.addEventListener('click', (e) => {
+        // Don't select if clicking the link
+        if (e.target.tagName === 'A' || e.target.closest('a')) {
+          return;
+        }
+        selectApp(app, deployment);
+      });
+
+      grid.appendChild(appDiv);
+    });
+  }
+
+  function selectApp(app, deployment) {
+    selectedApp = app;
+    renderApps(); // Re-render to update selected state
+    updateReplicaControl(app, deployment);
+  }
+
+  function updateReplicaControl(app, deployment) {
+    const appNameEl = document.getElementById('selected-app-name');
+    const replicaCountEl = document.getElementById('replica-count');
+    const sliderEl = document.getElementById('global-slider');
+    const sliderValueEl = document.getElementById('slider-value');
+
+    appNameEl.textContent = app.name;
+
+    if (deployment) {
+      const ready = deployment.readyReplicas || 0;
+      const total = deployment.replicas || 0;
+      replicaCountEl.textContent = `${ready}/${total}`;
+
+      sliderEl.disabled = false;
+      sliderEl.value = total;
+      sliderValueEl.textContent = total;
+    } else {
+      replicaCountEl.textContent = '-/-';
+      sliderEl.disabled = true;
+      sliderEl.value = 0;
+      sliderValueEl.textContent = '-';
+    }
+  }
+
+  // Global slider event handlers
+  const globalSlider = document.getElementById('global-slider');
+  const sliderValue = document.getElementById('slider-value');
+
+  globalSlider.addEventListener('input', (e) => {
+    sliderValue.textContent = e.target.value;
+  });
+
+  globalSlider.addEventListener('change', async (e) => {
+    if (!selectedApp) return;
+
+    const newReplicas = parseInt(e.target.value);
+    try {
+      const response = await fetch('/api/k8s/scale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespace: selectedApp.namespace,
+          deployment: selectedApp.deployment,
+          replicas: newReplicas
+        })
+      });
+
+      if (response.ok) {
+        console.log(`Scaled ${selectedApp.name} to ${newReplicas} replicas`);
+        // Refresh after a short delay
+        setTimeout(loadApps, 1000);
+      } else {
+        console.error('Failed to scale deployment');
+        // Reset slider
+        const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
+        const deployment = deploymentsData[deploymentKey];
+        if (deployment) {
+          globalSlider.value = deployment.replicas || 0;
+          sliderValue.textContent = deployment.replicas || 0;
+        }
+      }
+    } catch (error) {
+      console.error('Error scaling deployment:', error);
+      const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
+      const deployment = deploymentsData[deploymentKey];
+      if (deployment) {
+        globalSlider.value = deployment.replicas || 0;
+        sliderValue.textContent = deployment.replicas || 0;
+      }
+    }
+  });
+
   loadApps();
 
   const themeToggle = document.getElementById('theme-toggle');
   const drehteil = document.querySelector('.drehteil');
   const savedTheme = localStorage.getItem('theme') || 'light';
-  
+
   if (savedTheme === 'dark') {
     document.body.classList.add('dark-mode');
     if (drehteil) {
