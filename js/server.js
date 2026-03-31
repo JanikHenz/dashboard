@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(projectRoot, 'index.html'));
 });
 
-// Kubernetes Client Setup
 const kc = new k8s.KubeConfig();
 try {
   kc.loadFromDefault();

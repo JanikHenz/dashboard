@@ -1,6 +1,6 @@
 .power {
   background-color: var(--bg-power-outer);
-  height: 90%;
+  height: min(90%, 20vw );
   aspect-ratio: 1;
   border-radius: 50%;
   justify-self: center;
