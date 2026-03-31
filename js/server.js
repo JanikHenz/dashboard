@@ -20,7 +20,8 @@ app.use('/img', express.static(path.join(projectRoot, 'img')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(projectRoot, 'index.html'));
 });
-
+// ====================== Connection =============================
+// ---------------------- Kuberne
 const kc = new k8s.KubeConfig();
 try {
   kc.loadFromDefault();
@@ -31,6 +32,7 @@ try {
 }
 const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
 
+// -------------------- Raspberry Pi Connection ------------------------
 const PC_IP = process.env.PC_IP || "192.168.1.9";
 const PI_IP = process.env.PI_IP || "192.168.1.10";
 
@@ -47,8 +49,8 @@ pi.on('error', (err) => {
   isPiConnected = false;
 });
 
+// ============================ Uptime Info via Crontab =======================
 let realPcUptimeMs = 0;
-
 app.post('/api/pc-data', (req, res) => {
   if (req.body && typeof req.body.uptime_ms === 'number') {
     realPcUptimeMs = req.body.uptime_ms;
@@ -57,14 +59,13 @@ app.post('/api/pc-data', (req, res) => {
   res.json({ success: true });
 });
 
+// ======================= Power Status via Ping =================================
 app.get('/api/status', async (req, res) => {
   try {
     let pingResult = await ping.promise.probe(PC_IP, { timeout: 1 });
-
     if (!pingResult.alive) {
       realPcUptimeMs = 0;
     }
-
     res.json({
       is_on: pingResult.alive,
       uptime_ms: realPcUptimeMs
@@ -75,6 +76,7 @@ app.get('/api/status', async (req, res) => {
   }
 });
 
+// ======================= Power Control via Raspberry pi =============================
 app.get('/api/press-button', async (req, res) => {
   console.log('Jemand hat den Power-Button im Browser gedrückt!');
 
@@ -82,17 +84,12 @@ app.get('/api/press-button', async (req, res) => {
     console.error('Befehl ignoriert: Keine Verbindung zum Pi.');
     return res.status(500).json({ success: false, error: 'Pi Offline' });
   }
-
   try {
     const pin = pi.gpio(17);
     await pin.modeSet('output');
-
     await pin.write(1);
-
     await new Promise(resolve => setTimeout(resolve, 500));
-
     await pin.write(0);
-
     res.json({ success: true });
   } catch (error) {
     console.error(`Fehler beim Schalten:`, error);
@@ -100,28 +97,25 @@ app.get('/api/press-button', async (req, res) => {
   }
 });
 
+//=================== Kubernetes ==========================================
+//--------------------- Get Deployments ------------------------------------
 app.get('/api/k8s/deployments', async (req, res) => {
   try {
     const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
     const data = yaml.load(fileContents);
-    
     const deploymentStatus = {};
-    
     for (const namespace of Object.keys(data.apps || {})) {
       for (const app of data.apps[namespace]) {
         if (app && app.deployment) {
           try {
             const deploymentName = String(app.deployment);
             const ns = String(namespace);
-            
             const deployment = await k8sAppsApi.readNamespacedDeployment({
               name: deploymentName,
               namespace: ns
             });
-            
             const status = deployment.status;
             const spec = deployment.spec;
-            
             deploymentStatus[`${ns}/${deploymentName}`] = {
               replicas: status.replicas || 0,
               readyReplicas: status.readyReplicas || 0,
@@ -139,7 +133,6 @@ app.get('/api/k8s/deployments', async (req, res) => {
         }
       }
     }
-    
     res.json(deploymentStatus);
   } catch (error) {
     console.error('K8s API Fehler:', error);
@@ -147,27 +140,23 @@ app.get('/api/k8s/deployments', async (req, res) => {
   }
 });
 
+// -------------------- Scale Replicas -------------------------------
 app.post('/api/k8s/scale', async (req, res) => {
   const { namespace, deployment, replicas } = req.body;
-  
   if (!namespace || !deployment || replicas === undefined) {
     return res.status(400).json({ error: 'namespace, deployment und replicas erforderlich' });
   }
-  
   try {
     const currentDeployment = await k8sAppsApi.readNamespacedDeployment({
       name: deployment,
       namespace: namespace
     });
-    
     currentDeployment.spec.replicas = parseInt(replicas);
-    
     await k8sAppsApi.replaceNamespacedDeployment({
       name: deployment,
       namespace: namespace,
       body: currentDeployment
     });
-    
     res.json({ success: true, replicas: parseInt(replicas) });
   } catch (error) {
     console.error('Scale Fehler:', error);
@@ -175,6 +164,7 @@ app.post('/api/k8s/scale', async (req, res) => {
   }
 });
 
+// =============================== Apps from Yaml ======================
 app.get('/api/apps', (req, res) => {
   try {
     const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
@@ -199,6 +189,7 @@ app.get('/api/apps', (req, res) => {
   }
 });
 
+// ========================= General Infos =========================
 app.listen(PORT, () => {
-  console.log(`K8s Dashboard läuft auf Port ${PORT}`);
+  console.log(`Dashboard läuft auf Port ${PORT}`);
 });

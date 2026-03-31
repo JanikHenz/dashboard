@@ -1,3 +1,4 @@
+// ===================== 7 Segment =============================
 document.addEventListener('DOMContentLoaded', () => {
   const DIGITS = {
     0: [1, 1, 1, 1, 1, 1, 0],
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDigit('m1', parseInt(mStr[1]));
   }
 
+// =============== Power Status + Timer ===========================
   const powerBtn = document.querySelector('.power-btn');
   const pwrLed = document.querySelector('.pwr-led');
   let isPcOn = false;
@@ -79,9 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
           pwrLed.style.boxShadow = isPcOn ? '0 0 6px var(--online), 0 0 14px var(--online)' : '0 0 6px var(--offline), 0 0 14px var(--offline)';
         }
       }
-
       updateTimerDisplay(data.uptime_ms);
-
     } catch (error) {
       console.error('Fehler beim Status-Check:', error);
       if (pwrLed) pwrLed.style.backgroundColor = '#888';
@@ -91,17 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchPcStatus();
   setInterval(fetchPcStatus, 5000);
 
+// ================== Power Control ===========================================
   if (powerBtn) {
     powerBtn.addEventListener('click', async () => {
       powerBtn.style.transform = 'scale(0.95)';
       setTimeout(() => powerBtn.style.transform = 'scale(1)', 150);
-
       const action = isPcOn ? "Ubuntu-Server hart ausschalten?" : "Ubuntu-Server einschalten?";
-
       if (confirm(action)) {
         try {
           wasOn = isPcOn;
-
           const response = await fetch('/api/press-button');
           if (response.ok) {
             console.log("Befehl gesendet, warte auf Statusänderung...");
@@ -120,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
+// =========================== Apps get Information ========================================
   let selectedApp = null;
   let appsData = [];
   let deploymentsData = {};
@@ -144,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
       grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Konnte Apps nicht laden.</p>';
     }
   }
-
+// ---------------------------- Render Apps form Yaml ------------------------------
   function renderApps() {
     const grid = document.getElementById('app-grid');
     grid.innerHTML = '';
@@ -158,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (selectedApp && selectedApp.name === app.name) {
         appDiv.classList.add('selected');
       }
-
+// -------------------------------- Deployment Status -------------------------------
       const statusIndicator = document.createElement('div');
       statusIndicator.className = 'status-indicator';
       if (deployment) {
@@ -167,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         statusIndicator.classList.add('unknown');
       }
-
+// ------------------------------- Build App design ---------------------------
       const threed = document.createElement('div');
       threed.className = 'threed';
 
@@ -193,9 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
       appDiv.appendChild(threed);
       appDiv.appendChild(title);
 
-      // Click handler to select app
+// ------------------------ Select App -------------------------
       appDiv.addEventListener('click', (e) => {
-        // Don't select if clicking the link
         if (e.target.tagName === 'A' || e.target.closest('a')) {
           return;
         }
@@ -212,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateReplicaControl(app, deployment);
   }
 
+// ---------------------------- Show Replicas -----------------------------
   function updateReplicaControl(app, deployment) {
     const appNameEl = document.getElementById('selected-app-name');
     const replicaCountEl = document.getElementById('replica-count');
@@ -236,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Global slider event handlers
+// ---------------------------- Slider ----------------------------
   const globalSlider = document.getElementById('global-slider');
   const sliderValue = document.getElementById('slider-value');
 
@@ -261,11 +259,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok) {
         console.log(`Scaled ${selectedApp.name} to ${newReplicas} replicas`);
-        // Refresh after a short delay
         setTimeout(loadApps, 1000);
       } else {
         console.error('Failed to scale deployment');
-        // Reset slider
         const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
         const deployment = deploymentsData[deploymentKey];
         if (deployment) {
@@ -286,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadApps();
 
+// ======================== Theme Toggle ===================================
   const themeToggle = document.getElementById('theme-toggle');
   const drehteil = document.querySelector('.drehteil');
   const savedTheme = localStorage.getItem('theme') || 'light';

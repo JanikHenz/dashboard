@@ -1,13 +1,25 @@
+.apps-layout {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  gap: clamp(1vw, 2vw, 2vw);
+  padding: clamp(1vw, 2vw, 2vw);
+  box-sizing: border-box;
+}
+
 .apps {
-  margin: clamp(1vw, 2vw, 2vw) auto auto auto;
-  width: 70%;
-  padding: 4rem;
+  flex: 1;
+  padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, 15rem);
   gap: 4rem;
   justify-content: center;
+  height: 100%;
+  align-content: start;
 }
 
 .apps-inner {
@@ -99,27 +111,22 @@
 }
 
 .replica-control {
-  align-self: end;
   background-color: var(--bg-app-card);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1vw;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  height: calc(100vh - clamp(13vh, 12vw, 12vw) - 6rem);
-  max-height: calc(100vh - clamp(13vh, 12vw, 12vw) - 6rem);
+  align-items: center;
+  align-self: stretch;
+  overflow-y: hidden;
 }
 
 .replica-control h2 {
   font-family: var(--comic-font);
-  font-size: 1.5rem;
+  font-size: clamp(0.8rem, 1.5vw, 1.5vw);
   color: #fbfbfb;
-  -webkit-text-stroke: 2px black;
-  paint-order: stroke fill;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-  margin: 0;
   text-align: center;
 }
 
@@ -161,13 +168,22 @@
 
 .replica-slider {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
+  flex: 1;
+  justify-content: center;
 }
 
 .slider {
-  width: 1rem;
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 2rem;
   height: 100%;
+  min-height: 10rem;
+  flex: 1;
   background: var(--bg-segment);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 10px;

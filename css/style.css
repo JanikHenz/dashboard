@@ -145,6 +145,17 @@ main {
   max-height: calc(100vh - clamp(13vh, 12vw, 12vw));
 }
 
+main > .apps-layout {
+  flex: 1;
+  min-height: 0;
+}
+
+main > .hint {
+  flex-shrink: 0;
+  margin-top: auto;
+  margin-bottom: 1rem;
+}
+
 /*============ Hint ============================*/
 .hint {
   background-color: transparent;
@@ -153,7 +164,6 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
   font-family: 'Patrick Hand', cursive;
   color: #fbfbfb;
   paint-order: stroke fill;

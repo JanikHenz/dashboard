@@ -128,30 +128,31 @@
     </header>
 
     <main>
-      <div class="apps">
-        <div class="apps-inner" id="app-grid">
+      <div class="apps-layout">
+        <div class="apps">
+          <div class="apps-inner" id="app-grid">
+          </div>
         </div>
-      </div>
 
-      <!-- Global Replica Control -->
-      <div class="replica-control" id="replica-control">
-        <h2>Replica Control</h2>
-        <div class="app-name" id="selected-app-name">Keine App ausgewählt</div>
-        <div class="replica-info">
-          <span class="replica-count" id="replica-count">-/-</span>
-          <span class="replica-label">Pods</span>
-        </div>
-        <div class="replica-slider">
-          <input 
-            type="range" 
-            min="0" 
-            max="5" 
-            value="1" 
-            class="slider"
-            id="global-slider"
-            disabled
-          >
-          <span class="slider-value" id="slider-value">-</span>
+        <!-- Global Replica Control -->
+        <div class="replica-control" id="replica-control">
+          <h2>Replica Control</h2>
+          <div class="app-name" id="selected-app-name">Keine App ausgewählt</div>
+          <div class="replica-info">
+            <span class="replica-count" id="replica-count">-/-</span>
+            <span class="replica-label">Pods</span>
+          </div>
+          <div class="replica-slider">
+            <input 
+              type="range" 
+              min="0" 
+              max="5" 
+              value="1" 
+              class="slider"
+              id="global-slider"
+              disabled
+            >
+          </div>
         </div>
       </div>
 
