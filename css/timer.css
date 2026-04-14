@@ -5,7 +5,6 @@
   --digit-w: calc(var(--seg-l) + var(--seg-w) * 2 + var(--gap) * 2);
   --digit-h: calc(var(--seg-l) * 2 + var(--seg-w) * 3 + var(--gap) * 4);
 
-  /* LCD palette */
   --lcd-bg: #9bbc0f;
   --lcd-on: #0f380f;
   --lcd-off: rgba(15, 56, 15, 0.2);
@@ -24,7 +23,6 @@
 }
 
 .segment {
-  /* Override global vars inside this scope */
   --on: var(--lcd-on);
   --off: var(--lcd-off);
 
@@ -42,7 +40,6 @@
   overflow: hidden;
 }
 
-/* Pixel grid overlay */
 .segment::after {
   content: '';
   position: absolute;
