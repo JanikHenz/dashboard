@@ -50,6 +50,31 @@
   box-shadow: none;
 }
 
+.nameTag{
+  width: 70%;
+  height: 20%;
+  padding: 1%;
+  margin-top: 10px;
+  border: var(--outline-width) solid var(--outline-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.appName{
+  box-shadow: var(--neg-shadow), inset 0 0 10px rgba(0,0,0,0.15);
+  width: 85%;
+  height: 60%;
+  border: var(--outline-width) solid var(--outline-color);
+  background-color: #c1c2c0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: #FFD785;
+}
+/*519A66*/
 .appinfo {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -68,7 +93,7 @@
 }
 
 .icon {
-  background-color: #0d2b0d;
+  background-color: #519A66;
   width: 10rem;
   aspect-ratio: 1;
   height: 10rem;
@@ -100,7 +125,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-color: rgba(115, 199, 45, 0.08);
+  background-color: rgba(102, 158, 49, 0.08);
   z-index: 3;
   pointer-events: none;
   border-radius: inherit;
@@ -125,8 +150,8 @@
     sepia(1)
     hue-rotate(80deg)
     saturate(3)
-    brightness(0.8)
-    drop-shadow(0 0 6px rgba(115, 199, 45, 0.7));
+    brightness(0.6)
+    drop-shadow(0 0 6px rgba(102, 158, 49, 0.7));
 }
 
 .appinfo {

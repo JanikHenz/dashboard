@@ -180,8 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
       img.src = app.icon;
       img.alt = app.name;
 
-      const title = document.createElement('h3');
-      title.textContent = app.name;
+      const nameTag = document.createElement('div');
+      nameTag.className = 'nameTag';
+      
+      const appName = document.createElement('label');
+      appName.className = 'appName';
+      appName.textContent = app.name;
 
       link.appendChild(img);
       icon.appendChild(link);
@@ -189,7 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       appDiv.appendChild(statusIndicator);
       appDiv.appendChild(threed);
-      appDiv.appendChild(title);
+      appDiv.appendChild(nameTag);
+      nameTag.appendChild(appName);
 
 // ------------------------ Select App -------------------------
       appDiv.addEventListener('click', (e) => {

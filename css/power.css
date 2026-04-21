@@ -14,7 +14,7 @@
 .power-btn {
   height: 80%;
   width: 80%;
-  background-color: var(--bg-power-btn);
+  background-color: #4e7a25;
   border-radius: 50%;
   justify-content: center;
   align-items: center;
