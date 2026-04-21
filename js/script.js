@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const replicaCountEl = document.getElementById('replica-count');
     const sliderEl = document.getElementById('global-slider');
     const sliderValueEl = document.getElementById('slider-value');
+    if (!appNameEl || !replicaCountEl || !sliderEl || !sliderValueEl) return;
 
     appNameEl.textContent = app.name;
 
@@ -238,30 +239,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const globalSlider = document.getElementById('global-slider');
   const sliderValue = document.getElementById('slider-value');
 
-  globalSlider.addEventListener('input', (e) => {
-    sliderValue.textContent = e.target.value;
-  });
+  if (globalSlider && sliderValue) {
+    globalSlider.addEventListener('input', (e) => {
+      sliderValue.textContent = e.target.value;
+    });
 
-  globalSlider.addEventListener('change', async (e) => {
-    if (!selectedApp) return;
+    globalSlider.addEventListener('change', async (e) => {
+      if (!selectedApp) return;
 
-    const newReplicas = parseInt(e.target.value);
-    try {
-      const response = await fetch('/api/k8s/scale', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          namespace: selectedApp.namespace,
-          deployment: selectedApp.deployment,
-          replicas: newReplicas
-        })
-      });
+      const newReplicas = parseInt(e.target.value);
+      try {
+        const response = await fetch('/api/k8s/scale', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            namespace: selectedApp.namespace,
+            deployment: selectedApp.deployment,
+            replicas: newReplicas
+          })
+        });
 
-      if (response.ok) {
-        console.log(`Scaled ${selectedApp.name} to ${newReplicas} replicas`);
-        setTimeout(loadApps, 1000);
-      } else {
-        console.error('Failed to scale deployment');
+        if (response.ok) {
+          console.log(`Scaled ${selectedApp.name} to ${newReplicas} replicas`);
+          setTimeout(loadApps, 1000);
+        } else {
+          console.error('Failed to scale deployment');
+          const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
+          const deployment = deploymentsData[deploymentKey];
+          if (deployment) {
+            globalSlider.value = deployment.replicas || 0;
+            sliderValue.textContent = deployment.replicas || 0;
+          }
+        }
+      } catch (error) {
+        console.error('Error scaling deployment:', error);
         const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
         const deployment = deploymentsData[deploymentKey];
         if (deployment) {
@@ -269,16 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
           sliderValue.textContent = deployment.replicas || 0;
         }
       }
-    } catch (error) {
-      console.error('Error scaling deployment:', error);
-      const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
-      const deployment = deploymentsData[deploymentKey];
-      if (deployment) {
-        globalSlider.value = deployment.replicas || 0;
-        sliderValue.textContent = deployment.replicas || 0;
-      }
-    }
-  });
+    });
+  }
 
   loadApps();
 

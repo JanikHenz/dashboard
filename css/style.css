@@ -22,7 +22,13 @@ body {
   --online: #00ff41;
   --offline: #ff2222;
   --pending: #FFA500;
+  scrollbar-width: none;
 }
+
+body::-webkit-scrollbar{
+  display: none;
+}
+
 
 body.dark-mode {
   --bg-main: #1a1f2e;

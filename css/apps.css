@@ -11,6 +11,7 @@
 
 .apps {
   flex: 1;
+  min-width: 15rem;
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
@@ -25,6 +26,11 @@
   box-shadow: var(--hard-shadow);
   /* corner-shape: bevel; */
   border-radius: 30px;
+  scrollbar-width: none;
+}
+
+.apps::-webkit-scrollbar{
+  display: none;
 }
 
 .apps-inner {
@@ -166,8 +172,7 @@
   overflow-y: hidden;
   container-type: inline-size;
   flex-shrink: 0;
-  min-width: 10rem;
-  width: clamp(3vw, 5vw, 7vw);
+  min-width: 6rem;
 }
 
 .replica-control h2 {
@@ -238,17 +243,27 @@
   flex: 1;
   cursor: pointer;
   overflow: visible;
+  background: transparent;
+  border: none;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  height: 3rem;
   width: 100cqw;
+  aspect-ratio: 3/1;
   background: red;
   cursor: pointer;
   border-radius: 5px;
   transition: height 0.2s ease;
+}
+
+.slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 
@@ -259,6 +274,17 @@
   cursor: pointer;
   border: 2px solid white;
   border-radius: 5px;
+}
+
+.slider::-moz-range-track {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.slider::-moz-range-progress {
+  background: transparent;
+  border: none;
 }
 .slider-value {
   font-family: var(--comic-font);
