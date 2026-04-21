@@ -9,19 +9,42 @@
 }
 
 body {
-  --bg-main: white;
-  --bg-header: #8ca8b3;
-  --bg-header-inner: #7da8b8;
-  --bg-segment: #2d3e2e;
-  --bg-main-area: #8ca8b3;
-  --bg-app-card: #5a6b70;
-  --bg-power-outer: #707c85;
-  --bg-power-btn: #00cc44;
-  --on: #00ff41;
-  --off: rgba(0, 255, 65, 0.1);
-  --online: #00ff41;
-  --offline: #ff2222;
-  --pending: #FFA500;
+  --bg-main: #f4f7fb;
+  --bg-header: #9eb8c6;
+  --bg-header-inner: #86aabc;
+  --bg-segment: #2f4330;
+  --bg-main-area: #afc3cf;
+  --bg-app-card: #6d818c;
+  --bg-power-outer: #6f808c;
+  --bg-power-btn: #4f7b3a;
+  --surface-soft: #d1dae1;
+  --surface-strong: #5c8d67;
+  --surface-muted: #5f6368;
+  --text-main: #f5f8fb;
+  --text-accent: #fcc208;
+  --text-contrast: #ffffff;
+  --text-stroke-color: #000000;
+  --text-stroke-strong: 1px;
+  --text-stroke-soft: 0.8px;
+  --text-shadow-strong: 2px 2px 0 rgba(0, 0, 0, 0.35);
+  --text-shadow-soft: 1px 1px 0 rgba(0, 0, 0, 0.25);
+  --icon-power: #f7fbff;
+  --toggle-pointer: #ff5b5b;
+  --toggle-segment-start: #7ea4bd;
+  --toggle-segment-mid: #5f6570;
+  --toggle-segment-end: #d3e3ef;
+  --knurl-light: #e4edf3;
+  --knurl-dark: #8c9ba8;
+  --slider-thumb: #e45a5a;
+  --slider-thumb-alt: #6ecf8b;
+  --lcd-bg: #8ea72b;
+  --lcd-on: #173f19;
+  --lcd-off: rgba(23, 63, 25, 0.22);
+  --on: #3af075;
+  --off: rgba(58, 240, 117, 0.15);
+  --online: #3af075;
+  --offline: #ff5a5a;
+  --pending: #ffb347;
   scrollbar-width: none;
 }
 
@@ -31,19 +54,42 @@ body::-webkit-scrollbar{
 
 
 body.dark-mode {
-  --bg-main: #1a1f2e;
-  --bg-header: #252d3a;
-  --bg-header-inner: #3d4a5c;
-  --bg-segment: #0f1419;
-  --bg-main-area: #252d3a;
-  --bg-app-card: #1e2530;
-  --bg-power-outer: #3d4654;
-  --bg-power-btn: #00aa66;
-  --on: #00d4ff;
-  --off: rgba(0, 212, 255, 0.1);
-  --online: #00d4ff;
-  --offline: #ff4444;
-  --pending: #FFA500;
+  --bg-main: #171d26;
+  --bg-header: #222b37;
+  --bg-header-inner: #2f3c4c;
+  --bg-segment: #0f151b;
+  --bg-main-area: #1d2632;
+  --bg-app-card: #243241;
+  --bg-power-outer: #3a4757;
+  --bg-power-btn: #2f6f55;
+  --surface-soft: #3a4552;
+  --surface-strong: #2d6b57;
+  --surface-muted: #39414d;
+  --text-main: #eaf2fb;
+  --text-accent: #ffe38a;
+  --text-contrast: #eef7ff;
+  --text-stroke-color: #000000;
+  --text-stroke-strong: 1.2px;
+  --text-stroke-soft: 0.8px;
+  --text-shadow-strong: 1px 1px 0 rgba(0, 0, 0, 0.28);
+  --text-shadow-soft: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  --icon-power: #d8ecff;
+  --toggle-pointer: #ff8b7a;
+  --toggle-segment-start: #4f7d9f;
+  --toggle-segment-mid: #2e3946;
+  --toggle-segment-end: #8ab6d6;
+  --knurl-light: #8fa3b5;
+  --knurl-dark: #435364;
+  --slider-thumb: #e45a5a;
+  --slider-thumb-alt: #57d7b0;
+  --lcd-bg: #5e6f2a;
+  --lcd-on: #bff59a;
+  --lcd-off: rgba(191, 245, 154, 0.18);
+  --on: #73d7ff;
+  --off: rgba(115, 215, 255, 0.16);
+  --online: #73d7ff;
+  --offline: #ff6d6d;
+  --pending: #ffc36a;
 }
 
 .app,
@@ -63,8 +109,8 @@ body.dark-mode {
 
 body {
   font-family: 'Patrick Hand', cursive;
-  color: #fbfbfb;
-  -webkit-text-stroke: 6px black;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) #000000;
   paint-order: stroke fill;
   letter-spacing: 1px;
   margin: 0;
@@ -72,7 +118,7 @@ body {
   background-color: var(--bg-main);
   display: flex;
   flex-direction: column;
-  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  text-shadow: var(--text-shadow-soft);
   min-height: 100vh;
   max-height: 200vh;
 }
@@ -177,9 +223,10 @@ main > .hint {
   justify-content: center;
   align-items: center;
   font-family: 'Patrick Hand', cursive;
-  color: #fbfbfb;
+  color: var(--text-main);
   paint-order: stroke fill;
-  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+  text-shadow: var(--text-shadow-soft);
   letter-spacing: 1px;
   animation: bounce 1s infinite ease-in-out;
 }
@@ -199,8 +246,8 @@ main > .hint {
 .arrow {
   width: 16px;
   height: 16px;
-  border-right: 4px solid black;
-  border-bottom: 4px solid black;
+  border-right: 4px solid var(--outline-color);
+  border-bottom: 4px solid var(--outline-color);
   transform: rotate(45deg);
   border-radius: 2px;
 }

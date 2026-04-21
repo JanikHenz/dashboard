@@ -4,10 +4,6 @@
   --gap: 0.1vw;
   --digit-w: calc(var(--seg-l) + var(--seg-w) * 2 + var(--gap) * 2);
   --digit-h: calc(var(--seg-l) * 2 + var(--seg-w) * 3 + var(--gap) * 4);
-
-  --lcd-bg: #768c18;
-  --lcd-on: #0f380f;
-  --lcd-off: rgba(15, 56, 15, 0.2);
 }
 
 .group {

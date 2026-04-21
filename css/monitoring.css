@@ -1,6 +1,6 @@
 
 .chart {
-  background-color: white;
+  background-color: var(--surface-soft);
   display: flex;
   min-width: 15rem;
   aspect-ratio: 2/1;
