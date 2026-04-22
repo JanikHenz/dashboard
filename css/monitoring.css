@@ -1,11 +1,11 @@
 
 .chart {
   background-color: var(--surface-soft);
-  display: flex;
+  display: block;
   position: relative;
   min-width: 0;
-  height: auto;
-  aspect-ratio: 16 / 9;
+  min-height: clamp(220px, 30vh, 360px);
+  height: clamp(220px, 30vh, 360px);
   width: 100%;
   justify-self: stretch;
   align-self: start;
@@ -47,4 +47,53 @@
   background-color: var(--bg-header-inner);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: 20px 20px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.monitoring-headline {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+}
+
+.monitoring-model-hint {
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  opacity: 0.85;
+}
+
+.monitoring-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(110px, 1fr));
+  gap: 0.5rem;
+  width: min(68rem, 100%);
+}
+
+.monitoring-stat {
+  background-color: var(--surface-soft);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 12px;
+  box-shadow: var(--hard-shadow);
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.monitoring-stat strong {
+  color: var(--text-accent);
+}
+
+@media (max-width: 1000px) {
+  #monitoring-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .monitoring-stats {
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
+  }
 }

@@ -22,16 +22,36 @@ app.get('/', (req, res) => {
 // ====================== Connection =============================
 // ---------------------- Kuberne
 let k8sAppsApi = null;
+let k8sClientMode = 'disabled';
+
+function pickK8sResource(response) {
+  if (!response) return null;
+  return response.body || response;
+}
 
 async function initKubernetesClient() {
+  const k8s = await import('@kubernetes/client-node');
+  const kc = new k8s.KubeConfig();
+
   try {
-    const k8s = await import('@kubernetes/client-node');
-    const kc = new k8s.KubeConfig();
+    kc.loadFromCluster();
+    k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
+    k8sClientMode = 'in-cluster';
+    console.log('Kubernetes In-Cluster config geladen');
+    return;
+  } catch (clusterErr) {
+    console.log('In-Cluster config nicht verfuegbar:', clusterErr.message);
+  }
+
+  try {
     kc.loadFromDefault();
     k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
-    console.log('Kubernetes config geladen');
+    k8sClientMode = 'kubeconfig';
+    console.log('Kubernetes config aus kubeconfig geladen');
   } catch (err) {
     console.error('Konnte Kubernetes config nicht laden:', err.message);
+    k8sAppsApi = null;
+    k8sClientMode = 'disabled';
     console.log('K8s Features werden deaktiviert');
   }
 }
@@ -75,6 +95,9 @@ app.get('/api/status', async (req, res) => {
     let pingResult = await ping.promise.probe(PC_IP, { timeout: 1 });
     if (!pingResult.alive) {
       realPcUptimeMs = 0;
+    }
+    if (pingResult.alive && realPcUptimeMs <= 0) {
+      realPcUptimeMs = await resolvePcUptimeFallbackMs();
     }
     res.json({
       is_on: pingResult.alive,
@@ -123,12 +146,13 @@ app.get('/api/k8s/deployments', async (req, res) => {
           try {
             const deploymentName = String(app.deployment);
             const ns = String(namespace);
-            const deployment = await k8sAppsApi.readNamespacedDeployment({
+            const deploymentResponse = await k8sAppsApi.readNamespacedDeployment({
               name: deploymentName,
               namespace: ns
             });
-            const status = deployment.status;
-            const spec = deployment.spec;
+            const deployment = pickK8sResource(deploymentResponse);
+            const status = deployment?.status || {};
+            const spec = deployment?.spec || {};
             deploymentStatus[`${ns}/${deploymentName}`] = {
               replicas: status.replicas || 0,
               readyReplicas: status.readyReplicas || 0,
@@ -163,11 +187,13 @@ app.post('/api/k8s/scale', async (req, res) => {
     return res.status(400).json({ error: 'namespace, deployment und replicas erforderlich' });
   }
   try {
-    const currentDeployment = await k8sAppsApi.readNamespacedDeployment({
+    const currentDeploymentResponse = await k8sAppsApi.readNamespacedDeployment({
       name: deployment,
       namespace: namespace
     });
-    currentDeployment.spec.replicas = parseInt(replicas);
+    const currentDeployment = pickK8sResource(currentDeploymentResponse);
+    currentDeployment.spec = currentDeployment.spec || {};
+    currentDeployment.spec.replicas = parseInt(replicas, 10);
     await k8sAppsApi.replaceNamespacedDeployment({
       name: deployment,
       namespace: namespace,
@@ -217,6 +243,49 @@ async function queryPrometheusRange(query, start, end, step) {
   throw lastError || new Error('Prometheus nicht erreichbar');
 }
 
+async function queryPrometheusInstant(query) {
+  const params = new URLSearchParams({ query });
+  let lastError = null;
+  for (const baseUrl of PROMETHEUS_FALLBACK_URLS) {
+    try {
+      const response = await fetch(`${baseUrl}/api/v1/query?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Prometheus HTTP ${response.status}`);
+      }
+      const payload = await response.json();
+      if (payload.status !== 'success') {
+        throw new Error(payload.error || 'Prometheus query fehlgeschlagen');
+      }
+      return payload.data?.result || [];
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Prometheus nicht erreichbar');
+}
+
+async function resolvePcUptimeFallbackMs() {
+  const uptimeQueries = [
+    `max((node_time_seconds{instance=~"${PC_IP}(:\\\\d+)?"} - node_boot_time_seconds{instance=~"${PC_IP}(:\\\\d+)?"}))`,
+    'max(node_time_seconds - node_boot_time_seconds)'
+  ];
+
+  for (const query of uptimeQueries) {
+    try {
+      const result = await queryPrometheusInstant(query);
+      const raw = result?.[0]?.value?.[1];
+      const seconds = Number(raw);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        return Math.round(seconds * 1000);
+      }
+    } catch (_error) {
+      // Fallback auf naechste Query.
+    }
+  }
+
+  return 0;
+}
+
 function flattenSeries(result) {
   const points = new Map();
   result.forEach((series) => {
@@ -244,7 +313,8 @@ app.get('/api/monitoring/overview', async (req, res) => {
       cpu: '100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)',
       memory: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))',
       networkRx: 'sum(rate(node_network_receive_bytes_total{device!~"lo"}[5m])) * 8 / 1000000',
-      load: 'avg(node_load1)'
+      gpu: 'max(avg(DCGM_FI_DEV_GPU_UTIL), avg(nvidia_smi_utilization_gpu_ratio * 100), avg(nvidia_gpu_duty_cycle))',
+      powerKw: 'sum(DCGM_FI_DEV_POWER_USAGE) / 1000'
     };
 
     const entries = await Promise.all(Object.entries(queries).map(async ([key, promql]) => {
@@ -261,7 +331,8 @@ app.get('/api/monitoring/overview', async (req, res) => {
         cpu: '%',
         memory: '%',
         networkRx: 'Mbit/s',
-        load: 'load'
+        gpu: '%',
+        powerKw: 'kW'
       }
     });
   } catch (error) {

@@ -295,9 +295,43 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'chart-cpu', key: 'cpu', title: 'CPU Auslastung', unit: '%' },
     { id: 'chart-memory', key: 'memory', title: 'RAM Auslastung', unit: '%' },
     { id: 'chart-network', key: 'networkRx', title: 'Netzwerk RX', unit: 'Mbit/s' },
-    { id: 'chart-load', key: 'load', title: 'System Load (1m)', unit: 'load' }
+    { id: 'chart-load', key: 'gpu', title: 'GPU Usage', unit: '%' }
   ];
   const monitoringCharts = new Map();
+
+  function latestValue(points) {
+    if (!Array.isArray(points) || points.length === 0) return null;
+    const value = Number(points[points.length - 1]?.value);
+    return Number.isFinite(value) ? value : null;
+  }
+
+  function formatMetric(value, unit, digits = 1) {
+    if (value === null || value === undefined || Number.isNaN(value)) return '--';
+    return `${Number(value).toFixed(digits)} ${unit}`.trim();
+  }
+
+  function renderMonitoringHeader(data) {
+    const header = document.getElementById('monitoring-header');
+    if (!header) return;
+
+    const cpu = latestValue(data.series?.cpu);
+    const memory = latestValue(data.series?.memory);
+    const gpu = latestValue(data.series?.gpu);
+    const powerKw = latestValue(data.series?.powerKw);
+
+    header.innerHTML = `
+      <div class="monitoring-headline">
+        <span>Monitoring</span>
+        <span class="monitoring-model-hint">Opus 4.7 1M Extra High</span>
+      </div>
+      <div class="monitoring-stats">
+        <div class="monitoring-stat"><span>CPU</span><strong>${formatMetric(cpu, '%')}</strong></div>
+        <div class="monitoring-stat"><span>RAM</span><strong>${formatMetric(memory, '%')}</strong></div>
+        <div class="monitoring-stat"><span>GPU</span><strong>${formatMetric(gpu, '%')}</strong></div>
+        <div class="monitoring-stat"><span>Stromverbrauch</span><strong>${formatMetric(powerKw, 'kW', 2)}</strong></div>
+      </div>
+    `;
+  }
 
   function getCssVar(name) {
     return getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -408,6 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/monitoring/overview?range=1h&step=30');
       if (!response.ok) throw new Error('API Antwort nicht OK');
       const data = await response.json();
+      renderMonitoringHeader(data);
       monitoringConfig.forEach((config) => {
         const chart = monitoringCharts.get(config.id);
         if (!chart) return;
@@ -416,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } catch (error) {
       console.error('Monitoring konnte nicht geladen werden:', error);
+      renderMonitoringHeader({ series: {} });
       showMonitoringError('Monitoring nicht erreichbar');
     }
   }
