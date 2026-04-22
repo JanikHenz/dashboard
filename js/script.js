@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
       icon.appendChild(link);
       threed.appendChild(icon);
 
-      appDiv.appendChild(statusIndicator);
       appDiv.appendChild(threed);
       appDiv.appendChild(nameTag);
+      nameTag.appendChild(statusIndicator);
       nameTag.appendChild(appName);
 
 // ------------------------ Select App -------------------------
