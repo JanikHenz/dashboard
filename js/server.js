@@ -79,32 +79,19 @@ pi.on('error', (err) => {
   isPiConnected = false;
 });
 
-// ============================ Uptime Info via Crontab =======================
-let realPcUptimeMs = 0;
-app.post('/api/pc-data', (req, res) => {
-  if (req.body && typeof req.body.uptime_ms === 'number') {
-    realPcUptimeMs = req.body.uptime_ms;
-    console.log(`Uptime-Update vom Ubuntu-Server: ${realPcUptimeMs} ms`);
-  }
-  res.json({ success: true });
-});
-
-// ======================= Power Status via Ping =================================
+// ======================= Power Status via Ping + Uptime via Prometheus ===========
 app.get('/api/status', async (req, res) => {
   try {
-    let pingResult = await ping.promise.probe(PC_IP, { timeout: 1 });
-    if (!pingResult.alive) {
-      realPcUptimeMs = 0;
-    }
-    if (pingResult.alive && realPcUptimeMs <= 0) {
-      realPcUptimeMs = await resolvePcUptimeFallbackMs();
+    const pingResult = await ping.promise.probe(PC_IP, { timeout: 1 });
+    let uptimeMs = 0;
+    if (pingResult.alive) {
+      uptimeMs = await resolvePcUptimeFromPrometheus();
     }
     res.json({
       is_on: pingResult.alive,
-      uptime_ms: realPcUptimeMs
+      uptime_ms: uptimeMs
     });
   } catch (error) {
-    realPcUptimeMs = 0;
     res.status(500).json({ is_on: false, uptime_ms: 0, error: 'Ping fehlgeschlagen' });
   }
 });
@@ -264,7 +251,7 @@ async function queryPrometheusInstant(query) {
   throw lastError || new Error('Prometheus nicht erreichbar');
 }
 
-async function resolvePcUptimeFallbackMs() {
+async function resolvePcUptimeFromPrometheus() {
   const uptimeQueries = [
     `max((node_time_seconds{instance=~"${PC_IP}(:\\\\d+)?"} - node_boot_time_seconds{instance=~"${PC_IP}(:\\\\d+)?"}))`,
     'max(node_time_seconds - node_boot_time_seconds)'
@@ -279,7 +266,7 @@ async function resolvePcUptimeFallbackMs() {
         return Math.round(seconds * 1000);
       }
     } catch (_error) {
-      // Fallback auf naechste Query.
+      // weiter zur naechsten Query
     }
   }
 
@@ -313,14 +300,21 @@ app.get('/api/monitoring/overview', async (req, res) => {
       cpu: '100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)',
       memory: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))',
       networkRx: 'sum(rate(node_network_receive_bytes_total{device!~"lo"}[5m])) * 8 / 1000000',
-      gpu: 'max(avg(DCGM_FI_DEV_GPU_UTIL), avg(nvidia_smi_utilization_gpu_ratio * 100), avg(nvidia_gpu_duty_cycle))',
-      powerKw: 'sum(DCGM_FI_DEV_POWER_USAGE) / 1000'
+      gpu: 'avg(DCGM_FI_DEV_GPU_UTIL) or avg(nvidia_smi_utilization_gpu_ratio) * 100 or avg(nvidia_gpu_duty_cycle)',
+      powerKw: '(sum(DCGM_FI_DEV_POWER_USAGE) or sum(rate(node_rapl_package_joules_total[5m]))) / 1000'
     };
 
-    const entries = await Promise.all(Object.entries(queries).map(async ([key, promql]) => {
+    const settled = await Promise.allSettled(Object.entries(queries).map(async ([key, promql]) => {
       const result = await queryPrometheusRange(promql, start, end, step);
       return [key, flattenSeries(result)];
     }));
+
+    const entries = Object.keys(queries).map((key, idx) => {
+      const outcome = settled[idx];
+      if (outcome.status === 'fulfilled') return outcome.value;
+      console.warn(`Prometheus Query ${key} fehlgeschlagen:`, outcome.reason?.message);
+      return [key, []];
+    });
 
     res.json({
       start: start * 1000,

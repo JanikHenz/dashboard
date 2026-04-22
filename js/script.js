@@ -320,10 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const powerKw = latestValue(data.series?.powerKw);
 
     header.innerHTML = `
-      <div class="monitoring-headline">
-        <span>Monitoring</span>
-        <span class="monitoring-model-hint">Opus 4.7 1M Extra High</span>
-      </div>
       <div class="monitoring-stats">
         <div class="monitoring-stat"><span>CPU</span><strong>${formatMetric(cpu, '%')}</strong></div>
         <div class="monitoring-stat"><span>RAM</span><strong>${formatMetric(memory, '%')}</strong></div>
