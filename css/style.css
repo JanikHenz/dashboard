@@ -116,21 +116,46 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-main);
-  display: flex;
-  flex-direction: column;
   text-shadow: var(--text-shadow-soft);
-  min-height: 100vh;
-  max-height: 200vh;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.shell {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .content {
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100vh;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+}
 
+.content:nth-of-type(1) {
+  transform: translate3d(0, 0, 0);
+}
+
+.content:nth-of-type(2) {
+  transform: translate3d(0, 100%, 0);
+}
+
+.shell.show-monitoring .content:nth-of-type(1) {
+  transform: translate3d(0, -100%, 0);
+}
+
+.shell.show-monitoring .content:nth-of-type(2) {
+  transform: translate3d(0, 0, 0);
 }
 
 
@@ -250,5 +275,15 @@ main > .hint {
   border-bottom: 4px solid var(--outline-color);
   transform: rotate(45deg);
   border-radius: 2px;
+}
+
+.arrow-up {
+  transform: rotate(-135deg);
+}
+
+.back-hint {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  flex-direction: column-reverse;
 }
 

@@ -301,7 +301,10 @@ app.get('/api/monitoring/overview', async (req, res) => {
       memory: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))',
       networkRx: 'sum(rate(node_network_receive_bytes_total{device!~"lo"}[5m])) * 8 / 1000000',
       gpu: 'avg(DCGM_FI_DEV_GPU_UTIL) or avg(nvidia_smi_utilization_gpu_ratio) * 100 or avg(nvidia_gpu_duty_cycle)',
-      powerKw: '(sum(DCGM_FI_DEV_POWER_USAGE) or sum(rate(node_rapl_package_joules_total[5m]))) / 1000'
+      gpuTemp: 'max(DCGM_FI_DEV_GPU_TEMP) or max(nvidia_smi_temperature_gpu)',
+      powerW: 'sum(DCGM_FI_DEV_POWER_USAGE) or sum(rate(node_rapl_package_joules_total[5m]))',
+      diskFree: '100 * (sum(node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}) / sum(node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}))',
+      nodesUp: 'count(up{job="node-exporter"} == 1)'
     };
 
     const settled = await Promise.allSettled(Object.entries(queries).map(async ([key, promql]) => {
@@ -326,7 +329,10 @@ app.get('/api/monitoring/overview', async (req, res) => {
         memory: '%',
         networkRx: 'Mbit/s',
         gpu: '%',
-        powerKw: 'kW'
+        gpuTemp: '°C',
+        powerW: 'W',
+        diskFree: '%',
+        nodesUp: ''
       }
     });
   } catch (error) {

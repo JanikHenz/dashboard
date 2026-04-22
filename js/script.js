@@ -299,6 +299,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const monitoringCharts = new Map();
 
+  const headerStats = [
+    { key: 'cpu', label: 'CPU', unit: '%', digits: 0, icon: 'cpu' },
+    { key: 'memory', label: 'RAM', unit: '%', digits: 0, icon: 'ram' },
+    { key: 'gpu', label: 'GPU', unit: '%', digits: 0, icon: 'gpu' },
+    { key: 'gpuTemp', label: 'GPU TEMP', unit: '°C', digits: 0, icon: 'temp' },
+    { key: 'powerW', label: 'POWER', unit: 'W', digits: 0, icon: 'power' },
+    { key: 'networkRx', label: 'NETZ', unit: 'Mbit/s', digits: 1, icon: 'net' },
+    { key: 'diskFree', label: 'DISK FREI', unit: '%', digits: 0, icon: 'disk' },
+    { key: 'nodesUp', label: 'NODES', unit: '', digits: 0, icon: 'nodes' }
+  ];
+
   function latestValue(points) {
     if (!Array.isArray(points) || points.length === 0) return null;
     const value = Number(points[points.length - 1]?.value);
@@ -307,27 +318,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatMetric(value, unit, digits = 1) {
     if (value === null || value === undefined || Number.isNaN(value)) return '--';
-    return `${Number(value).toFixed(digits)} ${unit}`.trim();
+    const formatted = Number(value).toFixed(digits);
+    return unit ? `${formatted} ${unit}` : formatted;
+  }
+
+  function buildMonitoringHeader() {
+    const header = document.getElementById('monitoring-header');
+    if (!header || header.dataset.built === 'true') return;
+
+    header.innerHTML = `
+      <div class="monitoring-panel">
+        <div class="monitoring-title">
+          <span class="monitoring-led"></span>
+          <span class="monitoring-caption">CONTROL PANEL</span>
+        </div>
+        <div class="monitoring-stats">
+          ${headerStats.map((stat) => `
+            <div class="monitoring-stat" data-key="${stat.key}">
+              <span class="monitoring-stat-label">${stat.label}</span>
+              <strong class="monitoring-stat-value">--</strong>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    header.dataset.built = 'true';
   }
 
   function renderMonitoringHeader(data) {
     const header = document.getElementById('monitoring-header');
     if (!header) return;
+    buildMonitoringHeader();
 
-    const cpu = latestValue(data.series?.cpu);
-    const memory = latestValue(data.series?.memory);
-    const gpu = latestValue(data.series?.gpu);
-    const powerKw = latestValue(data.series?.powerKw);
-
-    header.innerHTML = `
-      <div class="monitoring-stats">
-        <div class="monitoring-stat"><span>CPU</span><strong>${formatMetric(cpu, '%')}</strong></div>
-        <div class="monitoring-stat"><span>RAM</span><strong>${formatMetric(memory, '%')}</strong></div>
-        <div class="monitoring-stat"><span>GPU</span><strong>${formatMetric(gpu, '%')}</strong></div>
-        <div class="monitoring-stat"><span>Stromverbrauch</span><strong>${formatMetric(powerKw, 'kW', 2)}</strong></div>
-      </div>
-    `;
+    const series = data.series || {};
+    headerStats.forEach((stat) => {
+      const value = latestValue(series[stat.key]);
+      const el = header.querySelector(`.monitoring-stat[data-key="${stat.key}"] .monitoring-stat-value`);
+      if (el) el.textContent = formatMetric(value, stat.unit, stat.digits);
+    });
   }
+
+// ======================== Page Switcher ==================================
+  const shell = document.getElementById('app-shell');
+  document.querySelectorAll('.hint').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!shell) return;
+      shell.classList.toggle('show-monitoring');
+      requestAnimationFrame(() => {
+        monitoringCharts.forEach((chart) => chart.resize());
+      });
+    });
+  });
 
   function getCssVar(name) {
     return getComputedStyle(document.body).getPropertyValue(name).trim();
