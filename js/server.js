@@ -4,7 +4,6 @@ const pigpioClient = require('pigpio-client');
 const path = require('path');
 const fs = require('fs');
 const yaml = require('js-yaml');
-const k8s = require('@kubernetes/client-node');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -22,15 +21,20 @@ app.get('/', (req, res) => {
 });
 // ====================== Connection =============================
 // ---------------------- Kuberne
-const kc = new k8s.KubeConfig();
-try {
-  kc.loadFromDefault();
-  console.log('Kubernetes config geladen');
-} catch (err) {
-  console.error('Konnte Kubernetes config nicht laden:', err.message);
-  console.log('K8s Features werden deaktiviert');
+let k8sAppsApi = null;
+
+async function initKubernetesClient() {
+  try {
+    const k8s = await import('@kubernetes/client-node');
+    const kc = new k8s.KubeConfig();
+    kc.loadFromDefault();
+    k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
+    console.log('Kubernetes config geladen');
+  } catch (err) {
+    console.error('Konnte Kubernetes config nicht laden:', err.message);
+    console.log('K8s Features werden deaktiviert');
+  }
 }
-const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
 
 // -------------------- Raspberry Pi Connection ------------------------
 const PC_IP = process.env.PC_IP || "192.168.1.9";
@@ -106,6 +110,9 @@ app.get('/api/press-button', async (req, res) => {
 //=================== Kubernetes ==========================================
 //--------------------- Get Deployments ------------------------------------
 app.get('/api/k8s/deployments', async (req, res) => {
+  if (!k8sAppsApi) {
+    return res.status(503).json({ error: 'Kubernetes API nicht verfügbar' });
+  }
   try {
     const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
     const data = yaml.load(fileContents);
@@ -148,6 +155,9 @@ app.get('/api/k8s/deployments', async (req, res) => {
 
 // -------------------- Scale Replicas -------------------------------
 app.post('/api/k8s/scale', async (req, res) => {
+  if (!k8sAppsApi) {
+    return res.status(503).json({ error: 'Kubernetes API nicht verfügbar' });
+  }
   const { namespace, deployment, replicas } = req.body;
   if (!namespace || !deployment || replicas === undefined) {
     return res.status(400).json({ error: 'namespace, deployment und replicas erforderlich' });
@@ -286,6 +296,8 @@ app.get('/api/apps', (req, res) => {
 });
 
 // ========================= General Infos =========================
-app.listen(PORT, () => {
-  console.log(`Dashboard läuft auf Port ${PORT}`);
+initKubernetesClient().finally(() => {
+  app.listen(PORT, () => {
+    console.log(`Dashboard läuft auf Port ${PORT}`);
+  });
 });
