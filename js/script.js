@@ -290,6 +290,144 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadApps();
 
+// ======================== Monitoring ===================================
+  const monitoringConfig = [
+    { id: 'chart-cpu', key: 'cpu', title: 'CPU Auslastung', unit: '%' },
+    { id: 'chart-memory', key: 'memory', title: 'RAM Auslastung', unit: '%' },
+    { id: 'chart-network', key: 'networkRx', title: 'Netzwerk RX', unit: 'Mbit/s' },
+    { id: 'chart-load', key: 'load', title: 'System Load (1m)', unit: 'load' }
+  ];
+  const monitoringCharts = new Map();
+
+  function getCssVar(name) {
+    return getComputedStyle(document.body).getPropertyValue(name).trim();
+  }
+
+  function getMonitoringPalette() {
+    return {
+      text: getCssVar('--text-main'),
+      stroke: getCssVar('--text-stroke-color') || '#000',
+      grid: 'rgba(0, 0, 0, 0.25)',
+      line: getCssVar('--on'),
+      area: getCssVar('--off')
+    };
+  }
+
+  function createBaseChartOption(config, points) {
+    const palette = getMonitoringPalette();
+    const seriesData = points.map((point) => [point.timestamp, point.value]);
+    return {
+      animation: false,
+      title: {
+        text: config.title,
+        left: 12,
+        top: 8,
+        textStyle: {
+          color: palette.text,
+          fontFamily: 'Patrick Hand, cursive',
+          fontSize: 18,
+          textBorderColor: palette.stroke,
+          textBorderWidth: 1
+        }
+      },
+      grid: { left: 48, right: 14, top: 46, bottom: 26 },
+      tooltip: {
+        trigger: 'axis',
+        valueFormatter: (value) => `${Number(value).toFixed(2)} ${config.unit}`
+      },
+      xAxis: {
+        type: 'time',
+        axisLabel: { color: palette.text },
+        axisLine: { lineStyle: { color: palette.grid } },
+        splitLine: { show: false }
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          color: palette.text,
+          formatter: (value) => `${value}${config.unit === '%' ? '%' : ''}`
+        },
+        axisLine: { lineStyle: { color: palette.grid } },
+        splitLine: { lineStyle: { color: palette.grid } }
+      },
+      series: [{
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        lineStyle: { width: 3, color: palette.line },
+        areaStyle: { color: palette.area },
+        data: seriesData
+      }]
+    };
+  }
+
+  function ensureMonitoringCharts() {
+    if (!window.echarts) return false;
+    monitoringConfig.forEach((config) => {
+      const target = document.getElementById(config.id);
+      if (!target) return;
+      if (!monitoringCharts.has(config.id)) {
+        monitoringCharts.set(config.id, echarts.init(target));
+      }
+    });
+    return monitoringCharts.size > 0;
+  }
+
+  function showMonitoringError(message) {
+    const palette = getMonitoringPalette();
+    monitoringConfig.forEach((config) => {
+      const chart = monitoringCharts.get(config.id);
+      if (!chart) return;
+      chart.clear();
+      chart.setOption({
+        title: {
+          text: config.title,
+          left: 'center',
+          top: 'middle',
+          textStyle: {
+            color: palette.text,
+            fontFamily: 'Patrick Hand, cursive',
+            textBorderColor: palette.stroke,
+            textBorderWidth: 1,
+            fontSize: 16
+          },
+          subtext: message,
+          subtextStyle: {
+            color: getCssVar('--offline'),
+            fontFamily: 'Patrick Hand, cursive',
+            fontSize: 14
+          }
+        }
+      }, true);
+    });
+  }
+
+  async function refreshMonitoring() {
+    if (!ensureMonitoringCharts()) return;
+    try {
+      const response = await fetch('/api/monitoring/overview?range=1h&step=30');
+      if (!response.ok) throw new Error('API Antwort nicht OK');
+      const data = await response.json();
+      monitoringConfig.forEach((config) => {
+        const chart = monitoringCharts.get(config.id);
+        if (!chart) return;
+        const points = data.series?.[config.key] || [];
+        chart.setOption(createBaseChartOption(config, points), true);
+      });
+    } catch (error) {
+      console.error('Monitoring konnte nicht geladen werden:', error);
+      showMonitoringError('Monitoring nicht erreichbar');
+    }
+  }
+
+  if (ensureMonitoringCharts()) {
+    refreshMonitoring();
+    setInterval(refreshMonitoring, 15000);
+    window.addEventListener('resize', () => {
+      monitoringCharts.forEach((chart) => chart.resize());
+    });
+  }
+
 // ======================== Theme Toggle ===================================
   const themeToggle = document.getElementById('theme-toggle');
   const drehteil = document.querySelector('.drehteil');
@@ -311,6 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     localStorage.setItem('theme', theme);
+    refreshMonitoring();
   }
 
   applyTheme(savedTheme);

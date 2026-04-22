@@ -10,7 +10,7 @@
 
 body {
   --bg-main: #f4f7fb;
-  --bg-header: #9eb8c6;
+  --bg-header: #afc3cf;
   --bg-header-inner: #86aabc;
   --bg-segment: #2f4330;
   --bg-main-area: #afc3cf;
@@ -55,7 +55,7 @@ body::-webkit-scrollbar{
 
 body.dark-mode {
   --bg-main: #171d26;
-  --bg-header: #222b37;
+  --bg-header: #1d2632;
   --bg-header-inner: #2f3c4c;
   --bg-segment: #0f151b;
   --bg-main-area: #1d2632;

@@ -35,6 +35,12 @@ const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
 // -------------------- Raspberry Pi Connection ------------------------
 const PC_IP = process.env.PC_IP || "192.168.1.9";
 const PI_IP = process.env.PI_IP || "192.168.1.10";
+const PROMETHEUS_BASE_URL = process.env.PROMETHEUS_BASE_URL || 'http://prometheus-service.monitoring.svc.cluster.local:9090';
+const PROMETHEUS_FALLBACK_URLS = [
+  PROMETHEUS_BASE_URL,
+  `http://${PC_IP}:30090`,
+  'http://127.0.0.1:30090'
+];
 
 const pi = pigpioClient.pigpio({ host: PI_IP });
 let isPiConnected = false;
@@ -161,6 +167,96 @@ app.post('/api/k8s/scale', async (req, res) => {
   } catch (error) {
     console.error('Scale Fehler:', error);
     res.status(500).json({ error: 'Scaling fehlgeschlagen' });
+  }
+});
+
+// =========================== Monitoring ==================================
+function parseRangeSeconds(rangeParam) {
+  if (!rangeParam) return 3600;
+  const match = String(rangeParam).trim().match(/^(\d+)([smhd])$/i);
+  if (!match) return 3600;
+  const value = Number(match[1]);
+  const unit = match[2].toLowerCase();
+  const multipliers = { s: 1, m: 60, h: 3600, d: 86400 };
+  return Math.max(60, value * multipliers[unit]);
+}
+
+async function queryPrometheusRange(query, start, end, step) {
+  const params = new URLSearchParams({
+    query,
+    start: String(start),
+    end: String(end),
+    step: String(step)
+  });
+  let lastError = null;
+  for (const baseUrl of PROMETHEUS_FALLBACK_URLS) {
+    try {
+      const response = await fetch(`${baseUrl}/api/v1/query_range?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Prometheus HTTP ${response.status}`);
+      }
+      const payload = await response.json();
+      if (payload.status !== 'success') {
+        throw new Error(payload.error || 'Prometheus query fehlgeschlagen');
+      }
+      return payload.data?.result || [];
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Prometheus nicht erreichbar');
+}
+
+function flattenSeries(result) {
+  const points = new Map();
+  result.forEach((series) => {
+    (series.values || []).forEach(([ts, value]) => {
+      const timestamp = Number(ts) * 1000;
+      const numeric = Number(value);
+      if (Number.isFinite(numeric)) {
+        points.set(timestamp, numeric);
+      }
+    });
+  });
+  return Array.from(points.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([timestamp, value]) => ({ timestamp, value: Number(value.toFixed(2)) }));
+}
+
+app.get('/api/monitoring/overview', async (req, res) => {
+  try {
+    const rangeSeconds = parseRangeSeconds(req.query.range);
+    const step = Math.max(15, Number(req.query.step) || 30);
+    const end = Math.floor(Date.now() / 1000);
+    const start = end - rangeSeconds;
+
+    const queries = {
+      cpu: '100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)',
+      memory: '100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))',
+      networkRx: 'sum(rate(node_network_receive_bytes_total{device!~"lo"}[5m])) * 8 / 1000000',
+      load: 'avg(node_load1)'
+    };
+
+    const entries = await Promise.all(Object.entries(queries).map(async ([key, promql]) => {
+      const result = await queryPrometheusRange(promql, start, end, step);
+      return [key, flattenSeries(result)];
+    }));
+
+    res.json({
+      start: start * 1000,
+      end: end * 1000,
+      step,
+      series: Object.fromEntries(entries),
+      units: {
+        cpu: '%',
+        memory: '%',
+        networkRx: 'Mbit/s',
+        load: 'load'
+      }
+    });
+  } catch (error) {
+    console.error('Monitoring API Fehler:', error.message);
+    res.status(500).json({ error: 'Monitoring-Daten konnten nicht geladen werden' });
   }
 });
 
