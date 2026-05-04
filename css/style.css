@@ -198,7 +198,14 @@ header {
   background-color: black;
   width: 100%;
   height: 100%;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 65%, 60% 65%, 55% 100%, 45% 100%, 40% 65%, 0% 65%);
+  clip-path: polygon(0% 0%,
+    100% 0%, 
+    100% 65%, 
+    60% 65%, 
+    55% min(100%, 25vw ), 
+    45% min(100%, 25vw ), 
+    40% 65%, 
+    0% 65%);
 }
 
 .header {
@@ -229,6 +236,12 @@ main {
 }
 
 main > .apps-layout {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Monitoring: Chart-Raster muss in der Flex-Spalte schrumpfen können (sonst Canvas-Ueberlapp) */
+main > #charts {
   flex: 1;
   min-height: 0;
 }

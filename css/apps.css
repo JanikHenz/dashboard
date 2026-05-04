@@ -11,13 +11,15 @@
 
 .apps {
   flex: 1;
-  min-width: 15rem;
+  min-width: 10rem;
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 15rem);
+  grid-template-columns: repeat(auto-fill, clamp(10rem,13rem,15rem));
   gap: 4rem;
+  row-gap: clamp(1rem, 2rem, 4rem);
   justify-content: center;
   height: 100%;
   align-content: start;
@@ -39,7 +41,7 @@
 
 .app {
  /* background-color: var(--bg-app-card);*/
-  width: 15rem;
+  width: clamp(10rem,13rem,15rem);
   height: 20rem;
   display: flex;
   flex-direction: column;
@@ -226,14 +228,14 @@
 
 .replica-control h2 {
   font-family: var(--comic-font);
-  font-size: clamp(0.8rem, 1.5vw, 1.5vw);
+  font-size: clamp(1.5rem, 1.5vw, 10vw);
   color: var(--text-main);
   text-align: center;
 }
 
 .replica-control .app-name {
   font-family: var(--comic-font);
-  font-size: 1.2rem;
+  font-size: clamp(1.0rem, 0.9vw, 5vw);
   color: var(--on);
   -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
   paint-order: stroke fill;

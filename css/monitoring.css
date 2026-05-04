@@ -1,37 +1,49 @@
-
 .chart {
   background-color: var(--surface-soft);
   display: block;
   position: relative;
-  min-width: 0;
-  min-height: clamp(220px, 30vh, 360px);
-  height: clamp(220px, 30vh, 360px);
   width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  height: auto;
   justify-self: stretch;
-  align-self: start;
+  align-self: stretch;
+  overflow: hidden;
+  isolation: isolate;
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   border-radius: 24px;
-  overflow: hidden;
-  contain: layout paint;
 }
-
 
 #charts {
   width: 90%;
   max-width: 90vw;
   margin: clamp(1vw, 2vw, 2vw) auto 0;
+  flex: 1;
+  min-height: 0;
+  align-self: stretch;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: auto;
-  align-items: start;
-  gap: 2rem;
+  align-items: stretch;
+  justify-items: stretch;
+  column-gap: clamp(1rem, 2vw, 2rem);
+  row-gap: clamp(1rem, 2vw, 2rem);
+  justify-content: stretch;
+  align-content: start;
+  background-color: var(--bg-header-inner);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  border-radius: 30px;
+  scrollbar-width: none;
 }
 
-@media (max-width: 900px) {
-  #charts {
-    grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-  }
+#charts::-webkit-scrollbar {
+  display: none;
 }
 
 #hidden>* {
@@ -80,29 +92,13 @@
   color: var(--text-contrast);
 }
 
-.monitoring-led {
-  width: 0.9rem;
-  height: 0.9rem;
-  border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
-  background: var(--online);
-  box-shadow: 0 0 6px var(--online), 0 0 14px var(--online),
-              inset 2px 2px 0 rgba(0, 0, 0, 0.25);
-  animation: pulse-led 2s infinite ease-in-out;
-}
-
-@keyframes pulse-led {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.55; }
-}
-
 .monitoring-stats {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: clamp(0.4rem, 0.8vw, 0.9rem);
 }
 
-.monitoring-stat {
+.monitor-stat {
   background-color: var(--lcd-bg);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 12px;
@@ -117,33 +113,17 @@
   min-width: 0;
 }
 
-.monitoring-stat-label {
+.monitor-stat-label {
   font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   letter-spacing: 1.5px;
   color: var(--lcd-on);
   opacity: 0.85;
 }
 
-.monitoring-stat-value {
+.monitor-stat-value {
   color: var(--lcd-on);
   font-size: clamp(1rem, 1.4vw, 1.4rem);
   line-height: 1;
   text-shadow: 0 0 4px rgba(23, 63, 25, 0.35);
   font-variant-numeric: tabular-nums;
-}
-
-@media (max-width: 1400px) {
-  .monitoring-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: auto;
-  }
-}
-
-@media (max-width: 900px) {
-  .monitoring-panel {
-    grid-template-columns: 1fr;
-  }
-  .monitoring-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }

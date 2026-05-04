@@ -1,9 +1,11 @@
 const express = require('express');
+const http = require('http');
 const ping = require('ping');
 const pigpioClient = require('pigpio-client');
 const path = require('path');
 const fs = require('fs');
 const yaml = require('js-yaml');
+const { WebSocketServer } = require('ws');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -80,19 +82,25 @@ pi.on('error', (err) => {
 });
 
 // ======================= Power Status via Ping + Uptime via Prometheus ===========
-app.get('/api/status', async (req, res) => {
+async function getPcStatusPayload() {
   try {
     const pingResult = await ping.promise.probe(PC_IP, { timeout: 1 });
     let uptimeMs = 0;
     if (pingResult.alive) {
       uptimeMs = await resolvePcUptimeFromPrometheus();
     }
-    res.json({
-      is_on: pingResult.alive,
-      uptime_ms: uptimeMs
-    });
-  } catch (error) {
-    res.status(500).json({ is_on: false, uptime_ms: 0, error: 'Ping fehlgeschlagen' });
+    return { is_on: pingResult.alive, uptime_ms: uptimeMs };
+  } catch (_error) {
+    return { is_on: false, uptime_ms: 0, error: 'Ping fehlgeschlagen' };
+  }
+}
+
+app.get('/api/status', async (req, res) => {
+  const payload = await getPcStatusPayload();
+  if (payload.error) {
+    res.status(500).json(payload);
+  } else {
+    res.json(payload);
   }
 });
 
@@ -118,45 +126,84 @@ app.get('/api/press-button', async (req, res) => {
 });
 
 //=================== Kubernetes ==========================================
+function flattenAppsFromYamlData(data) {
+  const allApps = [];
+  if (data && data.apps) {
+    Object.keys(data.apps).forEach((namespace) => {
+      data.apps[namespace].forEach((app) => {
+        allApps.push({
+          ...app,
+          namespace
+        });
+      });
+    });
+  }
+  return allApps;
+}
+
+function loadAppsYamlData() {
+  const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
+  return yaml.load(fileContents);
+}
+
+async function buildDeploymentStatusFromYamlData(data) {
+  const deploymentStatus = {};
+  for (const namespace of Object.keys(data.apps || {})) {
+    for (const app of data.apps[namespace]) {
+      if (app && app.deployment) {
+        try {
+          const deploymentName = String(app.deployment);
+          const ns = String(namespace);
+          const deploymentResponse = await k8sAppsApi.readNamespacedDeployment({
+            name: deploymentName,
+            namespace: ns
+          });
+          const deployment = pickK8sResource(deploymentResponse);
+          const status = deployment?.status || {};
+          const spec = deployment?.spec || {};
+          deploymentStatus[`${ns}/${deploymentName}`] = {
+            replicas: status.replicas || 0,
+            readyReplicas: status.readyReplicas || 0,
+            availableReplicas: status.availableReplicas || 0,
+            unavailableReplicas: status.unavailableReplicas || 0,
+            desiredReplicas: spec.replicas || 1
+          };
+        } catch (err) {
+          console.error(`Fehler beim Abrufen von ${namespace}/${app.deployment}:`, err.message);
+          deploymentStatus[`${namespace}/${app.deployment}`] = {
+            error: 'Deployment nicht gefunden',
+            details: err.message
+          };
+        }
+      }
+    }
+  }
+  return deploymentStatus;
+}
+
+async function getAppsStatePayload() {
+  try {
+    const data = loadAppsYamlData();
+    const apps = flattenAppsFromYamlData(data);
+    if (!k8sAppsApi) {
+      return { type: 'appsState', apps, deployments: {}, k8sUnavailable: true };
+    }
+    const deployments = await buildDeploymentStatusFromYamlData(data);
+    return { type: 'appsState', apps, deployments };
+  } catch (error) {
+    console.error('Apps/K8s Payload Fehler:', error);
+    return { type: 'appsState', apps: [], deployments: {}, error: error.message || 'Laden fehlgeschlagen' };
+  }
+}
+
 //--------------------- Get Deployments ------------------------------------
 app.get('/api/k8s/deployments', async (req, res) => {
   if (!k8sAppsApi) {
     return res.status(503).json({ error: 'Kubernetes API nicht verfügbar' });
   }
   try {
-    const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
-    const data = yaml.load(fileContents);
-    const deploymentStatus = {};
-    for (const namespace of Object.keys(data.apps || {})) {
-      for (const app of data.apps[namespace]) {
-        if (app && app.deployment) {
-          try {
-            const deploymentName = String(app.deployment);
-            const ns = String(namespace);
-            const deploymentResponse = await k8sAppsApi.readNamespacedDeployment({
-              name: deploymentName,
-              namespace: ns
-            });
-            const deployment = pickK8sResource(deploymentResponse);
-            const status = deployment?.status || {};
-            const spec = deployment?.spec || {};
-            deploymentStatus[`${ns}/${deploymentName}`] = {
-              replicas: status.replicas || 0,
-              readyReplicas: status.readyReplicas || 0,
-              availableReplicas: status.availableReplicas || 0,
-              unavailableReplicas: status.unavailableReplicas || 0,
-              desiredReplicas: spec.replicas || 1
-            };
-          } catch (err) {
-            console.error(`Fehler beim Abrufen von ${namespace}/${app.deployment}:`, err.message);
-            deploymentStatus[`${namespace}/${app.deployment}`] = {
-              error: 'Deployment nicht gefunden',
-              details: err.message
-            };
-          }
-        }
-      }
-    }
+    const data = loadAppsYamlData();
+    const deploymentStatus = await buildDeploymentStatusFromYamlData(data);
     res.json(deploymentStatus);
   } catch (error) {
     console.error('K8s API Fehler:', error);
@@ -289,10 +336,10 @@ function flattenSeries(result) {
     .map(([timestamp, value]) => ({ timestamp, value: Number(value.toFixed(2)) }));
 }
 
-app.get('/api/monitoring/overview', async (req, res) => {
+async function getMonitoringOverviewPayload(rangeParam, stepParam) {
   try {
-    const rangeSeconds = parseRangeSeconds(req.query.range);
-    const step = Math.max(15, Number(req.query.step) || 30);
+    const rangeSeconds = parseRangeSeconds(rangeParam || '1h');
+    const step = Math.max(15, Number(stepParam) || 30);
     const end = Math.floor(Date.now() / 1000);
     const start = end - rangeSeconds;
 
@@ -319,7 +366,7 @@ app.get('/api/monitoring/overview', async (req, res) => {
       return [key, []];
     });
 
-    res.json({
+    return {
       start: start * 1000,
       end: end * 1000,
       step,
@@ -334,41 +381,140 @@ app.get('/api/monitoring/overview', async (req, res) => {
         diskFree: '%',
         nodesUp: ''
       }
-    });
+    };
   } catch (error) {
     console.error('Monitoring API Fehler:', error.message);
-    res.status(500).json({ error: 'Monitoring-Daten konnten nicht geladen werden' });
+    return { error: 'Monitoring-Daten konnten nicht geladen werden' };
+  }
+}
+
+app.get('/api/monitoring/overview', async (req, res) => {
+  const payload = await getMonitoringOverviewPayload(req.query.range, req.query.step);
+  if (payload.error) {
+    res.status(500).json({ error: payload.error });
+  } else {
+    res.json(payload);
   }
 });
 
 // =============================== Apps from Yaml ======================
 app.get('/api/apps', (req, res) => {
   try {
-    const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
-    const data = yaml.load(fileContents);
-    
-    const allApps = [];
-    if (data.apps) {
-      Object.keys(data.apps).forEach(namespace => {
-        data.apps[namespace].forEach(app => {
-          allApps.push({
-            ...app,
-            namespace: namespace
-          });
-        });
-      });
-    }
-    
-    res.json(allApps);
+    const data = loadAppsYamlData();
+    res.json(flattenAppsFromYamlData(data));
   } catch (e) {
-    console.error("Fehler beim Lesen der apps.yml:", e);
+    console.error('Fehler beim Lesen der apps.yml:', e);
     res.status(500).json([]);
   }
 });
 
+// ========================= WebSocket (Status, Monitoring, Apps) =========================
+const STATUS_BROADCAST_MS = 5000;
+const MONITORING_BROADCAST_MS = 15000;
+const APPS_BROADCAST_MS = 15000;
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server, path: '/ws' });
+
+function wsSendJson(ws, obj) {
+  if (ws.readyState === 1) {
+    ws.send(JSON.stringify(obj));
+  }
+}
+
+function wsSendStatus(ws, payload) {
+  wsSendJson(ws, { type: 'status', ...payload });
+}
+
+function wsSendMonitoring(ws, payload) {
+  if (payload.error) {
+    wsSendJson(ws, { type: 'monitoring', error: payload.error });
+  } else {
+    wsSendJson(ws, { type: 'monitoring', ...payload });
+  }
+}
+
+function wsSendAppsState(ws, payload) {
+  wsSendJson(ws, payload);
+}
+
+function broadcastPcStatus() {
+  getPcStatusPayload()
+    .then((payload) => {
+      const msg = JSON.stringify({ type: 'status', ...payload });
+      wss.clients.forEach((client) => {
+        if (client.readyState === 1) client.send(msg);
+      });
+    })
+    .catch(() => {});
+}
+
+function broadcastMonitoring() {
+  getMonitoringOverviewPayload('1h', 30)
+    .then((payload) => {
+      const msg = payload.error
+        ? JSON.stringify({ type: 'monitoring', error: payload.error })
+        : JSON.stringify({ type: 'monitoring', ...payload });
+      wss.clients.forEach((client) => {
+        if (client.readyState === 1) client.send(msg);
+      });
+    })
+    .catch(() => {});
+}
+
+function broadcastAppsState() {
+  getAppsStatePayload()
+    .then((payload) => {
+      const msg = JSON.stringify(payload);
+      wss.clients.forEach((client) => {
+        if (client.readyState === 1) client.send(msg);
+      });
+    })
+    .catch(() => {});
+}
+
+function handleWsRefresh(ws, msg) {
+  if (msg.type === 'requestStatus') {
+    getPcStatusPayload().then((payload) => wsSendStatus(ws, payload));
+    return;
+  }
+  if (msg.type !== 'refresh') return;
+
+  const scope = msg.scope || 'status';
+  if (scope === 'status' || scope === 'all') {
+    getPcStatusPayload().then((payload) => wsSendStatus(ws, payload));
+  }
+  if (scope === 'monitoring' || scope === 'all') {
+    getMonitoringOverviewPayload('1h', 30).then((payload) => wsSendMonitoring(ws, payload));
+  }
+  if (scope === 'apps' || scope === 'all') {
+    getAppsStatePayload().then((payload) => wsSendAppsState(ws, payload));
+  }
+}
+
+wss.on('connection', (ws) => {
+  getPcStatusPayload().then((payload) => wsSendStatus(ws, payload));
+  getMonitoringOverviewPayload('1h', 30).then((payload) => wsSendMonitoring(ws, payload));
+  getAppsStatePayload().then((payload) => wsSendAppsState(ws, payload));
+
+  ws.on('message', (raw) => {
+    let msg = null;
+    try {
+      msg = JSON.parse(raw.toString());
+    } catch (_err) {
+      return;
+    }
+    if (msg && (msg.type === 'refresh' || msg.type === 'requestStatus')) {
+      handleWsRefresh(ws, msg);
+    }
+  });
+});
+
 // ========================= General Infos =========================
 initKubernetesClient().finally(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Dashboard läuft auf Port ${PORT}`);
+    setInterval(broadcastPcStatus, STATUS_BROADCAST_MS);
+    setInterval(broadcastMonitoring, MONITORING_BROADCAST_MS);
+    setInterval(broadcastAppsState, APPS_BROADCAST_MS);
   });
 });

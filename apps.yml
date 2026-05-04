@@ -29,8 +29,8 @@ apps:
       url: "https://qbt.janikhenz.ch"
       icon: "/img/icons/qbittorrent.png"
       deployment: "qbittorrent"
-  fitness:
-    - name: "Wger"
-      url: "https://wger.janikhenz.ch"
-      icon: "/img/icons/jellyseerr.png"
-      deployment: "wger-web"
+
+    - name: "qbittorrent"
+      url: "https://qbt.janikhenz.ch"
+      icon: "/img/icons/qbittorrent.png"
+      deployment: "qbittorrent"

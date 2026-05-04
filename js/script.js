@@ -65,31 +65,44 @@ document.addEventListener('DOMContentLoaded', () => {
   let wasOn = false; 
   let wasPressed = false;
 
-  async function fetchPcStatus() {
-    try {
-      const response = await fetch('/api/status');
-      const data = await response.json();
-      isPcOn = data.is_on;
+  let statusWs = null;
+  let statusWsReconnectTimer = null;
 
-      if (pwrLed) {
-        if (wasPressed && isPcOn === wasOn) {
-          pwrLed.style.backgroundColor = 'var(--pending)';
-          pwrLed.style.boxShadow = '0 0 6px var(--pending), 0 0 14px var(--pending)';
-        } else {
-          wasPressed = false;
-          pwrLed.style.backgroundColor = isPcOn ? 'var(--online)' : 'var(--offline)';
-          pwrLed.style.boxShadow = isPcOn ? '0 0 6px var(--online), 0 0 14px var(--online)' : '0 0 6px var(--offline), 0 0 14px var(--offline)';
-        }
+  function applyPcStatus(data) {
+    if (data.is_on === undefined) return;
+    isPcOn = data.is_on;
+
+    if (pwrLed) {
+      if (wasPressed && isPcOn === wasOn) {
+        pwrLed.style.backgroundColor = 'var(--pending)';
+        pwrLed.style.boxShadow = '0 0 6px var(--pending), 0 0 14px var(--pending)';
+      } else {
+        wasPressed = false;
+        pwrLed.style.backgroundColor = isPcOn ? 'var(--online)' : 'var(--offline)';
+        pwrLed.style.boxShadow = isPcOn ? '0 0 6px var(--online), 0 0 14px var(--online)' : '0 0 6px var(--offline), 0 0 14px var(--offline)';
       }
-      updateTimerDisplay(data.uptime_ms);
-    } catch (error) {
-      console.error('Fehler beim Status-Check:', error);
-      if (pwrLed) pwrLed.style.backgroundColor = '#888';
+    }
+    const uptime = Number(data.uptime_ms);
+    updateTimerDisplay(Number.isFinite(uptime) ? uptime : 0);
+  }
+
+  function requestPcStatusRefresh() {
+    if (statusWs && statusWs.readyState === WebSocket.OPEN) {
+      statusWs.send(JSON.stringify({ type: 'refresh' }));
     }
   }
 
-  fetchPcStatus();
-  setInterval(fetchPcStatus, 5000);
+  function requestMonitoringRefresh() {
+    if (statusWs && statusWs.readyState === WebSocket.OPEN) {
+      statusWs.send(JSON.stringify({ type: 'refresh', scope: 'monitoring' }));
+    }
+  }
+
+  function requestAppsRefresh() {
+    if (statusWs && statusWs.readyState === WebSocket.OPEN) {
+      statusWs.send(JSON.stringify({ type: 'refresh', scope: 'apps' }));
+    }
+  }
 
 // ================== Power Control ===========================================
   if (powerBtn) {
@@ -105,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Befehl gesendet, warte auf Statusänderung...");
             wasPressed = true;
             if (pwrLed) pwrLed.style.backgroundColor = '#FFA500';
-            setTimeout(fetchPcStatus, 1500);
+            setTimeout(requestPcStatusRefresh, 1500);
           } else {
             wasPressed = false;
             alert("Backend-Fehler!");
@@ -123,24 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let appsData = [];
   let deploymentsData = {};
 
-  async function loadApps() {
+  function applyAppsState(data) {
     const grid = document.getElementById('app-grid');
     if (!grid) return;
 
-    try {
-      const [appsResponse, deploymentsResponse] = await Promise.all([
-        fetch('/api/apps'),
-        fetch('/api/k8s/deployments')
-      ]);
-
-      appsData = await appsResponse.json();
-      deploymentsData = await deploymentsResponse.json();
-
-      renderApps();
-    } catch (error) {
-      console.error('Fehler beim Laden der Apps:', error);
+    if (data.error && (!Array.isArray(data.apps) || data.apps.length === 0)) {
       grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Konnte Apps nicht laden.</p>';
+      return;
     }
+
+    appsData = Array.isArray(data.apps) ? data.apps : [];
+    deploymentsData = data.deployments && typeof data.deployments === 'object' ? data.deployments : {};
+    renderApps();
   }
 // ---------------------------- Render Apps form Yaml ------------------------------
   function renderApps() {
@@ -266,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok) {
           console.log(`Scaled ${selectedApp.name} to ${newReplicas} replicas`);
-          setTimeout(loadApps, 1000);
+          setTimeout(requestAppsRefresh, 1000);
         } else {
           console.error('Failed to scale deployment');
           const deploymentKey = `${selectedApp.namespace}/${selectedApp.deployment}`;
@@ -288,26 +295,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  loadApps();
-
 // ======================== Monitoring ===================================
   const monitoringConfig = [
     { id: 'chart-cpu', key: 'cpu', title: 'CPU Auslastung', unit: '%' },
     { id: 'chart-memory', key: 'memory', title: 'RAM Auslastung', unit: '%' },
     { id: 'chart-network', key: 'networkRx', title: 'Netzwerk RX', unit: 'Mbit/s' },
-    { id: 'chart-load', key: 'gpu', title: 'GPU Usage', unit: '%' }
+    { id: 'chart-disk', key: 'diskFree', title: 'Disk frei', unit: '%' }
   ];
   const monitoringCharts = new Map();
 
-  const headerStats = [
-    { key: 'cpu', label: 'CPU', unit: '%', digits: 0, icon: 'cpu' },
-    { key: 'memory', label: 'RAM', unit: '%', digits: 0, icon: 'ram' },
-    { key: 'gpu', label: 'GPU', unit: '%', digits: 0, icon: 'gpu' },
-    { key: 'gpuTemp', label: 'GPU TEMP', unit: '°C', digits: 0, icon: 'temp' },
-    { key: 'powerW', label: 'POWER', unit: 'W', digits: 0, icon: 'power' },
-    { key: 'networkRx', label: 'NETZ', unit: 'Mbit/s', digits: 1, icon: 'net' },
-    { key: 'diskFree', label: 'DISK FREI', unit: '%', digits: 0, icon: 'disk' },
-    { key: 'nodesUp', label: 'NODES', unit: '', digits: 0, icon: 'nodes' }
+  const monitorHeaderBindings = [
+    { key: 'cpu', id: 'monitor-stat-cpu-value', unit: '%', digits: 0 },
+    { key: 'memory', id: 'monitor-stat-memory-value', unit: '%', digits: 0 },
+    { key: 'gpu', id: 'monitor-stat-gpu-value', unit: '%', digits: 0 },
+    { key: 'gpuTemp', id: 'monitor-stat-gpuTemp-value', unit: '°C', digits: 0 },
+    { key: 'powerW', id: 'monitor-stat-powerW-value', unit: 'W', digits: 0 },
+    { key: 'networkRx', id: 'monitor-stat-networkRx-value', unit: 'Mbit/s', digits: 1 },
+    { key: 'diskFree', id: 'monitor-stat-diskFree-value', unit: '%', digits: 0 },
+    { key: 'nodesUp', id: 'monitor-stat-nodesUp-value', unit: '', digits: 0 }
   ];
 
   function latestValue(points) {
@@ -322,53 +327,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return unit ? `${formatted} ${unit}` : formatted;
   }
 
-  function buildMonitoringHeader() {
-    const header = document.getElementById('monitoring-header');
-    if (!header || header.dataset.built === 'true') return;
-
-    header.innerHTML = `
-      <div class="monitoring-panel">
-        <div class="monitoring-title">
-          <span class="monitoring-led"></span>
-          <span class="monitoring-caption">CONTROL PANEL</span>
-        </div>
-        <div class="monitoring-stats">
-          ${headerStats.map((stat) => `
-            <div class="monitoring-stat" data-key="${stat.key}">
-              <span class="monitoring-stat-label">${stat.label}</span>
-              <strong class="monitoring-stat-value">--</strong>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-    header.dataset.built = 'true';
+  function setMonitorTextById(elementId, text) {
+    const el = document.getElementById(elementId);
+    if (el) el.textContent = text;
   }
 
-  function renderMonitoringHeader(data) {
-    const header = document.getElementById('monitoring-header');
-    if (!header) return;
-    buildMonitoringHeader();
-
+  function renderMonitoringHeaderFromData(data) {
     const series = data.series || {};
-    headerStats.forEach((stat) => {
-      const value = latestValue(series[stat.key]);
-      const el = header.querySelector(`.monitoring-stat[data-key="${stat.key}"] .monitoring-stat-value`);
-      if (el) el.textContent = formatMetric(value, stat.unit, stat.digits);
+    monitorHeaderBindings.forEach((row) => {
+      const v = latestValue(series[row.key]);
+      setMonitorTextById(row.id, formatMetric(v, row.unit, row.digits));
     });
   }
 
-// ======================== Page Switcher ==================================
-  const shell = document.getElementById('app-shell');
-  document.querySelectorAll('.hint').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (!shell) return;
-      shell.classList.toggle('show-monitoring');
-      requestAnimationFrame(() => {
-        monitoringCharts.forEach((chart) => chart.resize());
-      });
+  function clearMonitoringHeaderValues(placeholder = '--') {
+    monitorHeaderBindings.forEach((row) => {
+      setMonitorTextById(row.id, placeholder);
     });
-  });
+  }
 
   function getCssVar(name) {
     return getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -376,11 +352,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getMonitoringPalette() {
     return {
-      text: getCssVar('--text-main'),
+      text: getCssVar('--text-accent'),
       stroke: getCssVar('--text-stroke-color') || '#000',
       grid: 'rgba(0, 0, 0, 0.25)',
-      line: getCssVar('--on'),
-      area: getCssVar('--off')
+      line: getCssVar('--lcd-on'),
+      area: getCssVar('--on')
     };
   }
 
@@ -404,6 +380,17 @@ document.addEventListener('DOMContentLoaded', () => {
       grid: { left: 48, right: 14, top: 46, bottom: 26 },
       tooltip: {
         trigger: 'axis',
+        appendToBody: true,
+        confine: false,
+        backgroundColor: 'rgba(30, 38, 48, 0.94)',
+        borderColor: '#000000',
+        borderWidth: 2,
+        padding: [8, 12],
+        textStyle: {
+          color: '#f5f8fb',
+          fontFamily: 'Patrick Hand, cursive',
+          fontSize: 14
+        },
         valueFormatter: (value) => `${Number(value).toFixed(2)} ${config.unit}`
       },
       xAxis: {
@@ -444,7 +431,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return monitoringCharts.size > 0;
   }
 
-  function showMonitoringError(message) {
+  function resizeMonitoringCharts() {
+    requestAnimationFrame(() => {
+      monitoringCharts.forEach((chart) => {
+        try {
+          chart.resize();
+        } catch (_err) {
+          /* ignore */
+        }
+      });
+    });
+  }
+
+  function showMonitoringChartError(message) {
     const palette = getMonitoringPalette();
     monitoringConfig.forEach((config) => {
       const chart = monitoringCharts.get(config.id);
@@ -473,34 +472,90 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function refreshMonitoring() {
+  function applyMonitoringPayload(data) {
     if (!ensureMonitoringCharts()) return;
-    try {
-      const response = await fetch('/api/monitoring/overview?range=1h&step=30');
-      if (!response.ok) throw new Error('API Antwort nicht OK');
-      const data = await response.json();
-      renderMonitoringHeader(data);
-      monitoringConfig.forEach((config) => {
-        const chart = monitoringCharts.get(config.id);
-        if (!chart) return;
-        const points = data.series?.[config.key] || [];
-        chart.setOption(createBaseChartOption(config, points), true);
-      });
-    } catch (error) {
-      console.error('Monitoring konnte nicht geladen werden:', error);
-      renderMonitoringHeader({ series: {} });
-      showMonitoringError('Monitoring nicht erreichbar');
+    if (data.error) {
+      clearMonitoringHeaderValues('--');
+      const msg = typeof data.error === 'string' ? data.error : 'Monitoring nicht erreichbar';
+      showMonitoringChartError(msg);
+      return;
     }
+    renderMonitoringHeaderFromData(data);
+    monitoringConfig.forEach((config) => {
+      const chart = monitoringCharts.get(config.id);
+      if (!chart) return;
+      const points = data.series?.[config.key] || [];
+      chart.setOption(createBaseChartOption(config, points), true);
+    });
+    resizeMonitoringCharts();
+  }
+
+  function connectDashboardWebSocket() {
+    if (statusWsReconnectTimer) {
+      clearTimeout(statusWsReconnectTimer);
+      statusWsReconnectTimer = null;
+    }
+
+    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const ws = new WebSocket(`${proto}//${location.host}/ws`);
+    statusWs = ws;
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        switch (data.type) {
+          case 'status':
+            applyPcStatus(data);
+            break;
+          case 'monitoring':
+            applyMonitoringPayload(data);
+            break;
+          case 'appsState':
+            applyAppsState(data);
+            break;
+          default:
+            if (data.is_on !== undefined) applyPcStatus(data);
+        }
+      } catch (error) {
+        console.error('WebSocket Parsefehler:', error);
+      }
+    };
+
+    ws.onerror = () => {
+      if (pwrLed) pwrLed.style.backgroundColor = '#888';
+    };
+
+    ws.onclose = () => {
+      statusWs = null;
+      if (pwrLed) pwrLed.style.backgroundColor = '#888';
+      statusWsReconnectTimer = setTimeout(connectDashboardWebSocket, 3000);
+    };
   }
 
   if (ensureMonitoringCharts()) {
-    refreshMonitoring();
-    setInterval(refreshMonitoring, 15000);
-    window.addEventListener('resize', () => {
-      monitoringCharts.forEach((chart) => chart.resize());
-    });
+    window.addEventListener('resize', resizeMonitoringCharts);
+    const chartsRoot = document.getElementById('charts');
+    if (chartsRoot && typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => resizeMonitoringCharts());
+      ro.observe(chartsRoot);
+    }
   }
 
+  connectDashboardWebSocket();
+
+// ======================== Page Switcher ==================================
+const isAndroid = () => /Android/i.test(navigator.userAgent + (navigator.userAgentData?.platform || ""));
+const shell = document.getElementById('app-shell');
+
+document.querySelectorAll('.hint').forEach(btn => {
+  btn.onclick = () => {
+    const isShow = shell?.classList.contains('show-monitoring');
+    if (!shell || (isAndroid() && !isShow && !btn.classList.contains('back-hint'))) return;
+
+    shell.classList.toggle('show-monitoring');
+    resizeMonitoringCharts();
+  };
+});
 // ======================== Theme Toggle ===================================
   const themeToggle = document.getElementById('theme-toggle');
   const drehteil = document.querySelector('.drehteil');
@@ -522,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     localStorage.setItem('theme', theme);
-    refreshMonitoring();
+    requestMonitoringRefresh();
   }
 
   applyTheme(savedTheme);
