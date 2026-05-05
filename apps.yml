@@ -30,7 +30,8 @@ apps:
       icon: "/img/icons/qbittorrent.png"
       deployment: "qbittorrent"
 
-    - name: "qbittorrent"
-      url: "https://qbt.janikhenz.ch"
-      icon: "/img/icons/qbittorrent.png"
-      deployment: "qbittorrent"
+  monitoring:
+    - name: "Grafana"
+      url: "https://grafana.janikhenz.ch"
+      icon: "/img/icons/grafana.png"
+      deployment: "grafana"
