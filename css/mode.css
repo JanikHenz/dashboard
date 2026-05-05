@@ -1,31 +1,3 @@
-.pwr-status {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3vw;
-}
-
-.pwr-label {
-  font-family: var(--comic-font);
-  font-size: clamp(0.8rem, 1.5vw, 1.5vw);
-  color: var(--text-main);
-  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
-  paint-order: stroke fill;
-  text-shadow: var(--text-shadow-strong);
-  letter-spacing: 1px;
-  white-space: nowrap;
-}
-
-.pwr-led {
-  width: clamp(0.6rem, 1.2vw, 1.2vw);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background-color: var(--on);
-  box-shadow: 0 0 6px var(--on), 0 0 14px var(--on);
-  border: var(--outline-width) solid var(--outline-color);
-  flex-shrink: 0;
-}
-
 .mode {
   height: 100%;
   position: absolute;

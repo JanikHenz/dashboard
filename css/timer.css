@@ -62,19 +62,16 @@
   font-weight: bold;
   text-shadow: none;
   -webkit-text-stroke: 0px;
-  align-self: center;
-  position: relative;
-  z-index: 1;
-}
-
-.separator {
   color: var(--lcd-on);
   display: flex;
   align-items: center;
+  justify-content: center;
+  align-self: center;
+  height: var(--digit-h);
   margin-right: var(--gap);
   margin-left: var(--gap);
-  justify-content: center;
-  height: var(--digit-h);
+  position: relative;
+  z-index: 1;
 }
 
 
