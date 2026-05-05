@@ -4,25 +4,32 @@
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   display: flex;
-  align-items: stretch;
-  justify-content: center;
-  padding: clamp(0.6rem, 1vw, 1rem) clamp(1rem, 2vw, 2rem);
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(0.6rem, 1vw, 1rem);
 }
 
 .monitoring-panel {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
   width: 100%;
-  max-width: 90rem;
+  height: 100%;
 }
 
 .monitoring-stats {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  width: 33%;
+  max-width: 50%;
+  max-height: 100%;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: clamp(0.4rem, 0.8vw, 0.9rem);
+  align-items: stretch;
+  justify-items: stretch;
 }
+
 
 .monitor-stat {
   background-color: var(--lcd-bg);
@@ -30,26 +37,26 @@
   border-radius: 12px;
   box-shadow: var(--neg-shadow);
   padding: 0.35rem 0.5rem 0.45rem;
+  max-height: 100%;
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 0.15rem;
-  min-width: 0;
 }
 
 .monitor-stat-label {
-  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
   letter-spacing: 1.5px;
   color: var(--lcd-on);
+  font-size: 160%;
   opacity: 0.85;
 }
 
 .monitor-stat-value {
   color: var(--lcd-on);
-  font-size: clamp(1rem, 1.4vw, 1.4rem);
   line-height: 1;
+  font-size: 160%;
   text-shadow: 0 0 4px rgba(23, 63, 25, 0.35);
   font-variant-numeric: tabular-nums;
 }
@@ -67,7 +74,6 @@
 }
 
 .monitoring-caption {
-  font-size: clamp(0.8rem, 1vw, 1rem);
   letter-spacing: 2px;
   color: var(--text-contrast);
 }
