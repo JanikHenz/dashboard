@@ -1,6 +1,7 @@
+/*=========== Power =====*/
 .power {
   background-color: var(--bg-power-outer);
-  height: min(90%, 20vw );
+  height: min(90%, 20vw);
   aspect-ratio: 1;
   border-radius: 50%;
   justify-self: center;
@@ -42,6 +43,7 @@
   border-radius: 30%;
 }
 
+/*=========== Power Status =====*/
 .pwr-status {
   display: flex;
   flex-direction: column;
