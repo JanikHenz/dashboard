@@ -74,7 +74,7 @@ export function createAppsPanel({ onRequestAppsRefresh }) {
     if (!elements.grid) return;
 
     if (data.error && (!Array.isArray(data.apps) || data.apps.length === 0)) {
-      elements.grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Konnte Apps nicht laden.</p>';
+      elements.grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Could not load apps.</p>';
       return;
     }
 

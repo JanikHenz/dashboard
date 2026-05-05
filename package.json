@@ -1,7 +1,7 @@
 {
   "name": "dashboard",
   "version": "1.0.0",
-  "description": "Eine selbst gehostete Web-Oberfläche als zentrales Homelab-Dashboard. Entwickelt mit purem HTML, CSS und JavaScript – kein Framework, kein Build-Step.",
+  "description": "A self-hosted web interface for a central homelab dashboard. Built with plain HTML, CSS, and JavaScript - no framework and no build step.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

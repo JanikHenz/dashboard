@@ -1,6 +1,6 @@
 export function createThemeSwitcher({ onThemeChanged }) {
   const themeToggle = document.getElementById('theme-toggle');
-  const drehteil = document.querySelector('.drehteil');
+  const themeKnob = document.querySelector('.theme-knob');
   const themes = ['light', 'dark'];
   const savedTheme = themes.includes(localStorage.getItem('theme')) ? localStorage.getItem('theme') : 'light';
 
@@ -10,10 +10,10 @@ export function createThemeSwitcher({ onThemeChanged }) {
       document.body.classList.add('dark-mode');
     }
 
-    if (drehteil) {
-      drehteil.classList.remove('rotated');
+    if (themeKnob) {
+      themeKnob.classList.remove('rotated');
       if (theme === 'dark') {
-        drehteil.classList.add('rotated');
+        themeKnob.classList.add('rotated');
       }
     }
 

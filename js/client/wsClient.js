@@ -32,7 +32,7 @@ export function createWsClient({ onMessage, onDisconnected }) {
           safeOnMessage(payload);
         }
       } catch (error) {
-        console.error('WebSocket Parsefehler:', error);
+        console.error('WebSocket parse error:', error);
       }
     };
 

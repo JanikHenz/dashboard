@@ -17,41 +17,41 @@ function registerRoutes(app, services) {
   });
 
   app.get('/api/press-button', async (_req, res) => {
-    console.log('Jemand hat den Power-Button im Browser gedrückt!');
+    console.log('Power button triggered from browser!');
     const result = await powerService.pressButton();
     res.status(result.status).json(result.body);
   });
 
   app.get('/api/k8s/deployments', async (_req, res) => {
     if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API nicht verfügbar' });
+      res.status(503).json({ error: 'Kubernetes API unavailable' });
       return;
     }
     try {
       res.json(await appsService.getDeployments());
     } catch (error) {
-      console.error('K8s API Fehler:', error);
-      res.status(500).json({ error: 'Kubernetes API Fehler' });
+      console.error('K8s API error:', error);
+      res.status(500).json({ error: 'Kubernetes API error' });
     }
   });
 
   app.post('/api/k8s/scale', async (req, res) => {
     if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API nicht verfügbar' });
+      res.status(503).json({ error: 'Kubernetes API unavailable' });
       return;
     }
 
     const { namespace, deployment, replicas } = req.body;
     if (!namespace || !deployment || replicas === undefined) {
-      res.status(400).json({ error: 'namespace, deployment und replicas erforderlich' });
+      res.status(400).json({ error: 'namespace, deployment and replicas are required' });
       return;
     }
 
     try {
       res.json(await kubernetesService.scaleDeployment(namespace, deployment, replicas));
     } catch (error) {
-      console.error('Scale Fehler:', error);
-      res.status(500).json({ error: 'Scaling fehlgeschlagen' });
+      console.error('Scale error:', error);
+      res.status(500).json({ error: 'Scaling failed' });
     }
   });
 
@@ -68,7 +68,7 @@ function registerRoutes(app, services) {
     try {
       res.json(appsService.getAppsList());
     } catch (error) {
-      console.error('Fehler beim Lesen der apps.yml:', error);
+      console.error('Error reading apps.yml:', error);
       res.status(500).json([]);
     }
   });

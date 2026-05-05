@@ -12,7 +12,7 @@ function createPcStatusService({ pcIp, prometheusService }) {
       const isOn = Boolean(pingResult?.alive) || safeUptimeMs > 0;
       return { is_on: isOn, uptime_ms: safeUptimeMs };
     } catch (_error) {
-      return { is_on: false, uptime_ms: 0, error: 'Ping fehlgeschlagen' };
+      return { is_on: false, uptime_ms: 0, error: 'Ping failed' };
     }
   }
 

@@ -38,8 +38,8 @@
   z-index: 5;
 }
 
-/*=========== Drehteil =====*/
-.drehteil {
+/*=========== Knob =====*/
+.theme-knob {
   position: absolute;
   height: 60%;
   aspect-ratio: 1;
@@ -58,11 +58,11 @@
   rotate: 330deg;
 }
 
-.drehteil.rotated {
+.theme-knob.rotated {
   rotate: 390deg;
 }
 
-.spitze {
+.knob-pointer {
   position: absolute;
   top: -40%;
   height: 100%;

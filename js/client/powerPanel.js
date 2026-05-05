@@ -30,7 +30,7 @@ export function createPowerPanel({ onRequestRefresh, updateTimerDisplay }) {
       powerBtn.style.transform = 'scale(1)';
     }, 150);
 
-    const action = isPcOn ? 'Ubuntu-Server hart ausschalten?' : 'Ubuntu-Server einschalten?';
+    const action = isPcOn ? 'Force shutdown Ubuntu server?' : 'Power on Ubuntu server?';
     if (!confirm(action)) return;
 
     try {
@@ -38,16 +38,16 @@ export function createPowerPanel({ onRequestRefresh, updateTimerDisplay }) {
       const response = await fetch('/api/press-button');
       if (!response.ok) {
         wasPressed = false;
-        alert('Backend-Fehler!');
+        alert('Backend error!');
         return;
       }
       wasPressed = true;
       if (pwrLed) pwrLed.style.backgroundColor = '#FFA500';
       setTimeout(onRequestRefresh, 1500);
     } catch (error) {
-      console.error('Netzwerkfehler:', error);
+      console.error('Network error:', error);
       wasPressed = false;
-      alert('Konnte den Befehl nicht senden.');
+      alert('Could not send command.');
     }
   }
 

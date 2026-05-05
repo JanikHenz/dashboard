@@ -11,18 +11,18 @@ function isInvalidUrlMessage(message) {
 }
 
 function validateClusterServer(serverUrl) {
-  if (!serverUrl) return 'Keine Kubernetes API URL gefunden';
+  if (!serverUrl) return 'No Kubernetes API URL found';
 
   try {
     const parsed = new URL(serverUrl);
     if (!parsed.protocol || !parsed.hostname) {
-      return `Kubernetes API URL unvollstaendig: ${serverUrl}`;
+      return `Kubernetes API URL incomplete: ${serverUrl}`;
     }
     if (parsed.hostname === 'undefined' || parsed.port === 'undefined') {
-      return `Kubernetes API URL ungueltig: ${serverUrl}`;
+      return `Kubernetes API URL invalid: ${serverUrl}`;
     }
   } catch (_error) {
-    return `Kubernetes API URL ungueltig: ${serverUrl}`;
+    return `Kubernetes API URL invalid: ${serverUrl}`;
   }
 
   return null;
@@ -70,8 +70,8 @@ function createKubernetesService() {
       k8s,
       (kc) => kc.loadFromCluster(),
       'in-cluster',
-      'Kubernetes In-Cluster config geladen',
-      'In-Cluster config nicht verfuegbar:'
+      'Kubernetes in-cluster config loaded',
+      'In-cluster config unavailable:'
     );
     if (hasInClusterClient) return;
 
@@ -79,19 +79,19 @@ function createKubernetesService() {
       k8s,
       (kc) => kc.loadFromDefault(),
       'kubeconfig',
-      'Kubernetes config aus kubeconfig geladen',
-      'Kubeconfig nicht verfuegbar:'
+      'Kubernetes config loaded from kubeconfig',
+      'Kubeconfig unavailable:'
     );
     if (hasDefaultClient) return;
 
     k8sAppsApi = null;
     mode = 'disabled';
-    console.log('K8s Features werden deaktiviert');
+    console.log('K8s features are disabled');
   }
 
   function ensureClient() {
     if (!k8sAppsApi) {
-      throw new Error('Kubernetes API nicht verfügbar');
+      throw new Error('Kubernetes API unavailable');
     }
   }
 

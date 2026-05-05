@@ -41,9 +41,9 @@ function createAppsService({ projectRoot, kubernetesService }) {
             desiredReplicas: spec.replicas || 1
           };
         } catch (err) {
-          console.error(`Fehler beim Abrufen von ${namespace}/${app.deployment}:`, err.message);
+          console.error(`Error fetching ${namespace}/${app.deployment}:`, err.message);
           deploymentStatus[`${namespace}/${app.deployment}`] = {
-            error: 'Deployment nicht gefunden',
+            error: 'Deployment not found',
             details: err.message
           };
         }
@@ -61,8 +61,8 @@ function createAppsService({ projectRoot, kubernetesService }) {
       }
       return { type: 'appsState', apps, deployments: await buildDeploymentStatusFromYamlData(data) };
     } catch (error) {
-      console.error('Apps/K8s Payload Fehler:', error);
-      return { type: 'appsState', apps: [], deployments: {}, error: error.message || 'Laden fehlgeschlagen' };
+      console.error('Apps/K8s payload error:', error);
+      return { type: 'appsState', apps: [], deployments: {}, error: error.message || 'Loading failed' };
     }
   }
 

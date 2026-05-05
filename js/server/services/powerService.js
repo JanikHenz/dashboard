@@ -5,12 +5,12 @@ function createPowerService({ piIp }) {
   let isPiConnected = false;
 
   pi.on('connected', () => {
-    console.log(`Verbunden mit GPIO-Daemon auf ${piIp}`);
+    console.log(`Connected to GPIO daemon on ${piIp}`);
     isPiConnected = true;
   });
 
   pi.on('error', (err) => {
-    console.error(`GPIO-Verbindung fehlgeschlagen (${piIp}): ${err.message}`);
+    console.error(`GPIO connection failed (${piIp}): ${err.message}`);
     isPiConnected = false;
   });
 
@@ -27,8 +27,8 @@ function createPowerService({ piIp }) {
       await pin.write(0);
       return { ok: true, status: 200, body: { success: true } };
     } catch (error) {
-      console.error('Fehler beim Schalten:', error);
-      return { ok: false, status: 500, body: { success: false, error: 'Hardware Fehler' } };
+      console.error('Switching error:', error);
+      return { ok: false, status: 500, body: { success: false, error: 'Hardware error' } };
     }
   }
 

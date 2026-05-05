@@ -20,7 +20,7 @@ export function renderReplicaControl(elements, app, deployment) {
 
 export function renderNoSelection(elements) {
   if (!elements.appName || !elements.replicaCount || !elements.slider || !elements.sliderValue) return;
-  elements.appName.textContent = 'Keine App ausgewählt';
+  elements.appName.textContent = 'No app selected';
   elements.replicaCount.textContent = '-/-';
   elements.slider.disabled = true;
   elements.slider.value = 0;

@@ -67,7 +67,7 @@ const ws = createDashboardWebSocket(server, {
 
 kubernetesService.init().finally(() => {
   server.listen(PORT, () => {
-    console.log(`Dashboard läuft auf Port ${PORT}`);
+    console.log(`Dashboard running on port ${PORT}`);
     setInterval(ws.broadcastStatus, STATUS_BROADCAST_MS);
     setInterval(ws.broadcastMonitoring, MONITORING_BROADCAST_MS);
     setInterval(ws.broadcastAppsState, APPS_BROADCAST_MS);

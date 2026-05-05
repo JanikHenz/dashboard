@@ -45,7 +45,7 @@ export function createMonitoringPanel() {
     if (!ensureCharts()) return;
     if (data.error) {
       clearHeaderValues(monitorHeaderBindings, '--');
-      const message = typeof data.error === 'string' ? data.error : 'Monitoring nicht erreichbar';
+      const message = typeof data.error === 'string' ? data.error : 'Monitoring unavailable';
       showChartError(message);
       return;
     }

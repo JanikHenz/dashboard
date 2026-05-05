@@ -1,8 +1,8 @@
 export const monitoringConfig = [
-  { id: 'chart-cpu', key: 'cpu', title: 'CPU Auslastung', unit: '%' },
-  { id: 'chart-memory', key: 'memory', title: 'RAM Auslastung', unit: '%' },
-  { id: 'chart-network', key: 'networkRx', title: 'Netzwerk RX', unit: 'Mbit/s' },
-  { id: 'chart-disk', key: 'diskFree', title: 'Disk frei', unit: '%' }
+  { id: 'chart-cpu', key: 'cpu', title: 'CPU Usage', unit: '%' },
+  { id: 'chart-memory', key: 'memory', title: 'RAM Usage', unit: '%' },
+  { id: 'chart-network', key: 'networkRx', title: 'Network RX', unit: 'Mbit/s' },
+  { id: 'chart-disk', key: 'diskFree', title: 'Disk Free', unit: '%' }
 ];
 
 export const monitorHeaderBindings = [

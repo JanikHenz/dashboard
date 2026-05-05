@@ -26,7 +26,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
         }
         const payload = await response.json();
         if (payload.status !== 'success') {
-          throw new Error(payload.error || 'Prometheus query fehlgeschlagen');
+          throw new Error(payload.error || 'Prometheus query failed');
         }
         return payload.data?.result || [];
       } catch (error) {
@@ -34,7 +34,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
       }
     }
 
-    throw lastError || new Error('Prometheus nicht erreichbar');
+    throw lastError || new Error('Prometheus unavailable');
   }
 
   async function queryInstant(query) {
@@ -49,7 +49,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
         }
         const payload = await response.json();
         if (payload.status !== 'success') {
-          throw new Error(payload.error || 'Prometheus query fehlgeschlagen');
+          throw new Error(payload.error || 'Prometheus query failed');
         }
         return payload.data?.result || [];
       } catch (error) {
@@ -57,7 +57,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
       }
     }
 
-    throw lastError || new Error('Prometheus nicht erreichbar');
+    throw lastError || new Error('Prometheus unavailable');
   }
 
   async function resolvePcUptimeMs() {
@@ -122,7 +122,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
       const entries = Object.keys(queries).map((key, idx) => {
         const outcome = settled[idx];
         if (outcome.status === 'fulfilled') return outcome.value;
-        console.warn(`Prometheus Query ${key} fehlgeschlagen:`, outcome.reason?.message);
+        console.warn(`Prometheus Query ${key} failed:`, outcome.reason?.message);
         return [key, []];
       });
 
@@ -143,8 +143,8 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
         }
       };
     } catch (error) {
-      console.error('Monitoring API Fehler:', error.message);
-      return { error: 'Monitoring-Daten konnten nicht geladen werden' };
+      console.error('Monitoring API error:', error.message);
+      return { error: 'Monitoring data could not be loaded' };
     }
   }
 
