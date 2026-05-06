@@ -20,7 +20,6 @@
 .monitoring-stats {
   display: grid;
   width: 33%;
-  max-width: 50%;
   max-height: 100%;
   grid-template-rows: repeat(2, minmax(0, 1fr));
   grid-auto-flow: column;
@@ -76,6 +75,146 @@
 .monitoring-caption {
   letter-spacing: 2px;
   color: var(--text-contrast);
+}
+/*=========== Gauge =====*/
+
+.gauge-space {
+  height: 100%;
+  width: 33%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.gauge {
+  --gauge-value: 0;
+  --gauge-start-angle: -130deg;
+  --gauge-range: 170deg;
+  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  position: relative;
+  height: 95%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--hard-shadow);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0 36%, transparent 37% 100%),
+    conic-gradient(
+      from -130deg,
+      #8be287 0deg 120deg,
+      #f9dc75 120deg 200deg,
+      #f78282 200deg 260deg,
+      transparent 260deg
+    )
+}
+
+.gauge::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  background: radial-gradient(circle at 30% 30%, #ffffffa1 0 6%, transparent 7% 100%), var(--bg-header);
+}
+
+.gauge-ticks {
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -130deg,
+    var(--outline-color) 0deg 1.1deg,
+    transparent 1.1deg 6.5deg
+  );
+  -webkit-mask: 
+    radial-gradient(circle, transparent 63%, #000 64% 66%, transparent 67%),
+    conic-gradient(from -130deg, #000 0deg 260deg, transparent 260deg);
+  mask: 
+    radial-gradient(circle, transparent 63%, #000 64% 66%, transparent 67%),
+    conic-gradient(from -130deg, #000 0deg 260deg, transparent 260deg);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect; 
+}
+
+.gauge-ticks-major {
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -130deg,
+    var(--outline-color) 0deg 1.6deg,
+    transparent 1.6deg 32.5deg
+  );
+  -webkit-mask: 
+    radial-gradient(circle, transparent 56%, #000 57% 61%, transparent 62%),
+    conic-gradient(from -130deg, #000 0deg 260deg, transparent 260deg);
+  mask: 
+    radial-gradient(circle, transparent 56%, #000 57% 61%, transparent 62%),
+    conic-gradient(from -130deg, #000 0deg 260deg, transparent 260deg);
+  
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.gauge-needle-wrap {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--needle-angle));
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.35, 1.2, 0.55, 1);
+}
+
+.gauge-needle {
+  position: absolute;
+  left: 50%;
+  top: 23%;
+  width: 10%;
+  height: 33%;
+  transform: translateX(-50%);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f06e6e 0%, #c33f3f 100%);
+}
+
+
+.gauge-center-cap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 17%;
+  height: 17%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  background:
+    radial-gradient(circle at 32% 30%, #fff 0 20%, transparent 21% 100%),
+    #ffd24d;
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.gauge-value {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: translateX(-50%);
+  min-width: 4.4ch;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: clamp(1.2rem, 2.8vw, 2rem);
+  color: var(--text-contrast);
+  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
+}
+
+.gauge-label {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  transform: translateX(-50%);
+  letter-spacing: 2px;
+  font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
 }
 
 /*=========== Charts =====*/

@@ -15,10 +15,29 @@ function setTextById(elementId, text) {
   if (el) el.textContent = text;
 }
 
+function clampPercent(value) {
+  if (!Number.isFinite(value)) return null;
+  return Math.min(100, Math.max(0, value));
+}
+
+function renderCpuGauge(series) {
+  const cpuValue = latestValue(series.cpu);
+  const gaugeValue = clampPercent(cpuValue);
+  const gauge = document.getElementById('cpu-gauge');
+  const gaugeLabel = document.getElementById('cpu-gauge-value');
+  if (gauge) {
+    gauge.style.setProperty('--gauge-value', gaugeValue === null ? 0 : gaugeValue.toFixed(1));
+  }
+  if (gaugeLabel) {
+    gaugeLabel.textContent = gaugeValue === null ? '--%' : `${Math.round(gaugeValue)}%`;
+  }
+}
+
 export function clearHeaderValues(bindings, placeholder = '--') {
   bindings.forEach((row) => {
     setTextById(row.id, placeholder);
   });
+  renderCpuGauge({});
 }
 
 export function renderHeader(data, bindings) {
@@ -27,4 +46,5 @@ export function renderHeader(data, bindings) {
     const value = latestValue(series[row.key]);
     setTextById(row.id, formatMetric(value, row.unit, row.digits));
   });
+  renderCpuGauge(series);
 }
