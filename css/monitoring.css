@@ -223,10 +223,11 @@
   -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
 }
 
-/*=========== Nuclear Switch =====*/
-.nuclear-switch-space {
+/*=========== Safety Switch =====*/
+.safety-switch-space {
   width: 33%;
   height: 100%;
+  min-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -234,50 +235,102 @@
   overflow: visible;
 }
 
-.nuclear-switch {
+.safety-switch {
   position: relative;
-  display: block;
   height: 100%;
+  max-height: 18rem;
+  max-width: 100%;
   aspect-ratio: 1;
   overflow: visible;
+  perspective: 720px;
   perspective-origin: left center;
   transform-style: preserve-3d;
 }
 
-.nuclear-switch::before {
+.safety-switch::before {
+  content: '';
   position: absolute;
+  left: calc(12% - clamp(14px, 1.5vw, 22px));
+  top: 21%;
+  bottom: 11%;
   z-index: 12;
+  width: clamp(11px, 1.2vw, 16px);
   border: var(--outline-width) solid var(--outline-color);
+  border-radius: 999px;
   background:
     repeating-linear-gradient(
       180deg,
-      var(--nuclear-guard-highlight) 0 10px,
-      var(--nuclear-guard-highlight) 10px 16px,
-      var(--nuclear-guard) 16px 28px,
-      var(--nuclear-guard) 28px 34px
+      var(--safety-hinge-highlight) 0 10px,
+      var(--safety-hinge-highlight) 10px 16px,
+      var(--safety-hinge) 16px 28px,
+      var(--safety-hinge) 28px 34px
     );
-  box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.14);
+  box-shadow:
+    inset -2px 0 0 rgba(0, 0, 0, 0.18),
+    3px 3px 0 rgba(0, 0, 0, 0.22);
   pointer-events: none;
 }
 
-.nuclear-switch-toggle {
-  position: relative;
-  z-index: 3;
+.safety-switch-panel {
+  position: absolute;
+  inset: 18% 8% 4% 12%;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  flex: 1 1 auto;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(0.25rem, 0.7vw, 0.55rem);
+  box-sizing: border-box;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 46%),
+    repeating-linear-gradient(
+      135deg,
+      var(--outline-color) 0 10px,
+      var(--outline-color) 10px 18px,
+      var(--safety-panel) 18px 28px,
+      var(--safety-panel) 28px 36px
+    );
+  box-shadow:
+    var(--hard-shadow),
+    inset 5px 5px 0 rgba(255, 255, 255, 0.18),
+    inset -7px -7px 0 rgba(0, 0, 0, 0.16);
+}
+
+.safety-switch-panel::before {
+  content: '';
+  position: absolute;
+  inset: 14%;
+  z-index: 0;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 42% 38%, rgba(255, 255, 255, 0.2), transparent 34%),
+    var(--safety-panel-shadow);
+  box-shadow:
+    inset 6px 6px 0 rgba(0, 0, 0, 0.22),
+    inset -4px -4px 0 rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+
+.safety-switch-toggle {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 100%;
   margin: 0;
   cursor: default;
 }
 
-.nuclear-switch--guard-open .nuclear-switch-toggle {
+.safety-switch--cover-open .safety-switch-toggle {
   cursor: pointer;
 }
 
-.nuclear-switch-input {
+.safety-switch-input {
   position: absolute;
   opacity: 0;
   width: 1px;
@@ -289,152 +342,107 @@
   white-space: nowrap;
 }
 
-.nuclear-switch-panel {
-  position: absolute;
-  inset: 18% 8% 4%;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  padding: 0.4rem;
-  box-sizing: border-box;
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: 18px;
-  box-shadow: var(--hard-shadow);
-}
-
-.nuclear-switch-panel::before {
-  content: '';
-  position: absolute;
-  inset: 18% 8% 12%;
-  z-index: 0;
-  pointer-events: none;
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: 14px;
-}
-
-.nuclear-switch-warning,
-.nuclear-switch-state {
-  position: relative;
-  z-index: 2;
-  color: var(--text-contrast);
-  letter-spacing: 2px;
-  line-height: 1;
-  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
-}
-
-
-.nuclear-switch-slot {
+.safety-switch-slot {
   position: relative;
   z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 58%;
-  aspect-ratio: 1/2;
+  height: 68%;
+  max-height: 7.5rem;
+  aspect-ratio: 1 / 2;
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 999px;
   background:
-    radial-gradient(circle at 50% 50%, var(--gauge-silver) 0 18%, transparent 19%);
-  box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.25);
+    radial-gradient(circle at 50% 50%, var(--gauge-silver) 0 18%, transparent 19%),
+    var(--safety-slot);
+  box-shadow:
+    inset 5px 5px 0 rgba(0, 0, 0, 0.3),
+    inset -3px -3px 0 rgba(255, 255, 255, 0.12);
 }
 
-.nuclear-switch-lever {
+.safety-switch-lever {
   position: absolute;
   left: 50%;
-  top: 58%;
-  width: 22%;
-  height: 38%;
+  top: 52%;
+  width: 24%;
+  height: 36%;
   transform: translateX(-50%) scaleY(-1);
   transform-origin: center center;
   border-radius: 999px;
   background: var(--outline-color);
   transition:
     top 0.28s cubic-bezier(0.35, 1.2, 0.55, 1),
-    transform 0.28s cubic-bezier(0.35, 1.2, 0.55, 1);
+    transform 0.28s cubic-bezier(0.35, 1.2, 0.55, 1),
+    box-shadow 0.28s ease;
 }
 
-.nuclear-switch-lever::before {
+.safety-switch-lever::before {
   content: '';
   position: absolute;
   inset: var(--outline-width);
   border-radius: inherit;
-  background: linear-gradient(180deg, var(--nuclear-lever-start), var(--nuclear-lever-end));
+  background: linear-gradient(180deg, var(--safety-lever-start), var(--safety-lever-end));
 }
 
-.nuclear-switch-lever::after {
+.safety-switch-lever::after {
   content: '';
   position: absolute;
   left: 50%;
-  top: -22%;
-  width: 190%;
+  top: -24%;
+  width: 210%;
   aspect-ratio: 1;
   transform: translateX(-50%);
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
-  background:
-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.7) 0 18%, transparent 19%),
-    var(--nuclear-lever-start);
+  background-color:     var(--safety-lever-start);
 }
 
-.nuclear-switch-guard-btn {
+.safety-switch-input:checked ~ .safety-switch-slot .safety-switch-lever {
+  top: 12%;
+  transform: translateX(-50%);
+}
+
+.safety-switch-cover {
   position: absolute;
-  inset: 18% 8% 4%;
+  inset: 18% 8% 4% 12%;
   z-index: 10;
   appearance: none;
   padding: 0;
   margin: 0;
-  border: clamp(5px, 0.7vw, 9px) solid var(--nuclear-guard);
+  border: clamp(5px, 0.7vw, 9px) solid var(--outline-color);
   border-radius: 18px;
+  background-color: var(--safety-cover);
   box-shadow:
     0 0 0 var(--outline-width) var(--outline-color),
-    inset 0 8px 0 var(--nuclear-guard-highlight),
-    8px 8px 0 rgba(0, 0, 0, 0.18);
+    inset 6px 6px 0 rgba(255, 255, 255, 0.22),
+    inset -8px -8px 0 rgba(0, 0, 0, 0.18),
+    8px 8px 0 rgba(0, 0, 0, 0.22);
   cursor: pointer;
-  -webkit-transform-origin: left center;
   transform-origin: left center;
-  -webkit-transform: translateZ(22px) rotateY(0deg);
   transform: translateZ(22px) rotateY(0deg);
   transform-style: preserve-3d;
   backface-visibility: visible;
   transition:
     transform 0.55s cubic-bezier(0.42, 0, 0.18, 1),
-    box-shadow 0.45s ease,
-    opacity 0.4s ease;
+    box-shadow 0.45s ease;
 }
 
-.nuclear-switch--guard-open .nuclear-switch-guard-btn {
-  -webkit-transform: translateZ(22px) rotateY(-142deg);
+.safety-switch--cover-open .safety-switch-cover {
   transform: translateZ(22px) rotateY(-142deg);
-  opacity: 1;
+  box-shadow:
+    0 0 0 var(--outline-width) var(--outline-color),
+    inset 6px 0 0 rgba(0, 0, 0, 0.14),
+    -8px 8px 0 rgba(0, 0, 0, 0.16);
   pointer-events: none;
   cursor: default;
 }
 
-.nuclear-switch-guard-btn:focus-visible {
+.safety-switch-cover:focus-visible,
+.safety-switch-toggle:has(.safety-switch-input:focus-visible) {
   outline: 3px solid var(--text-accent);
   outline-offset: 4px;
-}
-
-.nuclear-switch-input:checked ~ .nuclear-switch-slot .nuclear-switch-lever {
-  top: 4%;
-  transform: translateX(-50%);
-}
-
-.nuclear-switch-input:checked ~ .nuclear-switch-state {
-  color: var(--nuclear-armed);
-}
-
-.nuclear-switch-input:checked ~ .nuclear-switch-state::after {
-  content: 'ARMED';
-}
-
-.nuclear-switch-toggle:has(.nuclear-switch-input:focus-visible) {
-  outline: 3px solid var(--text-accent);
-  outline-offset: 4px;
-  border-radius: 12px;
+  border-radius: 18px;
 }
 
 /*=========== Charts =====*/

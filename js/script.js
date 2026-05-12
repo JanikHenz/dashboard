@@ -6,10 +6,10 @@ import { createThemeSwitcher } from './client/themeSwitcher.js';
 import { createPageSwitcher } from './client/pageSwitcher.js';
 import { createWsClient } from './client/wsClient.js';
 import { MESSAGE_TYPES, SCOPES } from './client/protocol.js';
-import { initNuclearSwitch } from './client/nuclearSwitch.js';
+import { initSafetySwitch } from './client/safetySwitch.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  initNuclearSwitch();
+  initSafetySwitch();
   const monitoringPanel = createMonitoringPanel();
   let wsClient = null;
   const sendRefresh = (scope) => {

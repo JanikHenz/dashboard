@@ -203,17 +203,19 @@
               <span class="gauge-label">CPU</span>
             </div>
           </div>
-          <div class="nuclear-switch-space">
-            <div class="nuclear-switch">
-              <div class="nuclear-switch-panel">
-                <label class="nuclear-switch-toggle">
-                  <input class="nuclear-switch-input" type="checkbox">
-                  <span class="nuclear-switch-slot">
-                    <span class="nuclear-switch-lever"></span>
+          <div class="safety-switch-space">
+            <div class="safety-switch">
+              <div class="safety-switch-panel">
+                <label class="safety-switch-toggle">
+                  <input class="safety-switch-input" type="checkbox" disabled
+                    aria-label="Safety toggle">
+                  <span class="safety-switch-slot" aria-hidden="true">
+                    <span class="safety-switch-lever"></span>
                   </span>
                 </label>
               </div>
-              <button type="button" class="nuclear-switch-guard-btn"></button>
+              <button type="button" class="safety-switch-cover"
+                aria-label="Schutzabdeckung öffnen" aria-expanded="false"></button>
             </div>
           </div>
         </div>

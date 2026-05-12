@@ -62,15 +62,16 @@ body {
   --gauge-needle-start: #f06e6e;
   --gauge-needle-end: #c33f3f;
   --gauge-cap: #ffd24d;
-  --nuclear-panel: #ffd85c;
-  --nuclear-panel-shadow: #d89430;
-  --nuclear-guard: #c7d0d7;
-  --nuclear-guard-highlight: #eef4f8;
-  --nuclear-slot: #262d33;
-  --nuclear-lever-start: #ff7b6f;
-  --nuclear-lever-end: #ba3434;
-  --nuclear-safe: #3af075;
-  --nuclear-armed: #ff5a5a;
+  --safety-panel: #ffd85c;
+  --safety-panel-shadow: #d89430;
+  --safety-cover: #d33f3f;
+  --safety-cover-highlight: #ff8d7f;
+  --safety-cover-shadow: #8f2626;
+  --safety-hinge: #c7d0d7;
+  --safety-hinge-highlight: #eef4f8;
+  --safety-slot: #262d33;
+  --safety-lever-start: #ff7b6f;
+  --safety-lever-end: #ba3434;
   scrollbar-width: none;
 }
 
@@ -131,15 +132,16 @@ body.dark-mode {
   --gauge-needle-start: #ff8b7a;
   --gauge-needle-end: #d84f4f;
   --gauge-cap: #ffe38a;
-  --nuclear-panel: #d6a83d;
-  --nuclear-panel-shadow: #8b5a22;
-  --nuclear-guard: #d0d6de;
-  --nuclear-guard-highlight: #f3f7fb;
-  --nuclear-slot: #121820;
-  --nuclear-lever-start: #ff8b7a;
-  --nuclear-lever-end: #c94545;
-  --nuclear-safe: #73d7ff;
-  --nuclear-armed: #ff6d6d;
+  --safety-panel: #d6a83d;
+  --safety-panel-shadow: #8b5a22;
+  --safety-cover: #b83232;
+  --safety-cover-highlight: #ff7b72;
+  --safety-cover-shadow: #6f2020;
+  --safety-hinge: #d0d6de;
+  --safety-hinge-highlight: #f3f7fb;
+  --safety-slot: #121820;
+  --safety-lever-start: #ff8b7a;
+  --safety-lever-end: #c94545;
 }
 
 body {
