@@ -93,21 +93,14 @@
   --gauge-start-angle: -130deg;
   --gauge-range: 170deg;
   --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  --gauge-silver: silver;
   position: relative;
   height: 95%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--outline-width) solid var(--gauge-silver);
   box-shadow: var(--hard-shadow);
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0 36%, transparent 37% 100%),
-    conic-gradient(
-      from -130deg,
-      #8be287 0deg 120deg,
-      #f9dc75 120deg 200deg,
-      #f78282 200deg 260deg,
-      transparent 260deg
-    )
+  background: var(--surface-soft);
 }
 
 .gauge::before {
@@ -115,8 +108,16 @@
   position: absolute;
   inset: 8%;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
-  background: radial-gradient(circle at 30% 30%, #ffffffa1 0 6%, transparent 7% 100%), var(--bg-header);
+  border: var(--outline-width) solid var(--gauge-silver);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0 36%, transparent 37% 100%),
+    conic-gradient(
+      from -130deg,
+      #8be287 0deg 120deg,
+      #f9dc75 120deg 200deg,
+      #f78282 200deg 260deg,
+      var(--bg-header) 260deg
+    );
 }
 
 .gauge-ticks {
