@@ -1,6 +1,10 @@
 /*=========== Power =====*/
 .power {
-  background-color: var(--bg-power-outer);
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.38), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 48%, rgba(0, 0, 0, 0.26)),
+    var(--brushed-metal),
+    var(--bg-power-outer);
   height: min(90%, 20vw);
   aspect-ratio: 1;
   border-radius: 50%;
@@ -15,7 +19,10 @@
 .power-btn {
   height: 80%;
   width: 80%;
-  background-color: var(--bg-power-btn);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.36), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 48%, rgba(0, 0, 0, 0.28)),
+    var(--bg-power-btn);
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -66,8 +73,14 @@
   width: clamp(0.6rem, 1.2vw, 1.2vw);
   aspect-ratio: 1;
   border-radius: 50%;
-  background-color: var(--on);
-  box-shadow: 0 0 6px var(--on), 0 0 14px var(--on);
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.7) 0 18%, transparent 19%),
+    var(--on);
+  box-shadow:
+    0 0 6px var(--on),
+    0 0 14px var(--on),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.28),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.28);
   border: var(--outline-width) solid var(--outline-color);
   flex-shrink: 0;
 }

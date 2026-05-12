@@ -4,7 +4,7 @@
   box-sizing: border-box;
   flex-shrink: 0;
   position: relative;
-  background-color: var(--bg-header-inner);
+  background: var(--panel-gradient-strong);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   display: flex;
@@ -36,7 +36,7 @@
 
 
 .monitor-stat {
-  background-color: var(--lcd-bg);
+  background: var(--lcd-gradient);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 12px;
   box-shadow: var(--neg-shadow);
@@ -71,7 +71,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.9rem;
-  background-color: var(--surface-muted);
+  background: var(--recessed-gradient);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: 14px;
   box-shadow: var(--neg-shadow);
@@ -100,7 +100,9 @@
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
-  background: var(--gauge-silver);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 44%, rgba(0, 0, 0, 0.2)),
+    var(--gauge-silver);
 }
 
 .gauge::before {
@@ -110,6 +112,7 @@
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
   background:
+    radial-gradient(circle at 36% 24%, rgba(255, 255, 255, 0.28), transparent 22%),
     conic-gradient(
       from -130deg,
       var(--gauge-green) 0deg 120deg,
@@ -197,9 +200,12 @@
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
   background:
-    radial-gradient(transparent 21% 100%),
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.68) 0 17%, transparent 18%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 52%, rgba(0, 0, 0, 0.2)),
     var(--gauge-cap);
-  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.55),
+    2px 3px 0 rgba(0, 0, 0, 0.24);
   z-index: 3;
 }
 
@@ -416,7 +422,9 @@
   margin: 0;
   border: clamp(5px, 0.7vw, 9px) solid var(--outline-color);
   border-radius: 18px;
-  background-color: var(--safety-cover);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 34%),
+    linear-gradient(180deg, var(--safety-cover-highlight), var(--safety-cover) 46%, var(--safety-cover-shadow));
   box-shadow:
     0 0 0 var(--outline-width) var(--outline-color),
     inset 6px 6px 0 rgba(255, 255, 255, 0.22),
@@ -470,7 +478,7 @@
   row-gap: clamp(1rem, 2vw, 2rem);
   justify-content: stretch;
   align-content: start;
-  background-color: var(--bg-header-inner);
+  background: var(--panel-gradient);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
   border-radius: 30px;
@@ -482,7 +490,9 @@
 }
 
 .chart {
-  background-color: var(--surface-soft);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent 45%, rgba(0, 0, 0, 0.18)),
+    var(--surface-soft);
   display: block;
   position: relative;
   width: 100%;

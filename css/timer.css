@@ -22,7 +22,7 @@
 .segment {
   --on: var(--lcd-on);
   --off: var(--lcd-off);
-  background-color: var(--lcd-bg);
+  background: var(--lcd-gradient);
   max-width: 100%;
   height: 70%;
   justify-self: center;
