@@ -111,7 +111,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
         gpu: 'avg(DCGM_FI_DEV_GPU_UTIL) or avg(nvidia_smi_utilization_gpu_ratio) * 100 or avg(nvidia_gpu_duty_cycle)',
         gpuTemp: 'max(DCGM_FI_DEV_GPU_TEMP) or max(nvidia_smi_temperature_gpu)',
         powerW: 'sum(DCGM_FI_DEV_POWER_USAGE) or sum(rate(node_rapl_package_joules_total[5m]))',
-        diskFree: '100 * (sum(node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}) / sum(node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}))',
+        diskUsage: '100 * (1 - sum(node_filesystem_avail_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}) / sum(node_filesystem_size_bytes{mountpoint="/",fstype!~"tmpfs|overlay"}))',
         nodesUp: 'count(up{job="node-exporter"} == 1)'
       };
 
@@ -138,7 +138,7 @@ function createPrometheusService({ pcIp, fallbackUrls }) {
           gpu: '%',
           gpuTemp: '°C',
           powerW: 'W',
-          diskFree: '%',
+          diskUsage: '%',
           nodesUp: ''
         }
       };
