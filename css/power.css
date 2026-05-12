@@ -1,8 +1,8 @@
 /*=========== Power =====*/
 .power {
   background:
-    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.38), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 48%, rgba(0, 0, 0, 0.26)),
+    radial-gradient(circle at 34% 24%, var(--highlight-medium), transparent 24%),
+    linear-gradient(180deg, var(--highlight-soft), transparent 48%, var(--shadow-medium)),
     var(--brushed-metal),
     var(--bg-power-outer);
   height: min(90%, 20vw);
@@ -20,8 +20,8 @@
   height: 80%;
   width: 80%;
   background:
-    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.36), transparent 22%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 48%, rgba(0, 0, 0, 0.28)),
+    radial-gradient(circle at 32% 24%, var(--highlight-medium), transparent 22%),
+    linear-gradient(180deg, var(--highlight-soft), transparent 48%, var(--shadow-strong)),
     var(--bg-power-btn);
   border-radius: 50%;
   justify-content: center;
@@ -74,13 +74,13 @@
   aspect-ratio: 1;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.7) 0 18%, transparent 19%),
+    radial-gradient(circle at 34% 28%, var(--highlight-strong) 0 18%, transparent 19%),
     var(--on);
   box-shadow:
     0 0 6px var(--on),
     0 0 14px var(--on),
-    inset 2px 2px 0 rgba(255, 255, 255, 0.28),
-    inset -2px -2px 0 rgba(0, 0, 0, 0.28);
+    inset 2px 2px 0 var(--highlight-soft),
+    inset -2px -2px 0 var(--shadow-strong);
   border: var(--outline-width) solid var(--outline-color);
   flex-shrink: 0;
 }

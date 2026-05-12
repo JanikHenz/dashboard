@@ -29,7 +29,7 @@
   display: flex;
   align-items: center;
   border: var(--outline-width) solid var(--outline-color);
-  box-shadow: var(--neg-shadow), inset 0 0 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--neg-shadow), inset 0 0 12px var(--shadow-inset-soft);
   border-radius: 20px;
   padding: 0 var(--digit-w) 0 var(--digit-w);
   position: relative;
@@ -41,8 +41,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+    linear-gradient(var(--scanline-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--scanline-soft) 1px, transparent 1px);
   background-size: 3px 3px;
   pointer-events: none;
   z-index: 10;

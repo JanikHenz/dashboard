@@ -22,12 +22,12 @@ export function createBaseChartOption(config, points) {
       trigger: 'axis',
       appendToBody: true,
       confine: false,
-      backgroundColor: 'rgba(30, 38, 48, 0.94)',
-      borderColor: '#000000',
+      backgroundColor: palette.tooltipBackground,
+      borderColor: palette.stroke,
       borderWidth: 2,
       padding: [8, 12],
       textStyle: {
-        color: '#f5f8fb',
+        color: palette.tooltipText,
         fontFamily: 'Patrick Hand, cursive',
         fontSize: 14
       },

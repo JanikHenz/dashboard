@@ -2,109 +2,160 @@
 
 /*=========== Theme =====*/
 :root {
-  --outline-color: #000000;
+  --outline-color: var(--comic-blue-very-dark);
   --outline-width: 4px;
-  --hard-shadow: 8px 10px 0px rgba(0, 0, 0, 0.28);
+  --hard-shadow: 8px 10px 0px var(--shadow-hard);
   --comic-font: 'Patrick Hand', cursive;
   --neg-shadow:
-    inset 5px 7px 0px rgba(0, 0, 0, 0.22),
-    inset -3px -3px 0px rgba(255, 255, 255, 0.18);
-}
-
-/*=========== Body =====*/
-body{
-  --comic-yellow: #f9c85f;
-  --comic-yellow-light: #ffe36e;
-  --comic-cream: #fff0a8;
-  --comic-orange: #ffb94f;
-  --comic-orange-dark: #c7832d;
-  --comic-red: #ff5d5d;
-  --comic-red-light: #ff8175;
-  --comic-red-dark: #852020;
-  --comic-blue: #58c7dc;
-  --comic-blue-dark: #1f83b8;
-  --comic-green: #42f080;
-  --comic-green-dark: #31b65b;
-  --comic-purple: #d778c7;
-  --comic-purple-dark: #9b57c8;
-  --comic-navy: #262573;
-  --comic-ink-green: #163f17;
-  --comic-dark-panel: #20282e;
-  --bg-main: transparent;
-  --bg-header: transparent;
-  --bg-header-inner: var(--comic-blue);
-  --bg-segment: #244a2e;
-  --bg-main-area: var(--comic-yellow);
-  --bg-app-card: var(--comic-blue);
-  --bg-power-outer: var(--comic-blue);
-  --bg-power-btn: var(--comic-green-dark);
-  --surface-soft: var(--comic-cream);
-  --surface-strong: var(--comic-green-dark);
-  --surface-muted: var(--comic-purple);
-  --metal-top: rgba(255, 255, 255, 0.46);
-  --metal-mid: rgba(255, 255, 255, 0.1);
-  --metal-bottom: rgba(113, 55, 0, 0.2);
-  --brushed-metal:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.13) 0 2px,
-      rgba(92, 48, 0, 0.06) 2px 4px,
-      transparent 4px 8px
-    );
-  --panel-gradient:
-    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 30%, transparent 52%, var(--metal-bottom) 100%),
-    var(--brushed-metal),
-    linear-gradient(135deg, var(--comic-yellow-light) 0%, var(--comic-orange) 48%, var(--comic-red) 100%);
-  --panel-gradient-strong:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.54) 0%, rgba(255, 255, 255, 0.12) 28%, rgba(95, 44, 0, 0.2) 100%),
-    var(--brushed-metal),
-    linear-gradient(135deg, var(--comic-blue) 0%, var(--comic-blue) 52%, var(--comic-blue-dark) 100%);
-  --recessed-gradient:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(255, 255, 255, 0.12)),
-    linear-gradient(135deg, var(--comic-purple-dark), var(--comic-purple));
-  --lcd-gradient:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.25), transparent 38%, rgba(0, 0, 0, 0.16)),
-    var(--comic-green);
-  --control-gradient:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.46), transparent 42%, rgba(0, 0, 0, 0.2)),
-    linear-gradient(135deg, var(--comic-green), var(--comic-green-dark));
-  --text-main: #f7fbff;
-  --text-accent: #ffd34a;
-  --text-contrast: #ffffff;
-  --text-stroke-color: #000000;
+    inset 5px 7px 0px var(--shadow-inset),
+    inset -3px -3px 0px var(--highlight-soft);
   --text-stroke-strong: 1px;
   --text-stroke-soft: 0.8px;
-  --text-shadow-strong: 2px 2px 0 rgba(0, 0, 0, 0.35);
-  --text-shadow-soft: 1px 1px 0 rgba(0, 0, 0, 0.25);
-  --icon-power: var(--text-main);
-  --toggle-pointer: var(--comic-red);
-  --toggle-segment-start: var(--comic-navy);
-  --toggle-segment-mid: #5a6edc;
-  --toggle-segment-end: #9ad9e7;
-  --knurl-light: var(--comic-cream);
-  --knurl-dark: var(--comic-orange);
-  --slider-thumb: var(--comic-red);
-  --slider-thumb-alt: var(--comic-green);
-  --lcd-bg: var(--comic-green);
-  --lcd-on: var(--comic-ink-green);
-  --lcd-off: rgba(22, 63, 23, 0.22);
-  --on: var(--comic-green);
-  --off: rgba(66, 240, 128, 0.15);
-  --online: var(--comic-green);
-  --offline: var(--comic-red);
-  --pending: var(--comic-orange);
+
   --gauge-value: 0;
   --gauge-start-angle: -130deg;
   --gauge-range: 260deg;
   --gauge-step: 2.6deg;
   --needle-angle: -130deg;
-  --gauge-silver: var(--comic-cream);
+
+/* Yellow */
+  --comic-yellow-light: #FFE08C;
+  --comic-yellow: #F9C74F;
+  --comic-yellow-dark: #D69B2F;
+  --comic-yellow-very-dark: #7A5210;
+
+  /* Orange */
+  --comic-orange-light: #FFC98E;
+  --comic-orange: #FFA94D;
+  --comic-orange-dark: #D6701E;
+  --comic-orange-very-dark: #823508;
+
+  /* Red */
+  --comic-red-light: #FF97A8;
+  --comic-red: #FF4D6D;
+  --comic-red-dark: #C9184A;
+  --comic-red-very-dark: #590D22;
+
+  /* Blue */
+  --comic-blue-light: #6ABEDD;
+  --comic-blue: #277DA1;
+  --comic-blue-dark: #1A4F66;
+  --comic-blue-very-dark: #0D2B38;
+
+  /* Green */
+  --comic-green-light: #84D2BB;
+  --comic-green: #43AA8B;
+  --comic-green-dark: #2D725E;
+  --comic-green-very-dark: #143229;
+
+  /* Purple */
+  --comic-purple-light: #B388EB;
+  --comic-purple: #7B2CBF;
+  --comic-purple-dark: #5A189A;
+  --comic-purple-very-dark: #240046;
+
+  --shadow-strong: color-mix(in srgb, var(--comic-blue-very-dark) 42%, transparent);
+  --shadow-hard: color-mix(in srgb, var(--comic-blue-very-dark) 32%, transparent);
+  --shadow-medium: color-mix(in srgb, var(--comic-blue-very-dark) 26%, transparent);
+  --shadow-soft: color-mix(in srgb, var(--comic-blue-very-dark) 18%, transparent);
+  --shadow-inset: color-mix(in srgb, var(--comic-blue-very-dark) 28%, transparent);
+  --shadow-inset-soft: color-mix(in srgb, var(--comic-blue-very-dark) 16%, transparent);
+  --warm-shadow: color-mix(in srgb, var(--comic-orange-very-dark) 22%, transparent);
+  --highlight-strong: color-mix(in srgb, var(--comic-yellow-light) 70%, transparent);
+  --highlight-medium: color-mix(in srgb, var(--comic-yellow-light) 46%, transparent);
+  --highlight-soft: color-mix(in srgb, var(--comic-yellow-light) 24%, transparent);
+  --highlight-faint: color-mix(in srgb, var(--comic-yellow-light) 12%, transparent);
+  --scanline-strong: color-mix(in srgb, var(--comic-blue-very-dark) 30%, transparent);
+  --scanline-soft: color-mix(in srgb, var(--comic-blue-very-dark) 8%, transparent);
+  --icon-screen-tint: color-mix(in srgb, var(--comic-green) 12%, transparent);
+  --icon-glow: color-mix(in srgb, var(--comic-green-light) 70%, transparent);
+}
+
+/*=========== Body =====*/
+body{
+  --bg-main: transparent;
+  --bg-header: transparent;
+  --bg-header-inner: var(--comic-blue);
+  --bg-segment: var(--comic-green);
+  --bg-main-area: linear-gradient(60deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+  --bg-app-card: var(--comic-blue);
+  --bg-power-outer: linear-gradient(60deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+  --bg-power-btn: var(--comic-green);
+  --surface-soft: var(--comic-yellow-light);
+  --surface-strong: var(--comic-green-dark);
+  --surface-muted: var(--comic-purple-light);
+  --metal-top: var(--highlight-medium);
+  --metal-mid: var(--highlight-faint);
+  --metal-bottom: var(--warm-shadow);
+  --brushed-metal:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 16px,
+      color-mix(in srgb, var(--comic-yellow-light) 5%, transparent) 17px,
+      transparent 19px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--comic-blue-very-dark) 4%, transparent) 10px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 5px,
+      color-mix(in srgb, var(--comic-yellow-light) 7%, transparent) 6px,
+      transparent 8px
+    );
+  --panel-gradient:
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 30%, transparent 52%, var(--metal-bottom) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, var(--comic-yellow) 0%, var(--comic-yellow-light) 47%, var(--comic-orange) 53%, var(--comic-red-light) 100%);
+  --panel-gradient-strong:
+    linear-gradient(180deg, var(--highlight-medium) 0%, var(--highlight-faint) 28%, var(--warm-shadow) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+  --recessed-gradient:
+    linear-gradient(180deg, var(--shadow-inset), var(--highlight-faint)),
+    linear-gradient(135deg, var(--comic-purple-dark), var(--comic-purple-light));
+  --lcd-gradient:
+    linear-gradient(180deg, var(--highlight-soft), transparent 38%, var(--shadow-inset-soft)),
+    var(--comic-green-light);
+  --control-gradient:
+    linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
+    linear-gradient(135deg, var(--comic-green), var(--comic-green-dark));
+  --text-main: var(--comic-yellow-light);
+  --text-accent: var(--comic-yellow);
+  --text-contrast: var(--comic-green-light);
+  --text-stroke-color: var(--comic-blue-very-dark);
+  --text-shadow-strong: 2px 2px 0 var(--shadow-strong);
+  --text-shadow-soft: 1px 1px 0 var(--shadow-medium);
+  --chart-grid: var(--comic-blue-very-dark);
+  --chart-tooltip-bg: var(--comic-blue-dark);
+  --chart-tooltip-text: var(--comic-yellow-light);
+  --icon-power: var(--text-main);
+  --toggle-pointer: var(--comic-red);
+  --toggle-segment-start: var(--comic-blue-dark);
+  --toggle-segment-mid: var(--comic-purple);
+  --toggle-segment-end: var(--comic-yellow);
+  --knurl-light: var(--comic-orange-light);
+  --knurl-dark: var(--comic-orange);
+  --slider-thumb: var(--comic-red);
+  --slider-thumb-alt: var(--comic-green);
+  --lcd-bg: var(--comic-green-light);
+  --lcd-on: var(--comic-green-very-dark);
+  --lcd-off: color-mix(in srgb, var(--comic-green-very-dark) 24%, transparent);
+  --on: var(--comic-green);
+  --off: color-mix(in srgb, var(--comic-green-very-dark) 24%, transparent);
+  --online: var(--comic-green);
+  --offline: var(--comic-red);
+  --pending: var(--comic-orange);
+  --gauge-silver: var(--comic-orange-light);
   --gauge-green: var(--comic-green);
   --gauge-yellow: var(--comic-yellow-light);
   --gauge-red: var(--comic-red);
   --gauge-empty: var(--bg-header);
-  --gauge-gloss: rgba(255, 255, 255, 0.2);
-  --gauge-tick-color: var(--comic-dark-panel);
+  --gauge-gloss: var(--highlight-soft);
+  --gauge-tick-color: var(--comic-blue-very-dark);
   --gauge-needle-start: var(--comic-red-light);
   --gauge-needle-end: var(--comic-red-dark);
   --gauge-cap: var(--comic-orange);
@@ -114,17 +165,119 @@ body{
   --safety-cover-highlight: var(--comic-red-light);
   --safety-cover-shadow: var(--comic-red-dark);
   --safety-hinge: var(--comic-orange-dark);
-  --safety-hinge-highlight: var(--comic-cream);
-  --safety-slot: var(--comic-dark-panel);
+  --safety-hinge-highlight: var(--comic-orange-light);
+  --safety-slot: var(--comic-blue-very-dark);
   --safety-lever-start: var(--comic-red);
   --safety-lever-end: var(--comic-red-dark);
   --screw-metal: var(--comic-orange-dark);
-  --screw-highlight: var(--comic-cream);
+  --screw-highlight: var(--comic-orange-light);
   scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+/*=========== Dark Mode =====*/
+body.dark-mode {
+  --bg-main: transparent;
+  --bg-header: transparent;
+  --bg-header-inner: var(--comic-blue-dark);
+  --bg-segment: var(--comic-green-very-dark);
+  --bg-main-area: linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+  --bg-app-card: var(--comic-blue-dark);
+  --bg-power-outer: linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+  --bg-power-btn: var(--comic-green-dark);
+  --surface-soft: var(--comic-blue-dark);
+  --surface-strong: var(--comic-green-dark);
+  --surface-muted: var(--comic-purple-dark);
+  --metal-top: var(--highlight-soft);
+  --metal-mid: color-mix(in srgb, var(--comic-purple-light) 10%, transparent);
+  --metal-bottom: color-mix(in srgb, var(--comic-purple-very-dark) 44%, transparent);
+  --brushed-metal:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 16px,
+      color-mix(in srgb, var(--comic-blue-light) 5%, transparent) 17px,
+      transparent 19px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--comic-purple-very-dark) 8%, transparent) 10px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 5px,
+      color-mix(in srgb, var(--comic-yellow-light) 5%, transparent) 6px,
+      transparent 8px
+    );
+  --panel-gradient:
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, transparent 48%, var(--metal-bottom) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, var(--comic-purple-dark) 0%, var(--comic-blue-dark) 47%, var(--comic-blue) 53%, var(--comic-purple-dark) 100%);
+  --panel-gradient-strong:
+    linear-gradient(180deg, var(--highlight-soft) 0%, color-mix(in srgb, var(--comic-blue-light) 8%, transparent) 30%, color-mix(in srgb, var(--comic-purple-very-dark) 48%, transparent) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+  --recessed-gradient:
+    linear-gradient(180deg, color-mix(in srgb, var(--comic-purple-very-dark) 44%, transparent), color-mix(in srgb, var(--comic-purple-light) 10%, transparent)),
+    linear-gradient(135deg, var(--comic-purple-very-dark), var(--comic-purple-dark));
+  --lcd-gradient:
+    linear-gradient(180deg, color-mix(in srgb, var(--comic-green-light) 18%, transparent), transparent 40%, color-mix(in srgb, var(--comic-green-very-dark) 28%, transparent)),
+    var(--comic-green-dark);
+  --control-gradient:
+    linear-gradient(180deg, var(--highlight-soft), transparent 38%, color-mix(in srgb, var(--comic-green-very-dark) 38%, transparent)),
+    linear-gradient(135deg, var(--comic-green-dark), var(--comic-green-very-dark));
+  --text-main: var(--comic-yellow-light);
+  --text-accent: var(--comic-orange-light);
+  --text-contrast: var(--comic-green-light);
+  --text-stroke-color: var(--comic-purple-very-dark);
+  --text-shadow-strong: 1px 1px 0 color-mix(in srgb, var(--comic-purple-very-dark) 42%, transparent);
+  --text-shadow-soft: 1px 1px 0 color-mix(in srgb, var(--comic-purple-very-dark) 28%, transparent);
+  --chart-grid: var(--comic-blue-light);
+  --chart-tooltip-bg: var(--comic-purple-very-dark);
+  --chart-tooltip-text: var(--comic-yellow-light);
+  --icon-power: var(--text-main);
+  --toggle-pointer: var(--comic-red);
+  --toggle-segment-start: var(--comic-blue-very-dark);
+  --toggle-segment-mid: var(--comic-purple-dark);
+  --toggle-segment-end: var(--comic-blue-light);
+  --knurl-light: var(--comic-yellow-light);
+  --knurl-dark: var(--comic-orange-dark);
+  --slider-thumb: var(--comic-red);
+  --slider-thumb-alt: var(--comic-green);
+  --lcd-bg: var(--comic-green-dark);
+  --lcd-on: var(--comic-green-light);
+  --lcd-off: color-mix(in srgb, var(--comic-green-light) 18%, transparent);
+  --on: var(--comic-green);
+  --off: color-mix(in srgb, var(--comic-green-light) 16%, transparent);
+  --online: var(--comic-green);
+  --offline: var(--comic-red);
+  --pending: var(--comic-orange);
+  --gauge-silver: var(--comic-yellow);
+  --gauge-green: var(--comic-green);
+  --gauge-yellow: var(--comic-yellow-light);
+  --gauge-red: var(--comic-red);
+  --gauge-empty: var(--bg-header);
+  --gauge-gloss: color-mix(in srgb, var(--comic-yellow-light) 12%, transparent);
+  --gauge-tick-color: var(--text-main);
+  --gauge-needle-start: var(--comic-red-light);
+  --gauge-needle-end: var(--comic-red-dark);
+  --gauge-cap: var(--comic-orange-light);
+  --safety-panel: var(--comic-yellow);
+  --safety-panel-shadow: var(--comic-orange-dark);
+  --safety-cover: var(--comic-red);
+  --safety-cover-highlight: var(--comic-red-light);
+  --safety-cover-shadow: var(--comic-red-dark);
+  --safety-hinge: var(--comic-yellow);
+  --safety-hinge-highlight: var(--comic-orange-light);
+  --safety-slot: var(--comic-purple-very-dark);
+  --safety-lever-start: var(--comic-red);
+  --safety-lever-end: var(--comic-red-dark);
+  --screw-metal: var(--comic-orange-dark);
+  --screw-highlight: var(--comic-yellow-light);
 }
 
 .screw {
@@ -138,15 +291,15 @@ body::-webkit-scrollbar {
   box-sizing: border-box;
   background:
     linear-gradient(
-      to bottom,
-      transparent 42%,
-      var(--outline-color) 42% 58%,
-      transparent 58%
+    to bottom,
+    transparent 42%,
+    var(--outline-color) 42% 58%,
+    transparent 58%
     ),
-    linear-gradient(145deg, var(--screw-highlight) 0 24%, var(--screw-metal) 46%, #596167 100%);
+    linear-gradient(145deg, var(--screw-highlight) 0 24%, var(--screw-metal) 46%, var(--comic-blue-dark) 100%);
   box-shadow:
-    inset -2px -2px 0 rgba(0, 0, 0, 0.3),
-    1px 1px 0 rgba(0, 0, 0, 0.18);
+    inset -2px -2px 0 var(--shadow-strong),
+    1px 1px 0 var(--shadow-soft);
   pointer-events: none;
 }
 
@@ -173,127 +326,17 @@ body::-webkit-scrollbar {
 .screw--tilt {
   transform: rotate(45deg);
 }
-/*=========== Dark Mode =====*/
-body.dark-mode {
-  --comic-yellow: #c99738;
-  --comic-yellow-light: #ffd35d;
-  --comic-cream: #ffe38a;
-  --comic-orange: #ffc36a;
-  --comic-orange-dark: #73491e;
-  --comic-red: #ff6d6d;
-  --comic-red-light: #ff8b7a;
-  --comic-red-dark: #6f2020;
-  --comic-blue: #315e9e;
-  --comic-blue-dark: #2c5fa7;
-  --comic-green: #5ef08c;
-  --comic-green-dark: #2fc86d;
-  --comic-purple: #c95aa5;
-  --comic-purple-dark: #5c2c86;
-  --comic-navy: #262573;
-  --comic-ink-green: #bff59a;
-  --comic-dark-panel: #121820;
-  --bg-main: var(--comic-purple-dark);
-  --bg-header: #4c2c82;
-  --bg-header-inner: var(--comic-blue);
-  --bg-segment: #14261b;
-  --bg-main-area: #3f2b73;
-  --bg-app-card: var(--comic-blue);
-  --bg-power-outer: var(--comic-blue);
-  --bg-power-btn: var(--comic-green-dark);
-  --surface-soft: #445fc0;
-  --surface-strong: var(--comic-green-dark);
-  --surface-muted: var(--comic-purple-dark);
-  --metal-top: rgba(255, 255, 255, 0.2);
-  --metal-mid: rgba(255, 255, 255, 0.07);
-  --metal-bottom: rgba(0, 0, 0, 0.38);
-  --brushed-metal:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.07) 0 2px,
-      rgba(0, 0, 0, 0.1) 2px 4px,
-      transparent 4px 8px
-    );
-  --panel-gradient:
-    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, transparent 48%, var(--metal-bottom) 100%),
-    var(--brushed-metal),
-    linear-gradient(135deg, var(--comic-purple-dark) 0%, var(--comic-blue) 54%, #1d9ca8 100%);
-  --panel-gradient-strong:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.07) 30%, rgba(0, 0, 0, 0.42) 100%),
-    var(--brushed-metal),
-    linear-gradient(135deg, var(--comic-blue) 0%, var(--comic-blue-dark) 52%, var(--comic-purple-dark) 100%);
-  --recessed-gradient:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(255, 255, 255, 0.08)),
-    linear-gradient(135deg, var(--comic-purple-dark), var(--comic-purple));
-  --lcd-gradient:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.17), transparent 40%, rgba(0, 0, 0, 0.24)),
-    #667f2c;
-  --control-gradient:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 38%, rgba(0, 0, 0, 0.34)),
-    linear-gradient(135deg, var(--comic-green-dark), #217e50);
-  --text-main: #eaf2fb;
-  --text-accent: #ffe38a;
-  --text-contrast: #eef7ff;
-  --text-stroke-color: #000000;
-  --text-stroke-strong: 1.2px;
-  --text-stroke-soft: 0.8px;
-  --text-shadow-strong: 1px 1px 0 rgba(0, 0, 0, 0.28);
-  --text-shadow-soft: 1px 1px 0 rgba(0, 0, 0, 0.2);
-  --icon-power: var(--text-main);
-  --toggle-pointer: var(--comic-red);
-  --toggle-segment-start: var(--comic-navy);
-  --toggle-segment-mid: #4a3d9f;
-  --toggle-segment-end: #9ad9e7;
-  --knurl-light: var(--comic-cream);
-  --knurl-dark: var(--comic-orange-dark);
-  --slider-thumb: var(--comic-red);
-  --slider-thumb-alt: var(--comic-green);
-  --lcd-bg: #5e712c;
-  --lcd-on: var(--comic-ink-green);
-  --lcd-off: rgba(191, 245, 154, 0.18);
-  --on: var(--comic-green);
-  --off: rgba(94, 240, 140, 0.16);
-  --online: var(--comic-green);
-  --offline: var(--comic-red);
-  --pending: var(--comic-orange);
-  --gauge-value: 0;
-  --gauge-start-angle: -130deg;
-  --gauge-range: 260deg;
-  --gauge-step: 2.6deg;
-  --needle-angle: -130deg;
-  --gauge-silver: var(--comic-yellow);
-  --gauge-green: var(--comic-green);
-  --gauge-yellow: var(--comic-yellow-light);
-  --gauge-red: var(--comic-red);
-  --gauge-empty: var(--bg-header);
-  --gauge-gloss: rgba(255, 255, 255, 0.12);
-  --gauge-tick-color: var(--text-main);
-  --gauge-needle-start: var(--comic-red-light);
-  --gauge-needle-end: var(--comic-red-dark);
-  --gauge-cap: var(--comic-cream);
-  --safety-panel: var(--comic-yellow);
-  --safety-panel-shadow: var(--comic-orange-dark);
-  --safety-cover: var(--comic-red);
-  --safety-cover-highlight: var(--comic-red-light);
-  --safety-cover-shadow: var(--comic-red-dark);
-  --safety-hinge: var(--comic-yellow);
-  --safety-hinge-highlight: var(--comic-cream);
-  --safety-slot: var(--comic-dark-panel);
-  --safety-lever-start: var(--comic-red);
-  --safety-lever-end: var(--comic-red-dark);
-  --screw-metal: var(--comic-orange-dark);
-  --screw-highlight: var(--comic-cream);
-}
 
 body {
   font-family: 'Patrick Hand', cursive;
   color: var(--text-main);
-  -webkit-text-stroke: var(--text-stroke-soft) #000000;
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
   paint-order: stroke fill;
   letter-spacing: 1px;
   margin: 0;
   padding: 0;
   background:
-    radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.26), transparent 24%),
+    radial-gradient(circle at 18% 8%, var(--highlight-soft), transparent 24%),
     var(--brushed-metal),
     var(--bg-main-area);
   text-shadow: var(--text-shadow-soft);
@@ -316,7 +359,7 @@ body {
 .power-btn:active,
 .app:active {
   transform: translate(-1px, -2px);
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 4px 0px var(--shadow-medium);
 }
 
 /*=========== Shell =====*/
@@ -390,11 +433,11 @@ header {
 .shadow {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(12px 14px 0px rgba(0, 0, 0, 0.34));
+  filter: drop-shadow(12px 14px 0px var(--shadow-strong));
 }
 
 .border {
-  background-color: black;
+  background-color: var(--outline-color);
   width: 100%;
   height: 100%;
   clip-path: polygon(0% 0%,
@@ -427,7 +470,7 @@ header {
 /*=========== Main =====*/
 main {
   background:
-    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 18% 0%, var(--highlight-faint), transparent 28%),
     var(--brushed-metal),
     var(--bg-main-area);
   width: 100%;

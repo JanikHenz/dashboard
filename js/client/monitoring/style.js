@@ -5,9 +5,11 @@ export function getCssVar(name) {
 export function getPalette() {
   return {
     text: getCssVar('--text-accent'),
-    stroke: getCssVar('--text-stroke-color') || '#000',
-    grid: 'rgba(0, 0, 0, 0.25)',
+    stroke: getCssVar('--text-stroke-color') || getCssVar('--comic-blue-very-dark'),
+    grid: getCssVar('--chart-grid'),
     line: getCssVar('--lcd-on'),
-    area: getCssVar('--on')
+    area: getCssVar('--on'),
+    tooltipBackground: getCssVar('--chart-tooltip-bg'),
+    tooltipText: getCssVar('--chart-tooltip-text')
   };
 }

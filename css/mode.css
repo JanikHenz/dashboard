@@ -15,7 +15,7 @@
   height: 100%;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.32), transparent 24%),
+    radial-gradient(circle at 34% 24%, var(--highlight-soft), transparent 24%),
     conic-gradient(
       var(--toggle-segment-start) 0deg 62deg,
       var(--toggle-segment-mid) 62deg 298deg,
@@ -52,7 +52,7 @@
   transform-origin: center center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.42), transparent 22%),
+    radial-gradient(circle at 34% 28%, var(--highlight-medium), transparent 22%),
     repeating-conic-gradient(
       from 0deg,
       var(--knurl-light) 0deg 8deg,
@@ -76,7 +76,7 @@
   height: 100%;
   aspect-ratio: 1;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.36), transparent 45%, rgba(0, 0, 0, 0.22)),
+    linear-gradient(180deg, var(--highlight-medium), transparent 45%, var(--shadow-inset)),
     var(--toggle-pointer);
   clip-path: polygon(50% 0%, 65% 80%, 35% 80%);
   transform: translateZ(-1px);

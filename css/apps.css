@@ -65,12 +65,12 @@
 }
 
 .appName {
-  box-shadow: var(--neg-shadow), inset 0 0 10px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--neg-shadow), inset 0 0 10px var(--shadow-inset-soft);
   width: 100%;
   height: 60%;
   border: var(--outline-width) solid var(--outline-color);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.38), transparent 45%, rgba(0, 0, 0, 0.16)),
+    linear-gradient(180deg, var(--highlight-medium), transparent 45%, var(--shadow-inset-soft)),
     var(--surface-soft);
   text-align: center;
   display: flex;
@@ -85,23 +85,23 @@
   aspect-ratio: 1;
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
-  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 2px 2px 0 var(--shadow-medium);
   flex-shrink: 0;
 }
 
 .status-indicator.ready {
   background-color: var(--online);
-  box-shadow: 0 0 6px var(--online), inset 2px 2px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 6px var(--online), inset 2px 2px 0 var(--shadow-medium);
 }
 
 .status-indicator.not-ready {
   background-color: var(--pending);
-  box-shadow: 0 0 6px var(--pending), inset 2px 2px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 6px var(--pending), inset 2px 2px 0 var(--shadow-medium);
 }
 
 .status-indicator.unknown {
   background-color: var(--offline);
-  box-shadow: 0 0 6px var(--offline), inset 2px 2px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 6px var(--offline), inset 2px 2px 0 var(--shadow-medium);
 }
 
 /*=========== Icon =====*/
@@ -126,8 +126,8 @@
     to bottom,
     transparent 0px,
     transparent 3px,
-    rgba(0, 0, 0, 0.3) 3px,
-    rgba(0, 0, 0, 0.3) 4px
+    var(--scanline-strong) 3px,
+    var(--scanline-strong) 4px
   );
   z-index: 2;
   pointer-events: none;
@@ -138,7 +138,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-color: rgba(102, 158, 49, 0.08);
+  background-color: var(--icon-screen-tint);
   z-index: 3;
   pointer-events: none;
   border-radius: inherit;
@@ -164,7 +164,7 @@
     hue-rotate(80deg)
     saturate(3)
     brightness(0.6)
-    drop-shadow(0 0 6px rgba(102, 158, 49, 0.7));
+    drop-shadow(0 0 6px var(--icon-glow));
 }
 
 /*=========== App Info =====*/
@@ -182,7 +182,7 @@
   width: 1rem;
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
-  box-shadow: inset 4px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 4px 4px 0px var(--shadow-medium);
   background-color: var(--online);
   grid-column: 1;
 }
@@ -295,7 +295,7 @@
   width: 100cqw;
   aspect-ratio: 3/1;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent 42%, rgba(0, 0, 0, 0.24)),
+    linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
     var(--slider-thumb);
   cursor: pointer;
   border-radius: 5px;
@@ -315,7 +315,7 @@
   height: 20px;
   width: 75cqw;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent 42%, rgba(0, 0, 0, 0.24)),
+    linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
     var(--slider-thumb-alt);
   cursor: pointer;
   border: 2px solid var(--text-contrast);

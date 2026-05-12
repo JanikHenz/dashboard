@@ -20,7 +20,7 @@ export function createPowerPanel({ onRequestRefresh, updateTimerDisplay }) {
 
   function setLedDisconnected() {
     if (!pwrLed) return;
-    pwrLed.style.backgroundColor = '#888';
+    pwrLed.style.backgroundColor = 'var(--offline)';
   }
 
   async function handlePowerClick() {
@@ -42,7 +42,7 @@ export function createPowerPanel({ onRequestRefresh, updateTimerDisplay }) {
         return;
       }
       wasPressed = true;
-      if (pwrLed) pwrLed.style.backgroundColor = '#FFA500';
+      if (pwrLed) pwrLed.style.backgroundColor = 'var(--pending)';
       setTimeout(onRequestRefresh, 1500);
     } catch (error) {
       console.error('Network error:', error);
