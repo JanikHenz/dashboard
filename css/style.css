@@ -47,6 +47,20 @@ body {
   --online: #3af075;
   --offline: #ff5a5a;
   --pending: #ffb347;
+  --gauge-value: 0;
+  --gauge-start-angle: -130deg;
+  --gauge-range: 170deg;
+  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  --gauge-silver: #c0c0c0;
+  --gauge-green: #8be287;
+  --gauge-yellow: #f9dc75;
+  --gauge-red: #f78282;
+  --gauge-empty: var(--bg-header);
+  --gauge-gloss: rgba(255, 255, 255, 0.2);
+  --gauge-tick-color: #2f3337;
+  --gauge-needle-start: #f06e6e;
+  --gauge-needle-end: #c33f3f;
+  --gauge-cap: #ffd24d;
   scrollbar-width: none;
 }
 
@@ -92,6 +106,20 @@ body.dark-mode {
   --online: #73d7ff;
   --offline: #ff6d6d;
   --pending: #ffc36a;
+  --gauge-value: 0;
+  --gauge-start-angle: -130deg;
+  --gauge-range: 170deg;
+  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  --gauge-silver: #d0d6de;
+  --gauge-green: #57d7b0;
+  --gauge-yellow: #ffc36a;
+  --gauge-red: #ff6d6d;
+  --gauge-empty: var(--bg-header);
+  --gauge-gloss: rgba(255, 255, 255, 0.12);
+  --gauge-tick-color: #d8e0e8;
+  --gauge-needle-start: #ff8b7a;
+  --gauge-needle-end: #d84f4f;
+  --gauge-cap: #ffe38a;
 }
 
 body {

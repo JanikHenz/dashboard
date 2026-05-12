@@ -89,18 +89,13 @@
 }
 
 .gauge {
-  --gauge-value: 0;
-  --gauge-start-angle: -130deg;
-  --gauge-range: 170deg;
-  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
-  --gauge-silver: silver;
   position: relative;
   height: 95%;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--gauge-silver);
+  border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
-  background: var(--surface-soft);
+  background: var(--gauge-silver);
 }
 
 .gauge::before {
@@ -108,15 +103,14 @@
   position: absolute;
   inset: 8%;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--gauge-silver);
+  border: var(--outline-width) solid var(--outline-color);
   background:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0 36%, transparent 37% 100%),
     conic-gradient(
       from -130deg,
-      #8be287 0deg 120deg,
-      #f9dc75 120deg 200deg,
-      #f78282 200deg 260deg,
-      var(--bg-header) 260deg
+      var(--gauge-green) 0deg 120deg,
+      var(--gauge-yellow) 120deg 200deg,
+      var(--gauge-red) 200deg 260deg,
+      var(--gauge-empty) 260deg
     );
 }
 
@@ -126,7 +120,7 @@
   border-radius: 50%;
   background: repeating-conic-gradient(
     from -130deg,
-    var(--outline-color) 0deg 1.1deg,
+    var(--gauge-tick-color) 0deg 1.1deg,
     transparent 1.1deg 6.5deg
   );
   -webkit-mask: 
@@ -145,7 +139,7 @@
   border-radius: 50%;
   background: repeating-conic-gradient(
     from -130deg,
-    var(--outline-color) 0deg 1.6deg,
+    var(--gauge-tick-color) 0deg 1.6deg,
     transparent 1.6deg 32.5deg
   );
   -webkit-mask: 
@@ -169,13 +163,20 @@
 .gauge-needle {
   position: absolute;
   left: 50%;
-  top: 23%;
-  width: 10%;
-  height: 33%;
+  top: 15%;
+  width: 13%;
+  height: 41%;
   transform: translateX(-50%);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: 999px;
-  background: linear-gradient(180deg, #f06e6e 0%, #c33f3f 100%);
+  background: var(--outline-color);
+  clip-path: polygon(50% 0%, 82% 100%, 18% 100%);
+}
+
+.gauge-needle::before {
+  content: '';
+  position: absolute;
+  inset: var(--outline-width);
+  background: linear-gradient(180deg, var(--gauge-needle-start) 0%, var(--gauge-needle-end) 100%);
+  clip-path: polygon(50% 0%, 78% 100%, 22% 100%);
 }
 
 
@@ -189,8 +190,8 @@
   border-radius: 50%;
   border: var(--outline-width) solid var(--outline-color);
   background:
-    radial-gradient(circle at 32% 30%, #fff 0 20%, transparent 21% 100%),
-    #ffd24d;
+    radial-gradient(transparent 21% 100%),
+    var(--gauge-cap);
   box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.55);
 }
 
