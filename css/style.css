@@ -18,6 +18,12 @@
   --gauge-step: 2.6deg;
   --needle-angle: -130deg;
 
+/* White */
+  --comic-white: #FFFFFF;
+  --comic-white-warm: #FFF9E5;
+  --comic-white-cool: #F0F5F9;
+  --comic-white-dark: #cfcfcf;
+
 /* Yellow */
   --comic-yellow-light: #FFE08C;
   --comic-yellow: #F9C74F;
@@ -49,10 +55,10 @@
   --comic-green-very-dark: #143229;
 
   /* Purple */
-  --comic-purple-light: #B388EB;
-  --comic-purple: #7B2CBF;
-  --comic-purple-dark: #5A189A;
-  --comic-purple-very-dark: #240046;
+  --comic-purple-light: #9D91FF;
+  --comic-purple: #6355D8;
+  --comic-purple-dark: #4538A3;
+  --comic-purple-very-dark: #1B125C;
 
   --shadow-strong: color-mix(in srgb, var(--comic-blue-very-dark) 42%, transparent);
   --shadow-hard: color-mix(in srgb, var(--comic-blue-very-dark) 32%, transparent);
@@ -61,10 +67,10 @@
   --shadow-inset: color-mix(in srgb, var(--comic-blue-very-dark) 28%, transparent);
   --shadow-inset-soft: color-mix(in srgb, var(--comic-blue-very-dark) 16%, transparent);
   --warm-shadow: color-mix(in srgb, var(--comic-orange-very-dark) 22%, transparent);
-  --highlight-strong: color-mix(in srgb, var(--comic-yellow-light) 70%, transparent);
-  --highlight-medium: color-mix(in srgb, var(--comic-yellow-light) 46%, transparent);
-  --highlight-soft: color-mix(in srgb, var(--comic-yellow-light) 24%, transparent);
-  --highlight-faint: color-mix(in srgb, var(--comic-yellow-light) 12%, transparent);
+  --highlight-strong: color-mix(in srgb, var(--comic-white-warm) 70%, transparent);
+  --highlight-medium: color-mix(in srgb, var(--comic-white-warm) 46%, transparent);
+  --highlight-soft: color-mix(in srgb, var(--comic-white-cool) 24%, transparent);
+  --highlight-faint: color-mix(in srgb, var(--comic-white-cool) 12%, transparent);
   --scanline-strong: color-mix(in srgb, var(--comic-blue-very-dark) 30%, transparent);
   --scanline-soft: color-mix(in srgb, var(--comic-blue-very-dark) 8%, transparent);
   --icon-screen-tint: color-mix(in srgb, var(--comic-green) 12%, transparent);
@@ -84,14 +90,14 @@ body{
   --surface-soft: var(--comic-yellow-light);
   --surface-strong: var(--comic-green-dark);
   --surface-muted: var(--comic-purple-light);
-  --metal-top: color-mix(in srgb, var(--comic-blue-light) 18%, transparent);
-  --metal-mid: color-mix(in srgb, var(--comic-blue-light) 6%, transparent);
+  --metal-top: color-mix(in srgb, var(--comic-white-cool) 18%, transparent);
+  --metal-mid: color-mix(in srgb, var(--comic-white-cool) 6%, transparent);
   --metal-bottom: color-mix(in srgb, var(--comic-blue-very-dark) 14%, transparent);
   --brushed-metal:
     repeating-linear-gradient(
       90deg,
       transparent 0 16px,
-      color-mix(in srgb, var(--comic-blue-light) 4%, transparent) 17px,
+      color-mix(in srgb, var(--comic-white-cool) 4%, transparent) 17px,
       transparent 19px
     ),
     repeating-linear-gradient(
@@ -103,7 +109,7 @@ body{
     repeating-linear-gradient(
       92deg,
       transparent 0 5px,
-      color-mix(in srgb, var(--comic-blue-light) 5%, transparent) 6px,
+      color-mix(in srgb, var(--comic-white-warm) 5%, transparent) 6px,
       transparent 8px
     );
   --panel-gradient:
@@ -116,14 +122,14 @@ body{
     linear-gradient(90deg, var(--comic-blue-dark) 0%, var(--comic-blue) 50%, var(--comic-blue-dark) 100%);
   --recessed-gradient:
     linear-gradient(180deg, var(--shadow-inset), var(--highlight-faint)),
-    linear-gradient(135deg, var(--comic-purple-dark), var(--comic-purple-light));
+    linear-gradient(135deg, var(--comic-blue-very-dark), var(--comic-blue-dark));
   --lcd-gradient:
     linear-gradient(180deg, var(--highlight-soft), transparent 38%, var(--shadow-inset-soft)),
     var(--comic-green-light);
   --control-gradient:
     linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
     linear-gradient(135deg, var(--comic-green), var(--comic-green-dark));
-  --text-main: var(--comic-yellow-light);
+  --text-main: var(--comic-yellow);
   --text-accent: var(--comic-yellow);
   --text-contrast: var(--comic-green-light);
   --text-stroke-color: var(--comic-blue-very-dark);
@@ -131,11 +137,11 @@ body{
   --text-shadow-soft: 1px 1px 0 var(--shadow-medium);
   --chart-grid: var(--comic-blue-very-dark);
   --chart-tooltip-bg: var(--comic-blue-dark);
-  --chart-tooltip-text: var(--comic-yellow-light);
+  --chart-tooltip-text: var(--comic-yellow);
   --icon-power: var(--text-main);
   --toggle-pointer: var(--comic-red);
   --toggle-segment-start: var(--comic-blue-dark);
-  --toggle-segment-mid: var(--comic-purple);
+  --toggle-segment-mid: var(--comic-purple-very-dark);
   --toggle-segment-end: var(--comic-yellow);
   --knurl-light: var(--comic-orange-light);
   --knurl-dark: var(--comic-orange);
@@ -191,14 +197,14 @@ body.dark-mode {
   --surface-soft: var(--comic-blue-dark);
   --surface-strong: var(--comic-green-dark);
   --surface-muted: var(--comic-purple-dark);
-  --metal-top: var(--highlight-soft);
-  --metal-mid: color-mix(in srgb, var(--comic-purple-light) 10%, transparent);
+  --metal-top: color-mix(in srgb, var(--comic-white-cool) 16%, transparent);
+  --metal-mid: color-mix(in srgb, var(--comic-white-cool) 7%, transparent);
   --metal-bottom: color-mix(in srgb, var(--comic-purple-very-dark) 44%, transparent);
   --brushed-metal:
     repeating-linear-gradient(
       90deg,
       transparent 0 16px,
-      color-mix(in srgb, var(--comic-blue-light) 5%, transparent) 17px,
+      color-mix(in srgb, var(--comic-white-cool) 5%, transparent) 17px,
       transparent 19px
     ),
     repeating-linear-gradient(
@@ -210,7 +216,7 @@ body.dark-mode {
     repeating-linear-gradient(
       92deg,
       transparent 0 5px,
-      color-mix(in srgb, var(--comic-blue-light) 4%, transparent) 6px,
+      color-mix(in srgb, var(--comic-white-warm) 4%, transparent) 6px,
       transparent 8px
     );
   --panel-gradient:
@@ -242,7 +248,7 @@ body.dark-mode {
   --icon-power: var(--text-main);
   --toggle-pointer: var(--comic-red);
   --toggle-segment-start: var(--comic-blue-very-dark);
-  --toggle-segment-mid: var(--comic-purple-dark);
+  --toggle-segment-mid: var(--comic-purple-very-dark);
   --toggle-segment-end: var(--comic-blue-light);
   --knurl-light: var(--comic-yellow-light);
   --knurl-dark: var(--comic-orange-dark);
@@ -261,7 +267,6 @@ body.dark-mode {
   --gauge-yellow: var(--comic-yellow-light);
   --gauge-red: var(--comic-red);
   --gauge-empty: var(--bg-header);
-  --gauge-gloss: color-mix(in srgb, var(--comic-yellow-light) 12%, transparent);
   --gauge-tick-color: var(--text-main);
   --gauge-needle-start: var(--comic-red-light);
   --gauge-needle-end: var(--comic-red-dark);
