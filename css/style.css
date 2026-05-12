@@ -77,21 +77,21 @@ body{
   --bg-header: transparent;
   --bg-header-inner: var(--comic-blue);
   --bg-segment: var(--comic-green);
-  --bg-main-area: linear-gradient(60deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+  --bg-main-area: color-mix(in srgb, var(--comic-blue) 82%, var(--comic-blue-dark));
   --bg-app-card: var(--comic-blue);
-  --bg-power-outer: linear-gradient(60deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+  --bg-power-outer: color-mix(in srgb, var(--comic-blue) 82%, var(--comic-blue-dark));
   --bg-power-btn: var(--comic-green);
   --surface-soft: var(--comic-yellow-light);
   --surface-strong: var(--comic-green-dark);
   --surface-muted: var(--comic-purple-light);
-  --metal-top: var(--highlight-medium);
-  --metal-mid: var(--highlight-faint);
-  --metal-bottom: var(--warm-shadow);
+  --metal-top: color-mix(in srgb, var(--comic-blue-light) 18%, transparent);
+  --metal-mid: color-mix(in srgb, var(--comic-blue-light) 6%, transparent);
+  --metal-bottom: color-mix(in srgb, var(--comic-blue-very-dark) 14%, transparent);
   --brushed-metal:
     repeating-linear-gradient(
       90deg,
       transparent 0 16px,
-      color-mix(in srgb, var(--comic-yellow-light) 5%, transparent) 17px,
+      color-mix(in srgb, var(--comic-blue-light) 4%, transparent) 17px,
       transparent 19px
     ),
     repeating-linear-gradient(
@@ -103,17 +103,17 @@ body{
     repeating-linear-gradient(
       92deg,
       transparent 0 5px,
-      color-mix(in srgb, var(--comic-yellow-light) 7%, transparent) 6px,
+      color-mix(in srgb, var(--comic-blue-light) 5%, transparent) 6px,
       transparent 8px
     );
   --panel-gradient:
     linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 30%, transparent 52%, var(--metal-bottom) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, var(--comic-yellow) 0%, var(--comic-yellow-light) 47%, var(--comic-orange) 53%, var(--comic-red-light) 100%);
+    linear-gradient(90deg, color-mix(in srgb, var(--comic-blue) 76%, var(--comic-blue-dark)) 0%, var(--comic-blue) 50%, color-mix(in srgb, var(--comic-blue) 84%, var(--comic-green-dark)) 100%);
   --panel-gradient-strong:
-    linear-gradient(180deg, var(--highlight-medium) 0%, var(--highlight-faint) 28%, var(--warm-shadow) 100%),
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, var(--metal-bottom) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, var(--comic-blue-dark) 0%, var(--comic-blue-light) 47%, var(--comic-blue) 53%, var(--comic-blue-dark) 100%);
+    linear-gradient(90deg, var(--comic-blue-dark) 0%, var(--comic-blue) 50%, var(--comic-blue-dark) 100%);
   --recessed-gradient:
     linear-gradient(180deg, var(--shadow-inset), var(--highlight-faint)),
     linear-gradient(135deg, var(--comic-purple-dark), var(--comic-purple-light));
@@ -184,9 +184,9 @@ body.dark-mode {
   --bg-header: transparent;
   --bg-header-inner: var(--comic-blue-dark);
   --bg-segment: var(--comic-green-very-dark);
-  --bg-main-area: linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+  --bg-main-area: color-mix(in srgb, var(--comic-blue-dark) 82%, var(--comic-blue-very-dark));
   --bg-app-card: var(--comic-blue-dark);
-  --bg-power-outer: linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+  --bg-power-outer: color-mix(in srgb, var(--comic-blue-dark) 82%, var(--comic-blue-very-dark));
   --bg-power-btn: var(--comic-green-dark);
   --surface-soft: var(--comic-blue-dark);
   --surface-strong: var(--comic-green-dark);
@@ -210,17 +210,17 @@ body.dark-mode {
     repeating-linear-gradient(
       92deg,
       transparent 0 5px,
-      color-mix(in srgb, var(--comic-yellow-light) 5%, transparent) 6px,
+      color-mix(in srgb, var(--comic-blue-light) 4%, transparent) 6px,
       transparent 8px
     );
   --panel-gradient:
     linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, transparent 48%, var(--metal-bottom) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, var(--comic-purple-dark) 0%, var(--comic-blue-dark) 47%, var(--comic-blue) 53%, var(--comic-purple-dark) 100%);
+    linear-gradient(90deg, color-mix(in srgb, var(--comic-blue-dark) 86%, var(--comic-purple-dark)) 0%, var(--comic-blue-dark) 50%, color-mix(in srgb, var(--comic-blue-dark) 88%, var(--comic-blue)) 100%);
   --panel-gradient-strong:
     linear-gradient(180deg, var(--highlight-soft) 0%, color-mix(in srgb, var(--comic-blue-light) 8%, transparent) 30%, color-mix(in srgb, var(--comic-purple-very-dark) 48%, transparent) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue) 47%, var(--comic-blue-dark) 53%, var(--comic-purple-dark) 100%);
+    linear-gradient(90deg, var(--comic-blue-very-dark) 0%, var(--comic-blue-dark) 52%, color-mix(in srgb, var(--comic-blue-dark) 88%, var(--comic-purple-dark)) 100%);
   --recessed-gradient:
     linear-gradient(180deg, color-mix(in srgb, var(--comic-purple-very-dark) 44%, transparent), color-mix(in srgb, var(--comic-purple-light) 10%, transparent)),
     linear-gradient(135deg, var(--comic-purple-very-dark), var(--comic-purple-dark));
