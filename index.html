@@ -24,6 +24,8 @@
         <div class="shadow">
           <div class="border">
             <div class="header">
+              <span class="screw screw--top-left" ></span>
+              <span class="screw screw--top-right screw--tilt" ></span>
               <div class="header-left">
                 <div class="timer">
                   <div class="segment">
@@ -132,12 +134,20 @@
       <main>
         <div class="apps-layout">
           <div class="apps">
+            <span class="screw screw--top-left" ></span>
+            <span class="screw screw--top-right screw--tilt" ></span>
+            <span class="screw screw--bottom-left screw--tilt" ></span>
+            <span class="screw screw--bottom-right" ></span>
             <div class="apps-inner" id="app-grid">
             </div>
           </div>
 
           <!-- Global Replica Control -->
           <div class="replica-control" id="replica-control">
+            <span class="screw screw--top-left screw--tilt" ></span>
+            <span class="screw screw--top-right" ></span>
+            <span class="screw screw--bottom-left" ></span>
+            <span class="screw screw--bottom-right screw--tilt" ></span>
             <h2>Replica <br> Control</h2>
             <div class="app-name" id="selected-app-name">No app <br> selected</div>
             <div class="replica-info">
@@ -160,6 +170,10 @@
 
     <div class="content">
       <header id="monitoring-header">
+        <span class="screw screw--top-left" ></span>
+        <span class="screw screw--top-right screw--tilt" ></span>
+        <span class="screw screw--bottom-left screw--tilt" ></span>
+        <span class="screw screw--bottom-right" ></span>
         <div class="monitoring-panel">
           <div class="monitoring-stats">
             <div class="monitor-stat" id="monitor-stat-cpu">
@@ -193,12 +207,12 @@
           </div>
           <div class="gauge-space">
             <div class="gauge" id="cpu-gauge" style="--gauge-value: 0;">
-              <div class="gauge-ticks" aria-hidden="true"></div>
-              <div class="gauge-ticks gauge-ticks-major" aria-hidden="true"></div>
-              <div class="gauge-needle-wrap" aria-hidden="true">
+              <div class="gauge-ticks" ></div>
+              <div class="gauge-ticks gauge-ticks-major" ></div>
+              <div class="gauge-needle-wrap" >
                 <div class="gauge-needle"></div>
               </div>
-              <div class="gauge-center-cap" aria-hidden="true"></div>
+              <div class="gauge-center-cap" ></div>
               <span class="gauge-value" id="cpu-gauge-value">--%</span>
               <span class="gauge-label">CPU</span>
             </div>
@@ -207,21 +221,23 @@
             <div class="safety-switch">
               <div class="safety-switch-panel">
                 <label class="safety-switch-toggle">
-                  <input class="safety-switch-input" type="checkbox" disabled
-                    aria-label="Safety toggle">
-                  <span class="safety-switch-slot" aria-hidden="true">
+                  <input class="safety-switch-input" type="checkbox" disabled>
+                  <span class="safety-switch-slot" >
                     <span class="safety-switch-lever"></span>
                   </span>
                 </label>
               </div>
-              <button type="button" class="safety-switch-cover"
-                aria-label="Schutzabdeckung öffnen" aria-expanded="false"></button>
+              <button type="button" class="safety-switch-cover" ></button>
             </div>
           </div>
         </div>
       </header>
       <main>
         <div class="apps" id="charts">
+          <span class="screw screw--top-left screw--tilt" ></span>
+          <span class="screw screw--top-right"></span>
+          <span class="screw screw--bottom-left" ></span>
+          <span class="screw screw--bottom-right screw--tilt" ></span>
           <div class="chart" id="chart-cpu"></div>
           <div class="chart" id="chart-memory"></div>
           <div class="chart" id="chart-network"></div>

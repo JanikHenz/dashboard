@@ -11,6 +11,7 @@
 }
 
 .apps {
+  position: relative;
   flex: 1;
   min-width: 10rem;
   padding: 2rem;
@@ -197,6 +198,7 @@
 
 /*=========== Replica Control =====*/
 .replica-control {
+  position: relative;
   background-color: var(--bg-header-inner);
   border: var(--outline-width) solid var(--outline-color);
   box-shadow: var(--hard-shadow);
