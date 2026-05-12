@@ -14,7 +14,7 @@ function createPowerService({ piIp }) {
     isPiConnected = false;
   });
 
-  async function pressButton() {
+  async function pressPowerPin(durationMs) {
     if (!isPiConnected) {
       return { ok: false, status: 500, body: { success: false, error: 'Pi Offline' } };
     }
@@ -23,7 +23,7 @@ function createPowerService({ piIp }) {
       const pin = pi.gpio(17);
       await pin.modeSet('output');
       await pin.write(1);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, durationMs));
       await pin.write(0);
       return { ok: true, status: 200, body: { success: true } };
     } catch (error) {
@@ -32,8 +32,17 @@ function createPowerService({ piIp }) {
     }
   }
 
+  function pressButton() {
+    return pressPowerPin(500);
+  }
+
+  function hardShutdown() {
+    return pressPowerPin(5000);
+  }
+
   return {
-    pressButton
+    pressButton,
+    hardShutdown
   };
 }
 

@@ -22,6 +22,12 @@ function registerRoutes(app, services) {
     res.status(result.status).json(result.body);
   });
 
+  app.post('/api/hard-shutdown', async (_req, res) => {
+    console.log('Hard shutdown triggered from safety switch!');
+    const result = await powerService.hardShutdown();
+    res.status(result.status).json(result.body);
+  });
+
   app.get('/api/k8s/deployments', async (_req, res) => {
     if (!kubernetesService.isAvailable()) {
       res.status(503).json({ error: 'Kubernetes API unavailable' });

@@ -9,7 +9,6 @@ import { MESSAGE_TYPES, SCOPES } from './client/protocol.js';
 import { initSafetySwitch } from './client/safetySwitch.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  initSafetySwitch();
   const monitoringPanel = createMonitoringPanel();
   let wsClient = null;
   const sendRefresh = (scope) => {
@@ -17,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       wsClient.sendRefresh(scope);
     }
   };
+  initSafetySwitch({ onRequestRefresh: () => sendRefresh(SCOPES.STATUS) });
   const appsPanel = createAppsPanel({ onRequestAppsRefresh: () => sendRefresh(SCOPES.APPS) });
   const powerPanel = createPowerPanel({
     onRequestRefresh: () => sendRefresh(SCOPES.STATUS),
