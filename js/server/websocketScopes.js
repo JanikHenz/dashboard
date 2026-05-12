@@ -14,7 +14,7 @@ function createWebsocketScopes(services) {
       toMessage: (payload) => ({ type: MESSAGE_TYPES.STATUS, ...toSafeObject(payload) })
     },
     monitoring: {
-      load: () => prometheusService.getOverview('1h', 30),
+      load: () => prometheusService.getOverview('1h', 15),
       toMessage: (payload) => {
         const safePayload = toSafeObject(payload);
         if (safePayload.error) {

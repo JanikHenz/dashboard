@@ -23,10 +23,12 @@ function clampPercent(value) {
 function renderCpuGauge(series) {
   const cpuValue = latestValue(series.cpu);
   const gaugeValue = clampPercent(cpuValue);
+  const needleAngle = gaugeValue === null ? -130 : -130 + gaugeValue * 2.6;
   const gauge = document.getElementById('cpu-gauge');
   const gaugeLabel = document.getElementById('cpu-gauge-value');
   if (gauge) {
     gauge.style.setProperty('--gauge-value', gaugeValue === null ? 0 : gaugeValue.toFixed(1));
+    gauge.style.setProperty('--needle-angle', `${needleAngle.toFixed(1)}deg`);
   }
   if (gaugeLabel) {
     gaugeLabel.textContent = gaugeValue === null ? '--%' : `${Math.round(gaugeValue)}%`;

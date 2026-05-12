@@ -49,8 +49,9 @@ body {
   --pending: #ffb347;
   --gauge-value: 0;
   --gauge-start-angle: -130deg;
-  --gauge-range: 170deg;
-  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  --gauge-range: 260deg;
+  --gauge-step: 2.6deg;
+  --needle-angle: -130deg;
   --gauge-silver: #c0c0c0;
   --gauge-green: #8be287;
   --gauge-yellow: #f9dc75;
@@ -108,8 +109,9 @@ body.dark-mode {
   --pending: #ffc36a;
   --gauge-value: 0;
   --gauge-start-angle: -130deg;
-  --gauge-range: 170deg;
-  --needle-angle: calc(var(--gauge-start-angle) + (var(--gauge-value) * 2.6deg));
+  --gauge-range: 260deg;
+  --gauge-step: 2.6deg;
+  --needle-angle: -130deg;
   --gauge-silver: #d0d6de;
   --gauge-green: #57d7b0;
   --gauge-yellow: #ffc36a;
