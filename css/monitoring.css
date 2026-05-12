@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: clamp(0.6rem, 1vw, 1rem);
+  overflow: visible;
 }
 
 .monitoring-panel {
@@ -220,6 +221,220 @@
   font-size: clamp(0.9rem, 2.2vw, 1.4rem);
   color: var(--text-main);
   -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+}
+
+/*=========== Nuclear Switch =====*/
+.nuclear-switch-space {
+  width: 33%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+.nuclear-switch {
+  position: relative;
+  display: block;
+  height: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+  perspective-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.nuclear-switch::before {
+  position: absolute;
+  z-index: 12;
+  border: var(--outline-width) solid var(--outline-color);
+  background:
+    repeating-linear-gradient(
+      180deg,
+      var(--nuclear-guard-highlight) 0 10px,
+      var(--nuclear-guard-highlight) 10px 16px,
+      var(--nuclear-guard) 16px 28px,
+      var(--nuclear-guard) 28px 34px
+    );
+  box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+}
+
+.nuclear-switch-toggle {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  margin: 0;
+  cursor: default;
+}
+
+.nuclear-switch--guard-open .nuclear-switch-toggle {
+  cursor: pointer;
+}
+
+.nuclear-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nuclear-switch-panel {
+  position: absolute;
+  inset: 18% 8% 4%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 0.4rem;
+  box-sizing: border-box;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 18px;
+  box-shadow: var(--hard-shadow);
+}
+
+.nuclear-switch-panel::before {
+  content: '';
+  position: absolute;
+  inset: 18% 8% 12%;
+  z-index: 0;
+  pointer-events: none;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 14px;
+}
+
+.nuclear-switch-warning,
+.nuclear-switch-state {
+  position: relative;
+  z-index: 2;
+  color: var(--text-contrast);
+  letter-spacing: 2px;
+  line-height: 1;
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+}
+
+
+.nuclear-switch-slot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 58%;
+  aspect-ratio: 1/2;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--gauge-silver) 0 18%, transparent 19%);
+  box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.nuclear-switch-lever {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 22%;
+  height: 38%;
+  transform: translateX(-50%) scaleY(-1);
+  transform-origin: center center;
+  border-radius: 999px;
+  background: var(--outline-color);
+  transition:
+    top 0.28s cubic-bezier(0.35, 1.2, 0.55, 1),
+    transform 0.28s cubic-bezier(0.35, 1.2, 0.55, 1);
+}
+
+.nuclear-switch-lever::before {
+  content: '';
+  position: absolute;
+  inset: var(--outline-width);
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--nuclear-lever-start), var(--nuclear-lever-end));
+}
+
+.nuclear-switch-lever::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -22%;
+  width: 190%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: var(--outline-width) solid var(--outline-color);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.7) 0 18%, transparent 19%),
+    var(--nuclear-lever-start);
+}
+
+.nuclear-switch-guard-btn {
+  position: absolute;
+  inset: 18% 8% 4%;
+  z-index: 10;
+  appearance: none;
+  padding: 0;
+  margin: 0;
+  border: clamp(5px, 0.7vw, 9px) solid var(--nuclear-guard);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 var(--outline-width) var(--outline-color),
+    inset 0 8px 0 var(--nuclear-guard-highlight),
+    8px 8px 0 rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
+  -webkit-transform: translateZ(22px) rotateY(0deg);
+  transform: translateZ(22px) rotateY(0deg);
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  transition:
+    transform 0.55s cubic-bezier(0.42, 0, 0.18, 1),
+    box-shadow 0.45s ease,
+    opacity 0.4s ease;
+}
+
+.nuclear-switch--guard-open .nuclear-switch-guard-btn {
+  -webkit-transform: translateZ(22px) rotateY(-142deg);
+  transform: translateZ(22px) rotateY(-142deg);
+  opacity: 1;
+  pointer-events: none;
+  cursor: default;
+}
+
+.nuclear-switch-guard-btn:focus-visible {
+  outline: 3px solid var(--text-accent);
+  outline-offset: 4px;
+}
+
+.nuclear-switch-input:checked ~ .nuclear-switch-slot .nuclear-switch-lever {
+  top: 4%;
+  transform: translateX(-50%);
+}
+
+.nuclear-switch-input:checked ~ .nuclear-switch-state {
+  color: var(--nuclear-armed);
+}
+
+.nuclear-switch-input:checked ~ .nuclear-switch-state::after {
+  content: 'ARMED';
+}
+
+.nuclear-switch-toggle:has(.nuclear-switch-input:focus-visible) {
+  outline: 3px solid var(--text-accent);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 
 /*=========== Charts =====*/
