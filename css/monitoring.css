@@ -434,8 +434,7 @@
     0 0 0 var(--outline-width) var(--outline-color),
     inset 6px 0 0 rgba(0, 0, 0, 0.14),
     -8px 8px 0 rgba(0, 0, 0, 0.16);
-  pointer-events: none;
-  cursor: default;
+  cursor: pointer;
 }
 
 .safety-switch-cover:focus-visible,

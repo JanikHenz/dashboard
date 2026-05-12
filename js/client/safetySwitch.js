@@ -5,12 +5,29 @@ export function initSafetySwitch({ onRequestRefresh } = {}) {
   if (!root || !cover || !input) return;
 
   const collapseDelayMs = 340;
+  const autoCloseDelayMs = 5000;
   let isSendingShutdown = false;
+  let autoCloseTimer = null;
+
+  function clearAutoCloseTimer() {
+    if (!autoCloseTimer) return;
+    window.clearTimeout(autoCloseTimer);
+    autoCloseTimer = null;
+  }
 
   function closeCover() {
+    clearAutoCloseTimer();
     root.classList.remove('safety-switch--cover-open');
     input.disabled = true;
     cover.setAttribute('aria-expanded', 'false');
+  }
+
+  function scheduleAutoClose() {
+    clearAutoCloseTimer();
+    autoCloseTimer = window.setTimeout(() => {
+      if (isSendingShutdown) return;
+      closeCover();
+    }, autoCloseDelayMs);
   }
 
   function resetSwitch() {
@@ -63,15 +80,20 @@ export function initSafetySwitch({ onRequestRefresh } = {}) {
   }
 
   cover.addEventListener('click', () => {
-    if (root.classList.contains('safety-switch--cover-open')) return;
+    if (root.classList.contains('safety-switch--cover-open')) {
+      closeCover();
+      return;
+    }
     root.classList.add('safety-switch--cover-open');
     input.disabled = false;
     cover.setAttribute('aria-expanded', 'true');
+    scheduleAutoClose();
   });
 
   input.addEventListener('change', () => {
     if (!root.classList.contains('safety-switch--cover-open')) return;
     if (isSendingShutdown) return;
+    clearAutoCloseTimer();
     triggerHardShutdown();
   });
 }
