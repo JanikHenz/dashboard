@@ -10,13 +10,7 @@
   --gauge-step: 2.6deg;
   --needle-angle: -130deg;
 
-  /*
-    Physische Helligkeitsstufen pro Familie: --pal-{name}-1 (hell) … -5 (dunkel).
-    Semantische Rollen (--hue-*-hl | -g1 | -g2 | -sh) setzen body / body.dark-mode
-    nach dem Schema in Readme.md (Abschnitt Farbschema).
-  */
-
-  /* --- Neutral (Papier / Grau) --- */
+  /* --- Neutral --- */
   --pal-neutral-1: #ffffff;
   --pal-neutral-2: #fff9e5;
   --pal-neutral-3: #f0f5f9;

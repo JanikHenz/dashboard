@@ -1,9 +1,5 @@
 /*=========== Body (Dunkel) =====*/
 body.dark-mode {
-  /*
-    Rollen pro Farbfamilie (Dunkelmodus):
-    Stufe 1 unbenutzt | Stufe 2 → highlight, 3 → gradient 1, 4 → gradient 2, 5 → shadows.
-  */
   --hue-neutral-hl: var(--pal-neutral-2);
   --hue-neutral-g1: var(--pal-neutral-3);
   --hue-neutral-g2: var(--pal-neutral-4);
@@ -39,6 +35,7 @@ body.dark-mode {
   --hue-purple-g2: var(--pal-purple-4);
   --hue-purple-sh: var(--pal-purple-5);
 
+  /* --- Abgeleitet (Schatten / Glanz; basiert auf Blau-Schattenrolle Hell) --- */
   --shadow-strong: color-mix(in srgb, var(--hue-blue-sh) 42%, transparent);
   --shadow-hard: color-mix(in srgb, var(--hue-blue-sh) 32%, transparent);
   --shadow-medium: color-mix(in srgb, var(--hue-blue-sh) 26%, transparent);
@@ -55,12 +52,13 @@ body.dark-mode {
   --icon-screen-tint: color-mix(in srgb, var(--hue-green-g1) 12%, transparent);
   --icon-glow: color-mix(in srgb, var(--hue-green-hl) 70%, transparent);
 
-  --outline-color: var(--hue-blue-g2);
+  --outline-color: var(--hue-blue-sh);
   --hard-shadow: 8px 10px 0px var(--shadow-hard);
   --neg-shadow:
     inset 5px 7px 0px var(--shadow-inset),
     inset -3px -3px 0px var(--highlight-soft);
 
+  /* --- UI-Kit --- */
   --border-comic: var(--outline-width) solid var(--outline-color);
   --bevel-inset-2: inset 2px 2px 0 var(--shadow-medium);
   --bevel-inset-4: inset 4px 4px 0 var(--shadow-medium);
@@ -73,6 +71,7 @@ body.dark-mode {
     var(--surface-soft);
   --name-plaque-shadow: var(--neg-shadow), inset 0 0 10px var(--shadow-inset-soft);
   --lcd-segment-raised-shadow: var(--neg-shadow), inset 0 0 12px var(--shadow-inset-soft);
+  --emboss-sheen: linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium));
   --emboss-sheen-dome: linear-gradient(180deg, var(--highlight-medium), transparent 52%, var(--shadow-medium));
   --knob-pointer-shine: linear-gradient(180deg, var(--highlight-medium), transparent 45%, var(--shadow-inset));
   --pwr-led-dome-shadow:
@@ -84,116 +83,135 @@ body.dark-mode {
     inset 2px 2px 0 var(--highlight-medium),
     2px 3px 0 var(--shadow-medium);
   --chart-surface-bg:
-    linear-gradient(180deg, var(--highlight-soft), transparent 45%, var(--shadow-soft)),
+    linear-gradient(180deg, var(--hue-neutral-g1), var(--hue-neutral-g2)),
     var(--surface-soft);
 
+  /* --- Oberflächen & Verläufe --- */
   --bg-main: transparent;
   --bg-header: transparent;
-  --bg-header-inner: var(--hue-blue-g2);
-  --bg-segment: var(--hue-green-sh);
-  --bg-main-area: color-mix(in srgb, var(--hue-blue-g2) 82%, var(--hue-blue-sh));
-  --bg-app-card: var(--hue-blue-g2);
-  --bg-power-outer: color-mix(in srgb, var(--hue-blue-g2) 82%, var(--hue-blue-sh));
-  --bg-power-btn: var(--hue-green-g2);
-  --surface-soft: var(--hue-blue-g2);
+  --bg-header-inner: var(--hue-blue-g1);
+  --bg-segment: var(--hue-green-g1);
+  --bg-main-area: color-mix(in srgb, var(--hue-blue-g1) 82%, var(--hue-blue-g2));
+  --bg-app-card: var(--hue-blue-g1);
+  --bg-power-outer: color-mix(in srgb, var(--hue-blue-g1) 82%, var(--hue-blue-g2));
+  --bg-power-btn: var(--hue-green-g1);
+  --surface-soft: var(--hue-neutral-hl);
   --surface-strong: var(--hue-green-g2);
-  --surface-muted: var(--hue-purple-g2);
-  --metal-top: color-mix(in srgb, var(--hue-neutral-g2) 16%, transparent);
-  --metal-mid: color-mix(in srgb, var(--hue-neutral-g2) 7%, transparent);
-  --metal-bottom: color-mix(in srgb, var(--hue-purple-sh) 44%, transparent);
+  --surface-muted: var(--hue-purple-hl);
+  --metal-top: color-mix(in srgb, var(--hue-neutral-g2) 18%, transparent);
+  --metal-mid: color-mix(in srgb, var(--hue-neutral-g2) 6%, transparent);
+  --metal-bottom: color-mix(in srgb, var(--hue-blue-sh) 14%, transparent);
   --brushed-metal:
     repeating-linear-gradient(
       90deg,
       transparent 0 16px,
-      color-mix(in srgb, var(--hue-neutral-g2) 5%, transparent) 17px,
+      color-mix(in srgb, var(--hue-neutral-g2) 4%, transparent) 17px,
       transparent 19px
     ),
     repeating-linear-gradient(
       88deg,
       transparent 0 9px,
-      color-mix(in srgb, var(--hue-purple-sh) 8%, transparent) 10px,
+      color-mix(in srgb, var(--hue-blue-sh) 4%, transparent) 10px,
       transparent 12px
     ),
     repeating-linear-gradient(
       92deg,
       transparent 0 5px,
-      color-mix(in srgb, var(--hue-neutral-g1) 4%, transparent) 6px,
+      color-mix(in srgb, var(--hue-neutral-g1) 5%, transparent) 6px,
       transparent 8px
     );
   --panel-gradient:
-    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, transparent 48%, var(--metal-bottom) 100%),
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 30%, transparent 52%, var(--metal-bottom) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, color-mix(in srgb, var(--hue-blue-g2) 86%, var(--hue-purple-g2)) 0%, var(--hue-blue-g2) 50%, color-mix(in srgb, var(--hue-blue-g2) 88%, var(--hue-blue-g1)) 100%);
+    linear-gradient(90deg, color-mix(in srgb, var(--hue-blue-g1) 76%, var(--hue-blue-g2)) 0%, var(--hue-blue-g1) 50%, color-mix(in srgb, var(--hue-blue-g1) 84%, var(--hue-green-g2)) 100%);
   --panel-gradient-strong:
-    linear-gradient(180deg, var(--highlight-soft) 0%, color-mix(in srgb, var(--pal-blue-1) 8%, transparent) 30%, color-mix(in srgb, var(--hue-purple-sh) 48%, transparent) 100%),
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, var(--metal-bottom) 100%),
     var(--brushed-metal),
-    linear-gradient(90deg, var(--hue-blue-sh) 0%, var(--hue-blue-g2) 52%, color-mix(in srgb, var(--hue-blue-g2) 88%, var(--hue-purple-g2)) 100%);
+    linear-gradient(90deg, var(--hue-blue-g2) 0%, var(--hue-blue-g1) 50%, var(--hue-blue-g2) 100%);
   --recessed-gradient:
-    linear-gradient(180deg, color-mix(in srgb, var(--hue-purple-sh) 44%, transparent), color-mix(in srgb, var(--hue-purple-hl) 10%, transparent)),
-    linear-gradient(135deg, var(--hue-purple-sh), var(--hue-purple-g2));
+    linear-gradient(180deg, var(--shadow-inset), var(--highlight-faint)),
+    linear-gradient(135deg, var(--hue-blue-sh), var(--hue-blue-g2));
   --lcd-gradient:
-    linear-gradient(180deg, color-mix(in srgb, var(--pal-green-1) 18%, transparent), transparent 40%, color-mix(in srgb, var(--hue-green-sh) 28%, transparent)),
-    var(--hue-green-g2);
-  --emboss-sheen: linear-gradient(180deg, var(--highlight-soft), transparent 38%, color-mix(in srgb, var(--hue-green-sh) 38%, transparent));
+    linear-gradient(180deg, var(--highlight-soft), transparent 38%, var(--shadow-inset-soft)),
+    var(--hue-green-hl);
   --control-gradient:
     var(--emboss-sheen),
-    linear-gradient(135deg, var(--hue-green-g2), var(--hue-green-sh));
-  --text-main: var(--hue-yellow-hl);
-  --text-accent: var(--hue-orange-hl);
+    linear-gradient(135deg, var(--hue-green-g1), var(--hue-green-g2));
+  --text-main: var(--hue-yellow-g1);
+  --text-accent: var(--hue-yellow-g1);
   --text-contrast: var(--hue-green-hl);
-  --text-stroke-color: var(--hue-purple-sh);
-  --text-shadow-strong: 1px 1px 0 color-mix(in srgb, var(--hue-purple-sh) 42%, transparent);
-  --text-shadow-soft: 1px 1px 0 color-mix(in srgb, var(--hue-purple-sh) 28%, transparent);
-  --chart-grid: var(--pal-blue-1);
-  --chart-tooltip-bg: var(--hue-purple-sh);
-  --chart-tooltip-text: var(--hue-yellow-hl);
+  --text-stroke-color: var(--hue-blue-sh);
+  --text-shadow-strong: 2px 2px 0 var(--shadow-strong);
+  --text-shadow-soft: 1px 1px 0 var(--shadow-medium);
+  --chart-grid: var(--hue-blue-sh);
+  --chart-tooltip-bg: var(--hue-blue-g2);
+  --chart-tooltip-text: var(--text-main);
+  /* ECharts: Linien = Gradient-1-Rolle der jeweiligen Familie, Flaeche = leicht transparent */
   --echarts-cpu-line: var(--hue-blue-g1);
   --echarts-cpu-area: color-mix(in srgb, var(--hue-blue-g1) 30%, transparent);
   --echarts-memory-line: var(--hue-purple-g1);
   --echarts-memory-area: color-mix(in srgb, var(--hue-purple-g1) 30%, transparent);
   --echarts-network-line: var(--hue-orange-g1);
   --echarts-network-area: color-mix(in srgb, var(--hue-orange-g1) 30%, transparent);
-  --echarts-power-line: var(--hue-yellow-g1);
-  --echarts-power-area: color-mix(in srgb, var(--hue-yellow-g1) 30%, transparent);
-  --icon-power: var(--text-main);
+  --echarts-power-line: var(--hue-neutral-g2);
+  --echarts-power-area: color-mix(in srgb, var(--hue-neutral-g2) 32%, transparent);
+  --icon-power: var(--hue-neutral-hl);
   --toggle-pointer: var(--hue-red-g1);
-  --toggle-segment-start: var(--hue-blue-sh);
+  --toggle-segment-start: var(--hue-blue-g2);
   --toggle-segment-mid: var(--hue-purple-sh);
-  --toggle-segment-end: var(--pal-blue-1);
-  --knurl-light: var(--hue-yellow-hl);
-  --knurl-dark: var(--hue-orange-g2);
+  --toggle-segment-end: var(--hue-blue-hl);
+  --knurl-light: var(--hue-orange-hl);
+  --knurl-dark: var(--hue-orange-g1);
   --slider-thumb: var(--hue-red-g1);
   --slider-thumb-alt: var(--hue-green-g1);
-  --lcd-bg: var(--hue-green-g2);
-  --lcd-on: var(--hue-green-hl);
-  --lcd-off: color-mix(in srgb, var(--hue-green-hl) 18%, transparent);
+  --lcd-bg: var(--hue-green-hl);
+  --lcd-on: var(--hue-green-sh);
+  --lcd-off: color-mix(in srgb, var(--hue-green-sh) 24%, transparent);
   --on: var(--hue-green-g1);
-  --off: color-mix(in srgb, var(--hue-green-hl) 16%, transparent);
+  --off: color-mix(in srgb, var(--hue-green-sh) 24%, transparent);
   --online: var(--hue-green-g1);
   --offline: var(--hue-red-g1);
   --pending: var(--hue-orange-g1);
-  --gauge-silver: var(--hue-yellow-g1);
+  --gauge-silver: var(--hue-neutral-sh);
   --gauge-green: var(--hue-green-g1);
-  --gauge-yellow: var(--hue-yellow-hl);
+  --gauge-yellow: var(--hue-yellow-g1);
   --gauge-red: var(--hue-red-g1);
-  --gauge-empty: var(--bg-header);
-  --gauge-tick-color: var(--text-main);
+  --gauge-empty: var(--hue-blue-sh);
+  --gauge-gloss: var(--highlight-soft);
+  --gauge-tick-color: var(--hue-blue-sh);
   --gauge-needle-start: var(--hue-red-hl);
   --gauge-needle-end: var(--hue-red-g2);
-  --gauge-cap: var(--hue-orange-hl);
-  --safety-panel: var(--hue-yellow-g1);
+  --gauge-cap: var(--hue-neutral-g2);
+  --safety-panel: var(--hue-orange-g1);
   --safety-panel-shadow: var(--hue-orange-g2);
   --safety-cover: var(--hue-red-g1);
   --safety-cover-highlight: var(--hue-red-hl);
   --safety-cover-shadow: var(--hue-red-g2);
-  --safety-hinge: var(--hue-yellow-g1);
+  --safety-hinge: var(--hue-orange-g2);
   --safety-hinge-highlight: var(--hue-orange-hl);
-  --safety-slot: var(--hue-purple-sh);
+  --safety-slot: var(--hue-blue-sh);
   --safety-lever-start: var(--hue-red-g1);
   --safety-lever-end: var(--hue-red-g2);
-  --screw-metal: var(--hue-orange-g2);
+  --screw-metal: var(--hue-yellow-g2);
   --screw-highlight: var(--hue-yellow-hl);
   --screw-face-mid: var(--hue-blue-g2);
-  --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--hue-green-hl) 28%, transparent);
-  --gauge-gloss: color-mix(in srgb, var(--hue-yellow-hl) 12%, transparent);
+  --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--hue-green-sh) 35%, transparent);
+  scrollbar-width: none;
+
+  font-family: 'Patrick Hand', cursive;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+  paint-order: stroke fill;
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at 18% 8%, var(--highlight-soft), transparent 24%),
+    var(--brushed-metal),
+    var(--bg-main-area);
+  text-shadow: var(--text-shadow-soft);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior: none;
 }

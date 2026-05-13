@@ -1,9 +1,6 @@
 /*=========== Body (Hell) =====*/
 body {
-  /*
-    Rollen pro Farbfamilie (Hellmodus):
-    Stufe 1 → highlight (-hl), 2 → gradient 1 (-g1), 3 → gradient 2 (-g2), 4 → shadows (-sh), Stufe 5 unbenutzt.
-  */
+  
   --hue-neutral-hl: var(--pal-neutral-1);
   --hue-neutral-g1: var(--pal-neutral-2);
   --hue-neutral-g2: var(--pal-neutral-3);
@@ -87,7 +84,7 @@ body {
     inset 2px 2px 0 var(--highlight-medium),
     2px 3px 0 var(--shadow-medium);
   --chart-surface-bg:
-    linear-gradient(180deg, var(--highlight-soft), transparent 45%, var(--shadow-soft)),
+    linear-gradient(180deg, var(--hue-neutral-g1), var(--hue-neutral-g2)),
     var(--surface-soft);
 
   /* --- Oberflächen & Verläufe --- */
@@ -99,7 +96,7 @@ body {
   --bg-app-card: var(--hue-blue-g1);
   --bg-power-outer: color-mix(in srgb, var(--hue-blue-g1) 82%, var(--hue-blue-g2));
   --bg-power-btn: var(--hue-green-g1);
-  --surface-soft: var(--hue-yellow-hl);
+  --surface-soft: var(--hue-neutral-hl);
   --surface-strong: var(--hue-green-g2);
   --surface-muted: var(--hue-purple-hl);
   --metal-top: color-mix(in srgb, var(--hue-neutral-g2) 18%, transparent);
@@ -149,7 +146,7 @@ body {
   --text-shadow-soft: 1px 1px 0 var(--shadow-medium);
   --chart-grid: var(--hue-blue-sh);
   --chart-tooltip-bg: var(--hue-blue-g2);
-  --chart-tooltip-text: var(--hue-yellow-g1);
+  --chart-tooltip-text: var(--text-main);
   /* ECharts: Linien = Gradient-1-Rolle der jeweiligen Familie, Flaeche = leicht transparent */
   --echarts-cpu-line: var(--hue-blue-g1);
   --echarts-cpu-area: color-mix(in srgb, var(--hue-blue-g1) 30%, transparent);
@@ -157,13 +154,13 @@ body {
   --echarts-memory-area: color-mix(in srgb, var(--hue-purple-g1) 30%, transparent);
   --echarts-network-line: var(--hue-orange-g1);
   --echarts-network-area: color-mix(in srgb, var(--hue-orange-g1) 30%, transparent);
-  --echarts-power-line: var(--hue-yellow-g1);
-  --echarts-power-area: color-mix(in srgb, var(--hue-yellow-g1) 30%, transparent);
-  --icon-power: var(--text-main);
+  --echarts-power-line: var(--hue-neutral-g2);
+  --echarts-power-area: color-mix(in srgb, var(--hue-neutral-g2) 32%, transparent);
+  --icon-power: var(--hue-neutral-hl);
   --toggle-pointer: var(--hue-red-g1);
   --toggle-segment-start: var(--hue-blue-g2);
   --toggle-segment-mid: var(--hue-purple-sh);
-  --toggle-segment-end: var(--hue-yellow-g1);
+  --toggle-segment-end: var(--hue-blue-hl);
   --knurl-light: var(--hue-orange-hl);
   --knurl-dark: var(--hue-orange-g1);
   --slider-thumb: var(--hue-red-g1);
@@ -176,16 +173,16 @@ body {
   --online: var(--hue-green-g1);
   --offline: var(--hue-red-g1);
   --pending: var(--hue-orange-g1);
-  --gauge-silver: var(--hue-orange-hl);
+  --gauge-silver: var(--hue-neutral-sh);
   --gauge-green: var(--hue-green-g1);
-  --gauge-yellow: var(--hue-yellow-hl);
+  --gauge-yellow: var(--hue-yellow-g1);
   --gauge-red: var(--hue-red-g1);
-  --gauge-empty: var(--bg-header);
+  --gauge-empty: var(--hue-blue-sh);
   --gauge-gloss: var(--highlight-soft);
   --gauge-tick-color: var(--hue-blue-sh);
   --gauge-needle-start: var(--hue-red-hl);
   --gauge-needle-end: var(--hue-red-g2);
-  --gauge-cap: var(--hue-orange-g1);
+  --gauge-cap: var(--hue-neutral-g2);
   --safety-panel: var(--hue-orange-g1);
   --safety-panel-shadow: var(--hue-orange-g2);
   --safety-cover: var(--hue-red-g1);
@@ -196,8 +193,8 @@ body {
   --safety-slot: var(--hue-blue-sh);
   --safety-lever-start: var(--hue-red-g1);
   --safety-lever-end: var(--hue-red-g2);
-  --screw-metal: var(--hue-orange-g2);
-  --screw-highlight: var(--hue-orange-hl);
+  --screw-metal: var(--hue-yellow-g2);
+  --screw-highlight: var(--hue-yellow-hl);
   --screw-face-mid: var(--hue-blue-g2);
   --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--hue-green-sh) 35%, transparent);
   scrollbar-width: none;
