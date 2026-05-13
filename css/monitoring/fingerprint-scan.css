@@ -1,5 +1,6 @@
 .fingerprint-scan-space {
   height: 100%;
+  width: 100%;
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
@@ -7,45 +8,64 @@
   position: relative;
 }
 
-
-/* Container für den gesamten Scanner */
 .scan {
+  --fingerprint-scan-accent: #3fefef;
+
   position: relative;
+  box-sizing: border-box;
   height: 50%;
   aspect-ratio: 1;
   border: var(--border-comic);
   box-shadow: var(--hard-shadow);
-  overflow: hidden;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Der inaktive (graue) Fingerabdruck */
 .scan .fingerprint {
   position: relative;
+  width: 100%;
   height: 100%;
-  object-fit: contain;
   aspect-ratio: 1;
-  background: url('/img/fingerprint.png'); /* <-- DEIN BILD HIER */
-  background-position: top;
+  background-image:
+    linear-gradient(rgba(120, 125, 135, 0.55), rgba(120, 125, 135, 0.55)),
+    url('../../img/fingerprint.png');
+  background-position: center;
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
-/* Der aktive (farbige) Fingerabdruck, der animiert aufgedeckt wird */
 .scan .fingerprint::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('fingerprint_02.png'); /* <-- DEIN BILD HIER */
-  background-size: 300px;
-  background-position: top;
-  background-repeat: no-repeat;
-  animation: animate_image 4s ease-in-out infinite;
+  inset: 0;
+  background-color: var(--fingerprint-scan-accent);
+  -webkit-mask-image: url('../../img/fingerprint.png');
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url('../../img/fingerprint.png');
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  filter: drop-shadow(0 0 4px var(--fingerprint-scan-accent))
+    drop-shadow(0 0 14px rgb(63 239 239 / 0.45));
+  clip-path: inset(0 0 100% 0);
+  animation: fingerprint-scan-reveal 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* Die leuchtende Scan-Linie */
+@keyframes fingerprint-scan-reveal {
+  0%,
+  100% {
+    clip-path: inset(0 0 100% 0);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 .scan .fingerprint::after {
   content: '';
   position: absolute;
@@ -53,51 +73,23 @@
   left: 0;
   width: 100%;
   height: 8px;
-  background: #3fefef; /* Neon-Blau */
+  background: var(--fingerprint-scan-accent);
   border-radius: 8px;
-  filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
-  animation: animate_line 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px var(--fingerprint-scan-accent))
+    drop-shadow(0 0 60px var(--fingerprint-scan-accent));
+  animation: fingerprint-scan-line 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* Text Styling */
-.scan h3 {
-  text-transform: uppercase;
-  font-size: 2em;
-  letter-spacing: 2px;
-  margin-top: 20px;
-  color: #3fefef;
-  filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
-  animation: animate_text 0.5s steps(1) infinite;
-}
 
-/* --- ANIMATIONEN --- */
 
-/* Animiert die Höhe des farbigen Fingerabdrucks (deckt ihn auf) */
-@keyframes animate_image {
-  0%, 100% {
-      height: 0%;
+@keyframes fingerprint-scan-line {
+  0%,
+  100% {
+    top: 0;
   }
   50% {
-      height: 100%;
-  }
-}
-
-/* Bewegt die leuchtende Linie von oben nach unten und zurück */
-@keyframes animate_line {
-  0%, 100% {
-      top: 0%;
-  }
-  50% {
-      top: 100%;
-  }
-}
-
-/* Lässt den Text blinken */
-@keyframes animate_text {
-  0%, 100% {
-      opacity: 0;
-  }
-  50% {
-      opacity: 1;
+    top: calc(100% - 8px);
   }
 }
