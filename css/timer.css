@@ -28,8 +28,8 @@
   justify-self: center;
   display: flex;
   align-items: center;
-  border: var(--outline-width) solid var(--outline-color);
-  box-shadow: var(--neg-shadow), inset 0 0 12px var(--shadow-inset-soft);
+  border: var(--border-comic);
+  box-shadow: var(--lcd-segment-raised-shadow);
   border-radius: 20px;
   padding: 0 var(--digit-w) 0 var(--digit-w);
   position: relative;

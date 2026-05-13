@@ -1,0 +1,83 @@
+/*=========== Monitoring Header =====*/
+#monitoring-header {
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  position: relative;
+  background: var(--panel-gradient-strong);
+  border: var(--border-comic);
+  box-shadow: var(--hard-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.6rem, 1vw, 1rem);
+  overflow: hidden;
+}
+
+.monitoring-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.monitoring-stats {
+  display: grid;
+  width: 30%;
+  max-height: 100%;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: clamp(0.4rem, 0.8vw, 0.9rem);
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+
+.monitor-stat {
+  background: var(--lcd-gradient);
+  border: var(--border-comic);
+  border-radius: 12px;
+  box-shadow: var(--neg-shadow);
+  padding: 0.35rem 0.5rem 0.45rem;
+  max-height: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.monitor-stat-label {
+  letter-spacing: 1.5px;
+  color: var(--lcd-on);
+  font-size: 160%;
+  opacity: 0.85;
+}
+
+.monitor-stat-value {
+  color: var(--lcd-on);
+  line-height: 1;
+  font-size: 160%;
+  text-shadow: var(--monitor-stat-value-glow);
+  font-variant-numeric: tabular-nums;
+}
+
+.monitoring-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  background: var(--recessed-gradient);
+  border: var(--border-comic);
+  border-radius: 14px;
+  box-shadow: var(--neg-shadow);
+}
+
+.monitoring-caption {
+  letter-spacing: 2px;
+  color: var(--text-contrast);
+}

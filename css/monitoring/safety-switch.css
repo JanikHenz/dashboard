@@ -1,0 +1,222 @@
+/*=========== Safety Switch =====*/
+.safety-switch-space {
+  width: 30%;
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+.safety-switch {
+  position: relative;
+  height: 100%;
+  max-height: 18rem;
+  max-width: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+  perspective: 720px;
+  perspective-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.safety-switch::before {
+  content: '';
+  position: absolute;
+  left: calc(12% - clamp(14px, 1.5vw, 22px));
+  top: 21%;
+  bottom: 11%;
+  z-index: 12;
+  width: clamp(11px, 1.2vw, 16px);
+  border: var(--border-comic);
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      var(--safety-hinge-highlight) 0 10px,
+      var(--safety-hinge-highlight) 10px 16px,
+      var(--safety-hinge) 16px 28px,
+      var(--safety-hinge) 28px 34px
+    );
+  box-shadow:
+    inset -2px 0 0 var(--shadow-soft),
+    3px 3px 0 var(--shadow-inset);
+  pointer-events: none;
+}
+
+.safety-switch-panel {
+  position: absolute;
+  inset: 18% 8% 4% 12%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(0.25rem, 0.7vw, 0.55rem);
+  box-sizing: border-box;
+  border: var(--border-comic);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, var(--highlight-soft), transparent 46%),
+    repeating-linear-gradient(
+      135deg,
+      var(--outline-color) 0 10px,
+      var(--outline-color) 10px 18px,
+      var(--safety-panel) 18px 28px,
+      var(--safety-panel) 28px 36px
+    );
+  box-shadow:
+    var(--hard-shadow),
+    inset 5px 5px 0 var(--highlight-soft),
+    inset -7px -7px 0 var(--shadow-inset-soft);
+}
+
+.safety-switch-panel::before {
+  content: '';
+  position: absolute;
+  inset: 14%;
+  z-index: 0;
+  border: var(--border-comic);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 42% 38%, var(--highlight-soft), transparent 34%),
+    var(--safety-panel-shadow);
+  box-shadow:
+    inset 6px 6px 0 var(--shadow-inset),
+    inset -4px -4px 0 var(--highlight-soft);
+  pointer-events: none;
+}
+
+.safety-switch-toggle {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: default;
+}
+
+.safety-switch--cover-open .safety-switch-toggle {
+  cursor: pointer;
+}
+
+.safety-switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.safety-switch-slot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 68%;
+  max-height: 7.5rem;
+  aspect-ratio: 1 / 2;
+  border: var(--border-comic);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--gauge-silver) 0 18%, transparent 19%),
+    var(--safety-slot);
+  box-shadow:
+    inset 5px 5px 0 var(--shadow-strong),
+    inset -3px -3px 0 var(--highlight-faint);
+}
+
+.safety-switch-lever {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 24%;
+  height: 36%;
+  transform: translateX(-50%) scaleY(-1);
+  transform-origin: center center;
+  border-radius: 999px;
+  background: var(--outline-color);
+  transition:
+    top 0.28s cubic-bezier(0.35, 1.2, 0.55, 1),
+    transform 0.28s cubic-bezier(0.35, 1.2, 0.55, 1),
+    box-shadow 0.28s ease;
+}
+
+.safety-switch-lever::before {
+  content: '';
+  position: absolute;
+  inset: var(--outline-width);
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--safety-lever-start), var(--safety-lever-end));
+}
+
+.safety-switch-lever::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -24%;
+  width: 210%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  border: var(--border-comic);
+  background-color:     var(--safety-lever-start);
+}
+
+.safety-switch-input:checked ~ .safety-switch-slot .safety-switch-lever {
+  top: 12%;
+  transform: translateX(-50%);
+}
+
+.safety-switch-cover {
+  position: absolute;
+  inset: 18% 8% 4% 12%;
+  z-index: 10;
+  appearance: none;
+  padding: 0;
+  margin: 0;
+  border: clamp(5px, 0.7vw, 9px) solid var(--outline-color);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, var(--highlight-medium), transparent 34%),
+    linear-gradient(180deg, var(--safety-cover-highlight), var(--safety-cover) 46%, var(--safety-cover-shadow));
+  box-shadow:
+    0 0 0 var(--outline-width) var(--outline-color),
+    inset 6px 6px 0 var(--highlight-soft),
+    inset -8px -8px 0 var(--shadow-soft),
+    8px 8px 0 var(--shadow-inset);
+  cursor: pointer;
+  transform-origin: left center;
+  transform: translateZ(22px) rotateY(0deg);
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  transition:
+    transform 0.55s cubic-bezier(0.42, 0, 0.18, 1),
+    box-shadow 0.45s ease;
+}
+
+.safety-switch--cover-open .safety-switch-cover {
+  transform: translateZ(22px) rotateY(-142deg);
+  box-shadow:
+    0 0 0 var(--outline-width) var(--outline-color),
+    inset 6px 0 0 var(--shadow-inset-soft),
+    -8px 8px 0 var(--shadow-inset-soft);
+  cursor: pointer;
+}
+
+.safety-switch-cover:focus-visible,
+.safety-switch-toggle:has(.safety-switch-input:focus-visible) {
+  outline: 3px solid var(--text-accent);
+  outline-offset: 4px;
+  border-radius: 18px;
+}

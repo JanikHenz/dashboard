@@ -7,6 +7,8 @@ import {
 
 export function createMonitoringPanel() {
   const charts = new Map();
+  let lastGoodMonitoringData = null;
+  let lastErrorMessage = null;
 
   function ensureCharts() {
     if (!window.echarts) return false;
@@ -46,6 +48,8 @@ export function createMonitoringPanel() {
     if (data.error) {
       clearHeaderValues(monitorHeaderBindings, '--');
       const message = typeof data.error === 'string' ? data.error : 'Monitoring unavailable';
+      lastGoodMonitoringData = null;
+      lastErrorMessage = message;
       showChartError(message);
       return;
     }
@@ -55,6 +59,8 @@ export function createMonitoringPanel() {
       series: data.series && typeof data.series === 'object' ? data.series : {}
     };
 
+    lastErrorMessage = null;
+    lastGoodMonitoringData = safeData;
     renderHeader(safeData, monitorHeaderBindings);
     monitoringConfig.forEach((config) => {
       const chart = charts.get(config.id);
@@ -75,8 +81,26 @@ export function createMonitoringPanel() {
     }
   }
 
+  function reapplyTheme() {
+    if (!ensureCharts()) return;
+    if (lastErrorMessage) {
+      showChartError(lastErrorMessage);
+      return;
+    }
+    if (!lastGoodMonitoringData) return;
+    renderHeader(lastGoodMonitoringData, monitorHeaderBindings);
+    monitoringConfig.forEach((config) => {
+      const chart = charts.get(config.id);
+      if (!chart) return;
+      const points = lastGoodMonitoringData.series?.[config.key] || [];
+      chart.setOption(createBaseChartOption(config, points), true);
+    });
+    resizeCharts();
+  }
+
   return {
     applyPayload,
+    reapplyTheme,
     resizeCharts,
     initResizeObservers
   };

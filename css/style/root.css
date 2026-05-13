@@ -1,0 +1,67 @@
+/*=========== Theme: Layout / Geometrie (ohne Modus-Farben) =====*/
+:root {
+  --outline-width: 4px;
+  --comic-font: 'Patrick Hand', cursive;
+  --text-stroke-strong: 1px;
+  --text-stroke-soft: 0.8px;
+  --gauge-value: 0;
+  --gauge-start-angle: -130deg;
+  --gauge-range: 260deg;
+  --gauge-step: 2.6deg;
+  --needle-angle: -130deg;
+
+  /*
+    Physische Helligkeitsstufen pro Familie: --pal-{name}-1 (hell) … -5 (dunkel).
+    Semantische Rollen (--hue-*-hl | -g1 | -g2 | -sh) setzen body / body.dark-mode
+    nach dem Schema in Readme.md (Abschnitt Farbschema).
+  */
+
+  /* --- Neutral (Papier / Grau) --- */
+  --pal-neutral-1: #ffffff;
+  --pal-neutral-2: #fff9e5;
+  --pal-neutral-3: #f0f5f9;
+  --pal-neutral-4: #cfcfcf;
+  --pal-neutral-5: #8a939e;
+
+  /* --- Blau --- */
+  --pal-blue-1: #6abedd;
+  --pal-blue-2: #277da1;
+  --pal-blue-3: #1a4f66;
+  --pal-blue-4: #0d2b38;
+  --pal-blue-5: #061620;
+
+  /* --- Gruen --- */
+  --pal-green-1: #84d2bb;
+  --pal-green-2: #43aa8b;
+  --pal-green-3: #2d725e;
+  --pal-green-4: #143229;
+  --pal-green-5: #0a1810;
+
+  /* --- Gelb --- */
+  --pal-yellow-1: #ffe08c;
+  --pal-yellow-2: #f9c74f;
+  --pal-yellow-3: #d69b2f;
+  --pal-yellow-4: #7a5210;
+  --pal-yellow-5: #3d2808;
+
+  /* --- Orange --- */
+  --pal-orange-1: #ffc98e;
+  --pal-orange-2: #ffa94d;
+  --pal-orange-3: #d6701e;
+  --pal-orange-4: #823508;
+  --pal-orange-5: #451c04;
+
+  /* --- Rot --- */
+  --pal-red-1: #ff97a8;
+  --pal-red-2: #ff4d6d;
+  --pal-red-3: #c9184a;
+  --pal-red-4: #590d22;
+  --pal-red-5: #2c0610;
+
+  /* --- Lila --- */
+  --pal-purple-1: #9d91ff;
+  --pal-purple-2: #6355d8;
+  --pal-purple-3: #4538a3;
+  --pal-purple-4: #1b125c;
+  --pal-purple-5: #0e092f;
+}

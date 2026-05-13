@@ -76,11 +76,7 @@
   background:
     radial-gradient(circle at 34% 28%, var(--highlight-strong) 0 18%, transparent 19%),
     var(--on);
-  box-shadow:
-    0 0 6px var(--on),
-    0 0 14px var(--on),
-    inset 2px 2px 0 var(--highlight-soft),
-    inset -2px -2px 0 var(--shadow-strong);
-  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--pwr-led-dome-shadow);
+  border: var(--border-comic);
   flex-shrink: 0;
 }

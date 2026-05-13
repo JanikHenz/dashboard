@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   createThemeSwitcher({
-    onThemeChanged: () => sendRefresh(SCOPES.MONITORING)
+    onThemeChanged: () => {
+      monitoringPanel.reapplyTheme();
+      sendRefresh(SCOPES.MONITORING);
+    }
   });
 
   createPageSwitcher({

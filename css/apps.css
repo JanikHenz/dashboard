@@ -26,7 +26,7 @@
   height: 100%;
   align-content: start;
   background: var(--panel-gradient);
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   box-shadow: var(--hard-shadow);
   border-radius: 30px;
   scrollbar-width: none;
@@ -65,13 +65,11 @@
 }
 
 .appName {
-  box-shadow: var(--neg-shadow), inset 0 0 10px var(--shadow-inset-soft);
+  box-shadow: var(--name-plaque-shadow);
   width: 100%;
   height: 60%;
-  border: var(--outline-width) solid var(--outline-color);
-  background:
-    linear-gradient(180deg, var(--comic-white), var(--comic-white-dark)),
-    var(--surface-soft);
+  border: var(--border-comic);
+  background: var(--surface-plaque-bg);
   text-align: center;
   display: flex;
   justify-content: center;
@@ -84,24 +82,24 @@
   width: 0.9rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
-  box-shadow: inset 2px 2px 0 var(--shadow-medium);
+  border: var(--border-comic);
+  box-shadow: var(--status-shadow-idle);
   flex-shrink: 0;
 }
 
 .status-indicator.ready {
   background-color: var(--online);
-  box-shadow: 0 0 6px var(--online), inset 2px 2px 0 var(--shadow-medium);
+  box-shadow: var(--status-shadow-online);
 }
 
 .status-indicator.not-ready {
   background-color: var(--pending);
-  box-shadow: 0 0 6px var(--pending), inset 2px 2px 0 var(--shadow-medium);
+  box-shadow: var(--status-shadow-pending);
 }
 
 .status-indicator.unknown {
   background-color: var(--offline);
-  box-shadow: 0 0 6px var(--offline), inset 2px 2px 0 var(--shadow-medium);
+  box-shadow: var(--status-shadow-offline);
 }
 
 /*=========== Icon =====*/
@@ -111,7 +109,7 @@
   aspect-ratio: 1;
   height: 10rem;
   margin: 1rem;
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   box-shadow: var(--neg-shadow);
   border-radius: 20px;
   position: relative;
@@ -181,8 +179,8 @@
   height: 1rem;
   width: 1rem;
   border-radius: 50%;
-  border: var(--outline-width) solid var(--outline-color);
-  box-shadow: inset 4px 4px 0px var(--shadow-medium);
+  border: var(--border-comic);
+  box-shadow: var(--bevel-inset-4);
   background-color: var(--online);
   grid-column: 1;
 }
@@ -202,7 +200,7 @@
 .replica-control {
   position: relative;
   background: var(--panel-gradient);
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   box-shadow: var(--hard-shadow);
   border-radius: 30px;
   padding: 1vw;
@@ -270,7 +268,7 @@
   justify-content: center;
   overflow: visible;
   background: var(--recessed-gradient);
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   border-radius: 10px;
 }
 
@@ -295,12 +293,12 @@
   width: 100cqw;
   aspect-ratio: 3/1;
   background:
-    linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
+    var(--emboss-sheen),
     var(--slider-thumb);
   cursor: pointer;
   border-radius: 5px;
   transition: height 0.2s ease;
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
 }
 
 .slider::-webkit-slider-runnable-track {
@@ -315,12 +313,11 @@
   height: 20px;
   width: 75cqw;
   background:
-    linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium)),
+    var(--emboss-sheen),
     var(--slider-thumb-alt);
   cursor: pointer;
-  border: 2px solid var(--text-contrast);
   border-radius: 5px;
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
 }
 
 .slider::-moz-range-track {

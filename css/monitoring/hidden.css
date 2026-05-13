@@ -1,0 +1,9 @@
+/*=========== Hidden =====*/
+#hidden > * {
+  color: transparent;
+  border: none;
+  background-color: transparent;
+  border-color: transparent;
+  text-shadow: none;
+  -webkit-text-stroke: transparent;
+}

@@ -13,6 +13,28 @@ Die Anwendung nutzt **pures HTML/CSS/JavaScript** im Frontend und ein schlankes 
 ### Frontend
 
 - `index.html`: statisches UI-Layout mit zwei Seiten in einer Shell (Apps und Monitoring)
+
+### Farbschema (CSS)
+
+Jede chromatische Familie sowie **Neutral** haben **fuenf physische Helligkeitsstufen** in `:root` als `--pal-{name}-1` (hell) bis `--pal-{name}-5` (dunkel), definiert in `css/style/root.css`.
+
+Die **Verwendung** dieser Stufen haengt vom Modus ab. Semantische Rollen (pro Familie) setzen `body` bzw. `body.dark-mode` in `css/style/theme-light.css` / `theme-dark.css`:
+
+| Stufe | Hell (`body`) | Dunkel (`body.dark-mode`) |
+|-------|----------------|---------------------------|
+| 1 | **Highlight** (`-hl`) | *unbenutzt* |
+| 2 | **Gradient 1** (`-g1`) | **Highlight** (`-hl`) |
+| 3 | **Gradient 2** (`-g2`) | **Gradient 1** (`-g1`) |
+| 4 | **Schatten** (`-sh`) | **Gradient 2** (`-g2`) |
+| 5 | *unbenutzt* | **Schatten** (`-sh`) |
+
+API pro Familie: `--hue-{neutral,blue,green,yellow,orange,red,purple}-{hl|g1|g2|sh}` verweist immer auf die passende `--pal-*-n` fuer den aktuellen Modus.
+
+Komponenten und Semantik-Tokens (`--text-main`, `--chart-grid`, …) nutzen diese Rollen oder `color-mix` darauf. Wo das Layout absichtlich die **hellste physische Stufe** braucht (z. B. helle Gitterlinien im Dark-Chart), kann weiterhin `--pal-blue-1` o. ae. direkt gesetzt werden.
+
+**ECharts:** Achsen, Gitter, Tooltip und Titel lesen weiterhin `getPalette()` aus (`--text-accent`, `--chart-grid`, …). Pro Metrik gibt es `--echarts-{cpu|memory|network|power}-{line|area}` in den Theme-Dateien (Linie = jeweils `--hue-*-g1`, Flaeche = `color-mix` darauf). `chartOptions.js` wertet sie per `getComputedStyle(document.body)` aus. Beim Theme-Wechsel ruft `monitoringPanel.reapplyTheme()` die zuletzt gueltigen Daten erneut auf, damit die Kurven sofort umschalten (zusaetzlich zum bestehenden Monitoring-Refresh).
+
+Einstieg Styles: `css/style.css` importiert `style/root.css` (Paletten), dann Theme und Layout.
 - `js/script.js`: Einstiegspunkt, verbindet alle Panels und startet den WebSocket-Client
 - `js/client/powerPanel.js`: Power-Button, LED-Status und Timer-Update
 - `js/client/monitoringPanel.js`: aktualisiert Header-Werte und ECharts-Diagramme

@@ -1,8 +1,36 @@
 export const monitoringConfig = [
-  { id: 'chart-cpu', key: 'cpu', title: 'CPU Usage', unit: '%' },
-  { id: 'chart-memory', key: 'memory', title: 'RAM Usage', unit: '%' },
-  { id: 'chart-network', key: 'networkRx', title: 'Network RX', unit: 'Mbit/s' },
-  { id: 'chart-power', key: 'powerW', title: 'Power Usage', unit: 'W' }
+  {
+    id: 'chart-cpu',
+    key: 'cpu',
+    title: 'CPU Usage',
+    unit: '%',
+    cssLineVar: '--echarts-cpu-line',
+    cssAreaVar: '--echarts-cpu-area'
+  },
+  {
+    id: 'chart-memory',
+    key: 'memory',
+    title: 'RAM Usage',
+    unit: '%',
+    cssLineVar: '--echarts-memory-line',
+    cssAreaVar: '--echarts-memory-area'
+  },
+  {
+    id: 'chart-network',
+    key: 'networkRx',
+    title: 'Network RX',
+    unit: 'Mbit/s',
+    cssLineVar: '--echarts-network-line',
+    cssAreaVar: '--echarts-network-area'
+  },
+  {
+    id: 'chart-power',
+    key: 'powerW',
+    title: 'Power Usage',
+    unit: 'W',
+    cssLineVar: '--echarts-power-line',
+    cssAreaVar: '--echarts-power-area'
+  }
 ];
 
 export const monitorHeaderBindings = [

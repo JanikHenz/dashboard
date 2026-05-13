@@ -1,0 +1,150 @@
+/*=========== Gauge =====*/
+
+.gauge-space {
+  height: 100%;
+  width: 30%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.gauge {
+  position: relative;
+  height: 95%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: var(--border-comic);
+  box-shadow: var(--hard-shadow);
+  background:
+    var(--emboss-sheen),
+    var(--gauge-silver);
+}
+
+.gauge::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: var(--border-comic);
+  background:
+    radial-gradient(circle at 36% 24%, var(--highlight-soft), transparent 22%),
+    conic-gradient(
+      from -130deg,
+      var(--gauge-green) 0deg 120deg,
+      var(--gauge-yellow) 120deg 200deg,
+      var(--gauge-red) 200deg 260deg,
+      var(--gauge-empty) 260deg
+    );
+}
+
+.gauge-ticks {
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -130deg,
+    var(--gauge-tick-color) 0deg 1.1deg,
+    transparent 1.1deg 6.5deg
+  );
+  -webkit-mask: 
+    radial-gradient(circle, transparent 63%, var(--outline-color) 64% 66%, transparent 67%),
+    conic-gradient(from -130deg, var(--outline-color) 0deg 260deg, transparent 260deg);
+  mask: 
+    radial-gradient(circle, transparent 63%, var(--outline-color) 64% 66%, transparent 67%),
+    conic-gradient(from -130deg, var(--outline-color) 0deg 260deg, transparent 260deg);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect; 
+}
+
+.gauge-ticks-major {
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -130deg,
+    var(--gauge-tick-color) 0deg 1.6deg,
+    transparent 1.6deg 32.5deg
+  );
+  -webkit-mask: 
+    radial-gradient(circle, transparent 56%, var(--outline-color) 57% 61%, transparent 62%),
+    conic-gradient(from -130deg, var(--outline-color) 0deg 260deg, transparent 260deg);
+  mask: 
+    radial-gradient(circle, transparent 56%, var(--outline-color) 57% 61%, transparent 62%),
+    conic-gradient(from -130deg, var(--outline-color) 0deg 260deg, transparent 260deg);
+  
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.gauge-needle-wrap {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--needle-angle));
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.35, 1.2, 0.55, 1);
+  z-index: 2;
+}
+
+.gauge-needle {
+  position: absolute;
+  left: 50%;
+  top: 9%;
+  width: 15%;
+  height: 47%;
+  transform: translateX(-50%);
+  background: var(--outline-color);
+  clip-path: polygon(50% 0%, 82% 100%, 18% 100%);
+  filter: drop-shadow(2px 2px 0 var(--shadow-medium));
+}
+
+.gauge-needle::before {
+  content: '';
+  position: absolute;
+  inset: var(--outline-width);
+  background: linear-gradient(180deg, var(--gauge-needle-start) 0%, var(--gauge-needle-end) 100%);
+  clip-path: polygon(50% 0%, 78% 100%, 22% 100%);
+}
+
+
+.gauge-center-cap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 17%;
+  height: 17%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: var(--border-comic);
+  background:
+    radial-gradient(circle at 34% 28%, var(--highlight-strong) 0 17%, transparent 18%),
+    var(--emboss-sheen-dome),
+    var(--gauge-cap);
+  box-shadow: var(--gauge-cap-shadow);
+  z-index: 3;
+}
+
+.gauge-value {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: translateX(-50%);
+  min-width: 4.4ch;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: clamp(1.2rem, 2.8vw, 2rem);
+  color: var(--text-contrast);
+  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
+}
+
+.gauge-label {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  transform: translateX(-50%);
+  letter-spacing: 2px;
+  font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+}
+

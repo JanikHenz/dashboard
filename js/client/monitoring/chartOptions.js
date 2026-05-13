@@ -11,7 +11,7 @@ export function createBaseChartOption(config, points) {
       top: 8,
       textStyle: {
         color: palette.text,
-        fontFamily: 'Patrick Hand, cursive',
+        fontFamily: getCssVar('--comic-font'),
         fontSize: 18,
         textBorderColor: palette.stroke,
         textBorderWidth: 1
@@ -28,7 +28,7 @@ export function createBaseChartOption(config, points) {
       padding: [8, 12],
       textStyle: {
         color: palette.tooltipText,
-        fontFamily: 'Patrick Hand, cursive',
+        fontFamily: getCssVar('--comic-font'),
         fontSize: 14
       },
       valueFormatter: (value) => `${Number(value).toFixed(2)} ${config.unit}`
@@ -52,8 +52,11 @@ export function createBaseChartOption(config, points) {
       type: 'line',
       smooth: true,
       symbol: 'none',
-      lineStyle: { width: 3, color: palette.line },
-      areaStyle: { color: palette.area },
+      lineStyle: {
+        width: 3,
+        color: getCssVar(config.cssLineVar)
+      },
+      areaStyle: { color: getCssVar(config.cssAreaVar) },
       data: seriesData
     }]
   };
@@ -68,7 +71,7 @@ export function createChartErrorOption(title, message) {
       top: 'middle',
       textStyle: {
         color: palette.text,
-        fontFamily: 'Patrick Hand, cursive',
+        fontFamily: getCssVar('--comic-font'),
         textBorderColor: palette.stroke,
         textBorderWidth: 1,
         fontSize: 16
@@ -76,7 +79,7 @@ export function createChartErrorOption(title, message) {
       subtext: message,
       subtextStyle: {
         color: getCssVar('--offline'),
-        fontFamily: 'Patrick Hand, cursive',
+        fontFamily: getCssVar('--comic-font'),
         fontSize: 14
       }
     }

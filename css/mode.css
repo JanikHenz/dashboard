@@ -21,7 +21,7 @@
       var(--toggle-segment-mid) 62deg 298deg,
       var(--toggle-segment-end) 298deg 360deg
     );
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   box-shadow: var(--hard-shadow);
   display: flex;
   justify-content: space-between;
@@ -58,7 +58,7 @@
       var(--knurl-light) 0deg 8deg,
       var(--knurl-dark) 8deg 11deg
     );
-  border: var(--outline-width) solid var(--outline-color);
+  border: var(--border-comic);
   z-index: 10;
   transition: rotate 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-style: preserve-3d;
@@ -76,7 +76,7 @@
   height: 100%;
   aspect-ratio: 1;
   background:
-    linear-gradient(180deg, var(--highlight-medium), transparent 45%, var(--shadow-inset)),
+    var(--knob-pointer-shine),
     var(--toggle-pointer);
   clip-path: polygon(50% 0%, 65% 80%, 35% 80%);
   transform: translateZ(-1px);

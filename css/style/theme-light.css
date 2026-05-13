@@ -1,0 +1,225 @@
+/*=========== Body (Hell) =====*/
+body {
+  /*
+    Rollen pro Farbfamilie (Hellmodus):
+    Stufe 1 → highlight (-hl), 2 → gradient 1 (-g1), 3 → gradient 2 (-g2), 4 → shadows (-sh), Stufe 5 unbenutzt.
+  */
+  --hue-neutral-hl: var(--pal-neutral-1);
+  --hue-neutral-g1: var(--pal-neutral-2);
+  --hue-neutral-g2: var(--pal-neutral-3);
+  --hue-neutral-sh: var(--pal-neutral-4);
+
+  --hue-blue-hl: var(--pal-blue-1);
+  --hue-blue-g1: var(--pal-blue-2);
+  --hue-blue-g2: var(--pal-blue-3);
+  --hue-blue-sh: var(--pal-blue-4);
+
+  --hue-green-hl: var(--pal-green-1);
+  --hue-green-g1: var(--pal-green-2);
+  --hue-green-g2: var(--pal-green-3);
+  --hue-green-sh: var(--pal-green-4);
+
+  --hue-yellow-hl: var(--pal-yellow-1);
+  --hue-yellow-g1: var(--pal-yellow-2);
+  --hue-yellow-g2: var(--pal-yellow-3);
+  --hue-yellow-sh: var(--pal-yellow-4);
+
+  --hue-orange-hl: var(--pal-orange-1);
+  --hue-orange-g1: var(--pal-orange-2);
+  --hue-orange-g2: var(--pal-orange-3);
+  --hue-orange-sh: var(--pal-orange-4);
+
+  --hue-red-hl: var(--pal-red-1);
+  --hue-red-g1: var(--pal-red-2);
+  --hue-red-g2: var(--pal-red-3);
+  --hue-red-sh: var(--pal-red-4);
+
+  --hue-purple-hl: var(--pal-purple-1);
+  --hue-purple-g1: var(--pal-purple-2);
+  --hue-purple-g2: var(--pal-purple-3);
+  --hue-purple-sh: var(--pal-purple-4);
+
+  /* --- Abgeleitet (Schatten / Glanz; basiert auf Blau-Schattenrolle Hell) --- */
+  --shadow-strong: color-mix(in srgb, var(--hue-blue-sh) 42%, transparent);
+  --shadow-hard: color-mix(in srgb, var(--hue-blue-sh) 32%, transparent);
+  --shadow-medium: color-mix(in srgb, var(--hue-blue-sh) 26%, transparent);
+  --shadow-soft: color-mix(in srgb, var(--hue-blue-sh) 18%, transparent);
+  --shadow-inset: color-mix(in srgb, var(--hue-blue-sh) 28%, transparent);
+  --shadow-inset-soft: color-mix(in srgb, var(--hue-blue-sh) 16%, transparent);
+  --warm-shadow: color-mix(in srgb, var(--hue-orange-sh) 22%, transparent);
+  --highlight-strong: color-mix(in srgb, var(--hue-neutral-g1) 70%, transparent);
+  --highlight-medium: color-mix(in srgb, var(--hue-neutral-g1) 46%, transparent);
+  --highlight-soft: color-mix(in srgb, var(--hue-neutral-g2) 24%, transparent);
+  --highlight-faint: color-mix(in srgb, var(--hue-neutral-g2) 12%, transparent);
+  --scanline-strong: color-mix(in srgb, var(--hue-blue-sh) 30%, transparent);
+  --scanline-soft: color-mix(in srgb, var(--hue-blue-sh) 8%, transparent);
+  --icon-screen-tint: color-mix(in srgb, var(--hue-green-g1) 12%, transparent);
+  --icon-glow: color-mix(in srgb, var(--hue-green-hl) 70%, transparent);
+
+  --outline-color: var(--hue-blue-sh);
+  --hard-shadow: 8px 10px 0px var(--shadow-hard);
+  --neg-shadow:
+    inset 5px 7px 0px var(--shadow-inset),
+    inset -3px -3px 0px var(--highlight-soft);
+
+  /* --- UI-Kit --- */
+  --border-comic: var(--outline-width) solid var(--outline-color);
+  --bevel-inset-2: inset 2px 2px 0 var(--shadow-medium);
+  --bevel-inset-4: inset 4px 4px 0 var(--shadow-medium);
+  --status-shadow-idle: var(--bevel-inset-2);
+  --status-shadow-online: 0 0 6px var(--online), var(--bevel-inset-2);
+  --status-shadow-pending: 0 0 6px var(--pending), var(--bevel-inset-2);
+  --status-shadow-offline: 0 0 6px var(--offline), var(--bevel-inset-2);
+  --surface-plaque-bg:
+    linear-gradient(180deg, var(--pal-neutral-1), var(--pal-neutral-4)),
+    var(--surface-soft);
+  --name-plaque-shadow: var(--neg-shadow), inset 0 0 10px var(--shadow-inset-soft);
+  --lcd-segment-raised-shadow: var(--neg-shadow), inset 0 0 12px var(--shadow-inset-soft);
+  --emboss-sheen: linear-gradient(180deg, var(--highlight-medium), transparent 42%, var(--shadow-medium));
+  --emboss-sheen-dome: linear-gradient(180deg, var(--highlight-medium), transparent 52%, var(--shadow-medium));
+  --knob-pointer-shine: linear-gradient(180deg, var(--highlight-medium), transparent 45%, var(--shadow-inset));
+  --pwr-led-dome-shadow:
+    0 0 6px var(--on),
+    0 0 14px var(--on),
+    inset 2px 2px 0 var(--highlight-soft),
+    inset -2px -2px 0 var(--shadow-strong);
+  --gauge-cap-shadow:
+    inset 2px 2px 0 var(--highlight-medium),
+    2px 3px 0 var(--shadow-medium);
+  --chart-surface-bg:
+    linear-gradient(180deg, var(--highlight-soft), transparent 45%, var(--shadow-soft)),
+    var(--surface-soft);
+
+  /* --- Oberflächen & Verläufe --- */
+  --bg-main: transparent;
+  --bg-header: transparent;
+  --bg-header-inner: var(--hue-blue-g1);
+  --bg-segment: var(--hue-green-g1);
+  --bg-main-area: color-mix(in srgb, var(--hue-blue-g1) 82%, var(--hue-blue-g2));
+  --bg-app-card: var(--hue-blue-g1);
+  --bg-power-outer: color-mix(in srgb, var(--hue-blue-g1) 82%, var(--hue-blue-g2));
+  --bg-power-btn: var(--hue-green-g1);
+  --surface-soft: var(--hue-yellow-hl);
+  --surface-strong: var(--hue-green-g2);
+  --surface-muted: var(--hue-purple-hl);
+  --metal-top: color-mix(in srgb, var(--hue-neutral-g2) 18%, transparent);
+  --metal-mid: color-mix(in srgb, var(--hue-neutral-g2) 6%, transparent);
+  --metal-bottom: color-mix(in srgb, var(--hue-blue-sh) 14%, transparent);
+  --brushed-metal:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 16px,
+      color-mix(in srgb, var(--hue-neutral-g2) 4%, transparent) 17px,
+      transparent 19px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--hue-blue-sh) 4%, transparent) 10px,
+      transparent 12px
+    ),
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 5px,
+      color-mix(in srgb, var(--hue-neutral-g1) 5%, transparent) 6px,
+      transparent 8px
+    );
+  --panel-gradient:
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 30%, transparent 52%, var(--metal-bottom) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, color-mix(in srgb, var(--hue-blue-g1) 76%, var(--hue-blue-g2)) 0%, var(--hue-blue-g1) 50%, color-mix(in srgb, var(--hue-blue-g1) 84%, var(--hue-green-g2)) 100%);
+  --panel-gradient-strong:
+    linear-gradient(180deg, var(--metal-top) 0%, var(--metal-mid) 28%, var(--metal-bottom) 100%),
+    var(--brushed-metal),
+    linear-gradient(90deg, var(--hue-blue-g2) 0%, var(--hue-blue-g1) 50%, var(--hue-blue-g2) 100%);
+  --recessed-gradient:
+    linear-gradient(180deg, var(--shadow-inset), var(--highlight-faint)),
+    linear-gradient(135deg, var(--hue-blue-sh), var(--hue-blue-g2));
+  --lcd-gradient:
+    linear-gradient(180deg, var(--highlight-soft), transparent 38%, var(--shadow-inset-soft)),
+    var(--hue-green-hl);
+  --control-gradient:
+    var(--emboss-sheen),
+    linear-gradient(135deg, var(--hue-green-g1), var(--hue-green-g2));
+  --text-main: var(--hue-yellow-g1);
+  --text-accent: var(--hue-yellow-g1);
+  --text-contrast: var(--hue-green-hl);
+  --text-stroke-color: var(--hue-blue-sh);
+  --text-shadow-strong: 2px 2px 0 var(--shadow-strong);
+  --text-shadow-soft: 1px 1px 0 var(--shadow-medium);
+  --chart-grid: var(--hue-blue-sh);
+  --chart-tooltip-bg: var(--hue-blue-g2);
+  --chart-tooltip-text: var(--hue-yellow-g1);
+  /* ECharts: Linien = Gradient-1-Rolle der jeweiligen Familie, Flaeche = leicht transparent */
+  --echarts-cpu-line: var(--hue-blue-g1);
+  --echarts-cpu-area: color-mix(in srgb, var(--hue-blue-g1) 30%, transparent);
+  --echarts-memory-line: var(--hue-purple-g1);
+  --echarts-memory-area: color-mix(in srgb, var(--hue-purple-g1) 30%, transparent);
+  --echarts-network-line: var(--hue-orange-g1);
+  --echarts-network-area: color-mix(in srgb, var(--hue-orange-g1) 30%, transparent);
+  --echarts-power-line: var(--hue-yellow-g1);
+  --echarts-power-area: color-mix(in srgb, var(--hue-yellow-g1) 30%, transparent);
+  --icon-power: var(--text-main);
+  --toggle-pointer: var(--hue-red-g1);
+  --toggle-segment-start: var(--hue-blue-g2);
+  --toggle-segment-mid: var(--hue-purple-sh);
+  --toggle-segment-end: var(--hue-yellow-g1);
+  --knurl-light: var(--hue-orange-hl);
+  --knurl-dark: var(--hue-orange-g1);
+  --slider-thumb: var(--hue-red-g1);
+  --slider-thumb-alt: var(--hue-green-g1);
+  --lcd-bg: var(--hue-green-hl);
+  --lcd-on: var(--hue-green-sh);
+  --lcd-off: color-mix(in srgb, var(--hue-green-sh) 24%, transparent);
+  --on: var(--hue-green-g1);
+  --off: color-mix(in srgb, var(--hue-green-sh) 24%, transparent);
+  --online: var(--hue-green-g1);
+  --offline: var(--hue-red-g1);
+  --pending: var(--hue-orange-g1);
+  --gauge-silver: var(--hue-orange-hl);
+  --gauge-green: var(--hue-green-g1);
+  --gauge-yellow: var(--hue-yellow-hl);
+  --gauge-red: var(--hue-red-g1);
+  --gauge-empty: var(--bg-header);
+  --gauge-gloss: var(--highlight-soft);
+  --gauge-tick-color: var(--hue-blue-sh);
+  --gauge-needle-start: var(--hue-red-hl);
+  --gauge-needle-end: var(--hue-red-g2);
+  --gauge-cap: var(--hue-orange-g1);
+  --safety-panel: var(--hue-orange-g1);
+  --safety-panel-shadow: var(--hue-orange-g2);
+  --safety-cover: var(--hue-red-g1);
+  --safety-cover-highlight: var(--hue-red-hl);
+  --safety-cover-shadow: var(--hue-red-g2);
+  --safety-hinge: var(--hue-orange-g2);
+  --safety-hinge-highlight: var(--hue-orange-hl);
+  --safety-slot: var(--hue-blue-sh);
+  --safety-lever-start: var(--hue-red-g1);
+  --safety-lever-end: var(--hue-red-g2);
+  --screw-metal: var(--hue-orange-g2);
+  --screw-highlight: var(--hue-orange-hl);
+  --screw-face-mid: var(--hue-blue-g2);
+  --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--hue-green-sh) 35%, transparent);
+  scrollbar-width: none;
+
+  font-family: 'Patrick Hand', cursive;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+  paint-order: stroke fill;
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at 18% 8%, var(--highlight-soft), transparent 24%),
+    var(--brushed-metal),
+    var(--bg-main-area);
+  text-shadow: var(--text-shadow-soft);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
