@@ -7,6 +7,7 @@ import { createPageSwitcher } from './client/pageSwitcher.js';
 import { createWsClient } from './client/wsClient.js';
 import { MESSAGE_TYPES, SCOPES } from './client/protocol.js';
 import { initSafetySwitch } from './client/safetySwitch.js';
+import { initFingerprintScan } from './client/fingerprintScan.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const monitoringPanel = createMonitoringPanel();
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   initSafetySwitch({ onRequestRefresh: () => sendRefresh(SCOPES.STATUS) });
+  initFingerprintScan();
   const appsPanel = createAppsPanel({ onRequestAppsRefresh: () => sendRefresh(SCOPES.APPS) });
   const powerPanel = createPowerPanel({
     onRequestRefresh: () => sendRefresh(SCOPES.STATUS),

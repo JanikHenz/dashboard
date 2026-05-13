@@ -1,7 +1,6 @@
 .fingerprint-scan-space {
   height: 100%;
   width: 100%;
-  aspect-ratio: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,32 +9,40 @@
 
 .scan {
   --fingerprint-scan-accent: #3fefef;
+  --fingerprint-scan-duration: 2.4s;
+
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 
   position: relative;
-  box-sizing: border-box;
-  height: 50%;
-  aspect-ratio: 1;
+  height: 60%;
   border: var(--border-comic);
-  box-shadow: var(--hard-shadow);
+  box-shadow: var(--shadow-inset);
   display: flex;
   align-items: center;
+  border-radius: 12px;
   justify-content: center;
+  background-color: var(--pal-blue-5);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.scan .fingerprint {
+.fingerprint {
   position: relative;
   width: 100%;
   height: 100%;
   aspect-ratio: 1;
   background-image:
-    linear-gradient(rgba(120, 125, 135, 0.55), rgba(120, 125, 135, 0.55)),
     url('../../img/fingerprint.png');
   background-position: center;
-  background-repeat: no-repeat;
   background-size: contain;
 }
 
-.scan .fingerprint::before {
+.fingerprint::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -51,22 +58,25 @@
   filter: drop-shadow(0 0 4px var(--fingerprint-scan-accent))
     drop-shadow(0 0 14px rgb(63 239 239 / 0.45));
   clip-path: inset(0 0 100% 0);
-  animation: fingerprint-scan-reveal 4s ease-in-out infinite;
+  animation: none;
   pointer-events: none;
   z-index: 1;
 }
 
 @keyframes fingerprint-scan-reveal {
-  0%,
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+  92% {
+    clip-path: inset(0 0 0 0);
+  }
+  92.5%,
   100% {
     clip-path: inset(0 0 100% 0);
   }
-  50% {
-    clip-path: inset(0 0 0 0);
-  }
 }
 
-.scan .fingerprint::after {
+.fingerprint::after {
   content: '';
   position: absolute;
   top: 0;
@@ -77,19 +87,28 @@
   border-radius: 8px;
   filter: drop-shadow(0 0 20px var(--fingerprint-scan-accent))
     drop-shadow(0 0 60px var(--fingerprint-scan-accent));
-  animation: fingerprint-scan-line 4s ease-in-out infinite;
+  animation: none;
   pointer-events: none;
   z-index: 2;
 }
 
+.scan.is-scanning .fingerprint::before {
+  animation: fingerprint-scan-reveal var(--fingerprint-scan-duration) ease-out 1;
+}
 
+.scan.is-scanning .fingerprint::after {
+  animation: fingerprint-scan-line var(--fingerprint-scan-duration) ease-out 1;
+}
 
 @keyframes fingerprint-scan-line {
-  0%,
-  100% {
+  0% {
     top: 0;
   }
-  50% {
+  92% {
     top: calc(100% - 8px);
+  }
+  92.5%,
+  100% {
+    top: 0;
   }
 }
