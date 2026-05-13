@@ -1,65 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
-/*=========== Theme =====*/
+/*=========== Theme (nur Layout / Schrift, keine Farben) =====*/
 :root {
-  --outline-color: var(--comic-blue-very-dark);
   --outline-width: 4px;
-  --hard-shadow: 8px 10px 0px var(--shadow-hard);
   --comic-font: 'Patrick Hand', cursive;
-  --neg-shadow:
-    inset 5px 7px 0px var(--shadow-inset),
-    inset -3px -3px 0px var(--highlight-soft);
   --text-stroke-strong: 1px;
   --text-stroke-soft: 0.8px;
-
   --gauge-value: 0;
   --gauge-start-angle: -130deg;
   --gauge-range: 260deg;
   --gauge-step: 2.6deg;
   --needle-angle: -130deg;
+}
 
-/* White */
+/*
+  Alle Farben: nur in `body` (Hell) und `body.dark-mode` (Dunkel) setzen.
+  Andere Stylesheets nutzen ausschließlich diese Custom Properties.
+*/
+
+/*=========== Body (Hell: komplette Farbpalette + Semantik + Layout) =====*/
+body {
+  /* --- Basisfarbpalette --- */
   --comic-white: #FFFFFF;
   --comic-white-warm: #FFF9E5;
   --comic-white-cool: #F0F5F9;
   --comic-white-dark: #cfcfcf;
-
-/* Yellow */
   --comic-yellow-light: #FFE08C;
   --comic-yellow: #F9C74F;
   --comic-yellow-dark: #D69B2F;
   --comic-yellow-very-dark: #7A5210;
-
-  /* Orange */
   --comic-orange-light: #FFC98E;
   --comic-orange: #FFA94D;
   --comic-orange-dark: #D6701E;
   --comic-orange-very-dark: #823508;
-
-  /* Red */
   --comic-red-light: #FF97A8;
   --comic-red: #FF4D6D;
   --comic-red-dark: #C9184A;
   --comic-red-very-dark: #590D22;
-
-  /* Blue */
   --comic-blue-light: #6ABEDD;
   --comic-blue: #277DA1;
   --comic-blue-dark: #1A4F66;
   --comic-blue-very-dark: #0D2B38;
-
-  /* Green */
   --comic-green-light: #84D2BB;
   --comic-green: #43AA8B;
   --comic-green-dark: #2D725E;
   --comic-green-very-dark: #143229;
-
-  /* Purple */
   --comic-purple-light: #9D91FF;
   --comic-purple: #6355D8;
   --comic-purple-dark: #4538A3;
   --comic-purple-very-dark: #1B125C;
 
+  /* --- Abgeleitet (Schatten, Glanz, Effekte) --- */
   --shadow-strong: color-mix(in srgb, var(--comic-blue-very-dark) 42%, transparent);
   --shadow-hard: color-mix(in srgb, var(--comic-blue-very-dark) 32%, transparent);
   --shadow-medium: color-mix(in srgb, var(--comic-blue-very-dark) 26%, transparent);
@@ -75,10 +66,15 @@
   --scanline-soft: color-mix(in srgb, var(--comic-blue-very-dark) 8%, transparent);
   --icon-screen-tint: color-mix(in srgb, var(--comic-green) 12%, transparent);
   --icon-glow: color-mix(in srgb, var(--comic-green-light) 70%, transparent);
-}
 
-/*=========== Body =====*/
-body{
+  /* --- Rahmen & globale Schatten --- */
+  --outline-color: var(--comic-blue-very-dark);
+  --hard-shadow: 8px 10px 0px var(--shadow-hard);
+  --neg-shadow:
+    inset 5px 7px 0px var(--shadow-inset),
+    inset -3px -3px 0px var(--highlight-soft);
+
+  /* --- Oberflächen & Verläufe --- */
   --bg-main: transparent;
   --bg-header: transparent;
   --bg-header-inner: var(--comic-blue);
@@ -177,15 +173,88 @@ body{
   --safety-lever-end: var(--comic-red-dark);
   --screw-metal: var(--comic-orange-dark);
   --screw-highlight: var(--comic-orange-light);
+  --screw-face-mid: var(--comic-blue-dark);
+  --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--comic-green-very-dark) 35%, transparent);
   scrollbar-width: none;
+
+  font-family: 'Patrick Hand', cursive;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+  paint-order: stroke fill;
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(circle at 18% 8%, var(--highlight-soft), transparent 24%),
+    var(--brushed-metal),
+    var(--bg-main-area);
+  text-shadow: var(--text-shadow-soft);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body::-webkit-scrollbar {
   display: none;
 }
 
-/*=========== Dark Mode =====*/
+/*=========== Dark Mode (komplette Farbpalette + Semantik) =====*/
 body.dark-mode {
+  /* --- Basisfarbpalette (Dunkel; eigene Werte möglich) --- */
+  --comic-white: #FFFFFF;
+  --comic-white-warm: #FFF9E5;
+  --comic-white-cool: #F0F5F9;
+  --comic-white-dark: #cfcfcf;
+  --comic-yellow-light: #FFE08C;
+  --comic-yellow: #F9C74F;
+  --comic-yellow-dark: #D69B2F;
+  --comic-yellow-very-dark: #7A5210;
+  --comic-orange-light: #FFC98E;
+  --comic-orange: #FFA94D;
+  --comic-orange-dark: #D6701E;
+  --comic-orange-very-dark: #823508;
+  --comic-red-light: #FF97A8;
+  --comic-red: #FF4D6D;
+  --comic-red-dark: #C9184A;
+  --comic-red-very-dark: #590D22;
+  --comic-blue-light: #6ABEDD;
+  --comic-blue: #277DA1;
+  --comic-blue-dark: #1A4F66;
+  --comic-blue-very-dark: #0D2B38;
+  --comic-green-light: #84D2BB;
+  --comic-green: #43AA8B;
+  --comic-green-dark: #2D725E;
+  --comic-green-very-dark: #143229;
+  --comic-purple-light: #9D91FF;
+  --comic-purple: #6355D8;
+  --comic-purple-dark: #4538A3;
+  --comic-purple-very-dark: #1B125C;
+
+  /* --- Abgeleitet (Schatten, Glanz, Effekte) --- */
+  --shadow-strong: color-mix(in srgb, var(--comic-blue-very-dark) 42%, transparent);
+  --shadow-hard: color-mix(in srgb, var(--comic-blue-very-dark) 32%, transparent);
+  --shadow-medium: color-mix(in srgb, var(--comic-blue-very-dark) 26%, transparent);
+  --shadow-soft: color-mix(in srgb, var(--comic-blue-very-dark) 18%, transparent);
+  --shadow-inset: color-mix(in srgb, var(--comic-blue-very-dark) 28%, transparent);
+  --shadow-inset-soft: color-mix(in srgb, var(--comic-blue-very-dark) 16%, transparent);
+  --warm-shadow: color-mix(in srgb, var(--comic-orange-very-dark) 22%, transparent);
+  --highlight-strong: color-mix(in srgb, var(--comic-white-warm) 70%, transparent);
+  --highlight-medium: color-mix(in srgb, var(--comic-white-warm) 46%, transparent);
+  --highlight-soft: color-mix(in srgb, var(--comic-white-cool) 24%, transparent);
+  --highlight-faint: color-mix(in srgb, var(--comic-white-cool) 12%, transparent);
+  --scanline-strong: color-mix(in srgb, var(--comic-blue-very-dark) 30%, transparent);
+  --scanline-soft: color-mix(in srgb, var(--comic-blue-very-dark) 8%, transparent);
+  --icon-screen-tint: color-mix(in srgb, var(--comic-green) 12%, transparent);
+  --icon-glow: color-mix(in srgb, var(--comic-green-light) 70%, transparent);
+
+  /* --- Rahmen & globale Schatten --- */
+  --outline-color: var(--comic-blue-very-dark);
+  --hard-shadow: 8px 10px 0px var(--shadow-hard);
+  --neg-shadow:
+    inset 5px 7px 0px var(--shadow-inset),
+    inset -3px -3px 0px var(--highlight-soft);
+
   --bg-main: transparent;
   --bg-header: transparent;
   --bg-header-inner: var(--comic-blue-dark);
@@ -283,6 +352,9 @@ body.dark-mode {
   --safety-lever-end: var(--comic-red-dark);
   --screw-metal: var(--comic-orange-dark);
   --screw-highlight: var(--comic-yellow-light);
+  --screw-face-mid: var(--comic-blue-dark);
+  --monitor-stat-value-glow: 0 0 4px color-mix(in srgb, var(--comic-green-light) 28%, transparent);
+  --gauge-gloss: color-mix(in srgb, var(--comic-yellow-light) 12%, transparent);
 }
 
 .screw {
@@ -301,7 +373,7 @@ body.dark-mode {
     var(--outline-color) 42% 58%,
     transparent 58%
     ),
-    linear-gradient(145deg, var(--screw-highlight) 0 24%, var(--screw-metal) 46%, var(--comic-blue-dark) 100%);
+    linear-gradient(145deg, var(--screw-highlight) 0 24%, var(--screw-metal) 46%, var(--screw-face-mid) 100%);
   box-shadow:
     inset -2px -2px 0 var(--shadow-strong),
     1px 1px 0 var(--shadow-soft);
@@ -330,25 +402,6 @@ body.dark-mode {
 
 .screw--tilt {
   transform: rotate(45deg);
-}
-
-body {
-  font-family: 'Patrick Hand', cursive;
-  color: var(--text-main);
-  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
-  paint-order: stroke fill;
-  letter-spacing: 1px;
-  margin: 0;
-  padding: 0;
-  background:
-    radial-gradient(circle at 18% 8%, var(--highlight-soft), transparent 24%),
-    var(--brushed-metal),
-    var(--bg-main-area);
-  text-shadow: var(--text-shadow-soft);
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  overscroll-behavior: none;
 }
 
 /*=========== Surface =====*/

@@ -61,7 +61,7 @@
   color: var(--lcd-on);
   line-height: 1;
   font-size: 160%;
-  text-shadow: 0 0 4px color-mix(in srgb, var(--comic-green-very-dark) 35%, transparent);
+  text-shadow: var(--monitor-stat-value-glow);
   font-variant-numeric: tabular-nums;
 }
 

@@ -5,7 +5,7 @@ export function getCssVar(name) {
 export function getPalette() {
   return {
     text: getCssVar('--text-accent'),
-    stroke: getCssVar('--text-stroke-color') || getCssVar('--comic-blue-very-dark'),
+    stroke: getCssVar('--text-stroke-color'),
     grid: getCssVar('--chart-grid'),
     line: getCssVar('--lcd-on'),
     area: getCssVar('--on'),
