@@ -1,0 +1,103 @@
+.fingerprint-scan-space {
+  height: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+/* Container für den gesamten Scanner */
+.scan {
+  position: relative;
+  height: 50%;
+  aspect-ratio: 1;
+  border: var(--border-comic);
+  box-shadow: var(--hard-shadow);
+  overflow: hidden;
+
+}
+
+/* Der inaktive (graue) Fingerabdruck */
+.scan .fingerprint {
+  position: relative;
+  height: 100%;
+  object-fit: contain;
+  aspect-ratio: 1;
+  background: url('/img/fingerprint.png'); /* <-- DEIN BILD HIER */
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+/* Der aktive (farbige) Fingerabdruck, der animiert aufgedeckt wird */
+.scan .fingerprint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('fingerprint_02.png'); /* <-- DEIN BILD HIER */
+  background-size: 300px;
+  background-position: top;
+  background-repeat: no-repeat;
+  animation: animate_image 4s ease-in-out infinite;
+}
+
+/* Die leuchtende Scan-Linie */
+.scan .fingerprint::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: #3fefef; /* Neon-Blau */
+  border-radius: 8px;
+  filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
+  animation: animate_line 4s ease-in-out infinite;
+}
+
+/* Text Styling */
+.scan h3 {
+  text-transform: uppercase;
+  font-size: 2em;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  color: #3fefef;
+  filter: drop-shadow(0 0 20px #3fefef) drop-shadow(0 0 60px #3fefef);
+  animation: animate_text 0.5s steps(1) infinite;
+}
+
+/* --- ANIMATIONEN --- */
+
+/* Animiert die Höhe des farbigen Fingerabdrucks (deckt ihn auf) */
+@keyframes animate_image {
+  0%, 100% {
+      height: 0%;
+  }
+  50% {
+      height: 100%;
+  }
+}
+
+/* Bewegt die leuchtende Linie von oben nach unten und zurück */
+@keyframes animate_line {
+  0%, 100% {
+      top: 0%;
+  }
+  50% {
+      top: 100%;
+  }
+}
+
+/* Lässt den Text blinken */
+@keyframes animate_text {
+  0%, 100% {
+      opacity: 0;
+  }
+  50% {
+      opacity: 1;
+  }
+}

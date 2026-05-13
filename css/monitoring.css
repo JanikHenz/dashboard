@@ -1,5 +1,6 @@
 @import 'monitoring/header.css';
 @import 'monitoring/gauge.css';
+@import 'monitoring/fingerprint-scan.css';
 @import 'monitoring/safety-switch.css';
 @import 'monitoring/charts.css';
 @import 'monitoring/hidden.css';
