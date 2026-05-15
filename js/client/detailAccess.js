@@ -19,5 +19,5 @@ export function setDetailPageUnlocked() {
 
 /** Index der App-Uebersicht, funktioniert mit Modul-Basis-URL und mit `/` als Startseite. */
 export function getAppsIndexHref() {
-  return new URL('../index.html', import.meta.url).href;
+  return new URL('../../index.html', import.meta.url).href;
 }
