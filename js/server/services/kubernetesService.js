@@ -30,6 +30,7 @@ function validateClusterServer(serverUrl) {
 
 function createKubernetesService() {
   let k8sAppsApi = null;
+  let k8sCoreApi = null;
   let mode = 'disabled';
 
   async function tryInitializeClient(k8s, loadConfig, targetMode, successMessage, unavailableMessage) {
@@ -48,6 +49,7 @@ function createKubernetesService() {
     }
 
     const appsApi = kubeConfig.makeApiClient(k8s.AppsV1Api);
+    const coreApi = kubeConfig.makeApiClient(k8s.CoreV1Api);
     try {
       await appsApi.listDeploymentForAllNamespaces({ limit: 1 });
     } catch (error) {
@@ -58,6 +60,7 @@ function createKubernetesService() {
     }
 
     k8sAppsApi = appsApi;
+    k8sCoreApi = coreApi;
     mode = targetMode;
     console.log(successMessage);
     return true;
@@ -85,18 +88,19 @@ function createKubernetesService() {
     if (hasDefaultClient) return;
 
     k8sAppsApi = null;
+    k8sCoreApi = null;
     mode = 'disabled';
     console.log('K8s features are disabled');
   }
 
   function ensureClient() {
-    if (!k8sAppsApi) {
+    if (!k8sAppsApi || !k8sCoreApi) {
       throw new Error('Kubernetes API unavailable');
     }
   }
 
   function isAvailable() {
-    return Boolean(k8sAppsApi);
+    return Boolean(k8sAppsApi && k8sCoreApi);
   }
 
   function getMode() {
@@ -149,13 +153,81 @@ function createKubernetesService() {
     return { success: true };
   }
 
+  function matchLabelsToSelector(matchLabels) {
+    if (!matchLabels || typeof matchLabels !== 'object') return '';
+    return Object.entries(matchLabels)
+      .map(([k, v]) => `${k}=${String(v)}`)
+      .join(',');
+  }
+
+  function podLogAsString(response) {
+    if (response == null) return '';
+    if (typeof response === 'string') return response;
+    const body = response.body;
+    if (typeof body === 'string') return body;
+    if (Buffer.isBuffer(body)) return body.toString('utf8');
+    return String(body ?? '');
+  }
+
+  /**
+   * Letzte Logzeilen pro Pod des Deployments (Selector matchLabels).
+   * @param {number} tailLines begrenzt Server-Antwort (max 2000)
+   */
+  async function getDeploymentPodLogs(namespace, deploymentName, tailLines = 150) {
+    ensureClient();
+    const dep = await readDeployment(namespace, deploymentName);
+    const selector = matchLabelsToSelector(dep?.spec?.selector?.matchLabels);
+    if (!selector) {
+      throw new Error('Deployment hat keinen matchLabels-Selector');
+    }
+
+    const maxTail = Math.min(2000, Math.max(10, parseInt(String(tailLines), 10) || 150));
+    const podListRaw = await k8sCoreApi.listNamespacedPod({
+      namespace,
+      labelSelector: selector
+    });
+    const podList = podListRaw?.items !== undefined ? podListRaw : pickK8sResource(podListRaw);
+    const items = Array.isArray(podList?.items) ? podList.items : [];
+
+    const containerName = dep?.spec?.template?.spec?.containers?.[0]?.name;
+
+    const pods = [];
+    const limitPods = Math.min(items.length, 24);
+    for (let i = 0; i < limitPods; i += 1) {
+      const pod = items[i];
+      const podName = pod?.metadata?.name;
+      if (!podName) continue;
+      try {
+        const logRaw = await k8sCoreApi.readNamespacedPodLog({
+          name: podName,
+          namespace,
+          container: containerName,
+          tailLines: maxTail
+        });
+        pods.push({
+          name: podName,
+          logs: podLogAsString(logRaw)
+        });
+      } catch (err) {
+        pods.push({
+          name: podName,
+          logs: '',
+          error: err?.body?.message || err?.message || 'Logs nicht lesbar'
+        });
+      }
+    }
+
+    return { pods, tailLines: maxTail };
+  }
+
   return {
     init,
     isAvailable,
     getMode,
     readDeployment,
     scaleDeployment,
-    updatePrimaryContainerRequests
+    updatePrimaryContainerRequests,
+    getDeploymentPodLogs
   };
 }
 

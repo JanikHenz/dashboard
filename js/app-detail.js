@@ -11,6 +11,9 @@ import {
   syncSliderValueLabel
 } from './client/apps/replicaControl.js';
 
+/** Immer die letzten N Zeilen pro Pod (neueste zuerst im Ausschnitt). */
+const POD_LOG_TAIL_LINES = 200;
+
 function deploymentKey(namespace, deployment) {
   return `${namespace}/${deployment}`;
 }
@@ -37,6 +40,16 @@ async function fetchDeploymentsMap() {
   return res.json();
 }
 
+async function fetchPodLogsSummary(namespace, deploymentName, tailLines) {
+  const u = new URL('/api/k8s/pod-logs', window.location.origin);
+  u.searchParams.set('namespace', namespace);
+  u.searchParams.set('deployment', deploymentName);
+  u.searchParams.set('tailLines', String(tailLines));
+  const res = await fetch(u);
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, data };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const backLink = document.getElementById('detail-back-link');
   if (backLink) {
@@ -57,6 +70,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const cpu = panelElements('detail-cpu');
   const mem = panelElements('detail-memory');
   const rep = panelElements('detail-replica');
+  const logsPanels = document.getElementById('detail-logs-panels');
+  const logsRefresh = document.getElementById('detail-logs-refresh');
+
+  function renderLogsPlaceholder(message) {
+    if (!logsPanels) return;
+    logsPanels.replaceChildren();
+    const p = document.createElement('p');
+    p.className = 'app-detail__log-empty';
+    p.textContent = message;
+    logsPanels.appendChild(p);
+  }
+
+  async function loadPodLogs() {
+    if (!logsPanels || !namespace || !deployment) return;
+
+    const { ok, data } = await fetchPodLogsSummary(namespace, deployment, POD_LOG_TAIL_LINES);
+    if (!ok) {
+      renderLogsPlaceholder(data?.error || 'Logs konnten nicht geladen werden.');
+      return;
+    }
+    const podsList = Array.isArray(data?.pods) ? data.pods : [];
+    if (podsList.length === 0) {
+      renderLogsPlaceholder('Keine Pods fuer dieses Deployment gefunden.');
+      return;
+    }
+
+    logsPanels.replaceChildren();
+    podsList.forEach((p) => {
+      const article = document.createElement('article');
+      article.className = 'app-detail__log-pod';
+      const h3 = document.createElement('h3');
+      h3.className = 'app-detail__log-pod-title';
+      h3.textContent = p.name || 'Pod';
+      const pre = document.createElement('pre');
+      pre.className = 'app-detail__log-pre';
+      if (p.error) {
+        pre.textContent = `Fehler: ${p.error}`;
+      } else {
+        const text = p.logs != null ? String(p.logs) : '';
+        pre.textContent = text.trim() ? text : '(keine Logzeilen in diesem Ausschnitt)';
+      }
+      article.appendChild(h3);
+      article.appendChild(pre);
+      logsPanels.appendChild(article);
+    });
+  }
 
   if (!namespace || !deployment) {
     if (titleEl) titleEl.textContent = 'Keine App gewaehlt';
@@ -82,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (titleEl) titleEl.textContent = 'Daten nicht verfuegbar';
       if (subEl) subEl.textContent = err.message || 'API-Fehler';
       setPanelsDisabled(true);
+      renderLogsPlaceholder('Deployments-API fehlgeschlagen.');
       return;
     }
 
@@ -91,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dep || dep.error) {
       if (titleEl) titleEl.textContent = 'Deployment nicht gefunden';
       setPanelsDisabled(true);
+      renderLogsPlaceholder('Deployment nicht gefunden oder nicht lesbar.');
       return;
     }
 
@@ -160,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sliderValue: desired,
       sliderDisabled: false
     });
+
+    await loadPodLogs();
   }
 
   function wireCpuMemPreview() {
@@ -198,6 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ok) await refresh();
     else window.setTimeout(refresh, 1200);
   }
+
+  logsRefresh?.addEventListener('click', () => {
+    loadPodLogs();
+  });
 
   wireCpuMemPreview();
   wireReplicaPreview();

@@ -91,6 +91,31 @@ function registerRoutes(app, services) {
     }
   });
 
+  app.get('/api/k8s/pod-logs', async (req, res) => {
+    if (!kubernetesService.isAvailable()) {
+      res.status(503).json({ error: 'Kubernetes API unavailable' });
+      return;
+    }
+    const namespace = req.query.namespace;
+    const deployment = req.query.deployment;
+    const tailLines = req.query.tailLines;
+    if (!namespace || !deployment) {
+      res.status(400).json({ error: 'namespace and deployment query params are required' });
+      return;
+    }
+    try {
+      const payload = await kubernetesService.getDeploymentPodLogs(
+        String(namespace),
+        String(deployment),
+        tailLines !== undefined ? Number.parseInt(String(tailLines), 10) : 150
+      );
+      res.json(payload);
+    } catch (error) {
+      console.error('Pod logs error:', error);
+      res.status(500).json({ error: error.message || 'Pod logs failed', pods: [] });
+    }
+  });
+
   app.get('/api/monitoring/overview', async (req, res) => {
     const payload = await prometheusService.getOverview(req.query.range, req.query.step);
     if (payload.error) {

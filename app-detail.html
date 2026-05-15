@@ -75,7 +75,13 @@
       </div>
         </div>
       </div>
-      <div class="app-detail__spacer" aria-hidden="true"></div>
+      <section class="app-detail__logs" aria-labelledby="detail-logs-heading">
+        <div class="app-detail__logs-head">
+          <h2 id="detail-logs-heading" class="app-detail__logs-title">Pod-Logs</h2>
+          <button type="button" class="app-detail__logs-refresh" id="detail-logs-refresh">Aktualisieren</button>
+        </div>
+        <div class="app-detail__logs-panels" id="detail-logs-panels"></div>
+      </section>
     </div>
   </main>
 </body>
