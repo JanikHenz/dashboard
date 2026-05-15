@@ -112,3 +112,99 @@
     top: 0;
   }
 }
+
+.fingerprint-scan-dialog {
+  margin: auto;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0;
+  border: var(--border-comic);
+  border-radius: 14px;
+  background: var(--pal-blue-5);
+  box-shadow: var(--hard-shadow);
+  color: var(--text-contrast);
+}
+
+.fingerprint-scan-dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.fingerprint-scan-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.fingerprint-scan-dialog__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+.fingerprint-scan-dialog__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+  line-height: 1.35;
+}
+
+.fingerprint-scan-dialog__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.fingerprint-scan-dialog__input {
+  font: inherit;
+  padding: 0.45rem 0.55rem;
+  border: var(--border-comic);
+  border-radius: 8px;
+  background: var(--lcd-gradient);
+  color: var(--lcd-on);
+  box-shadow: var(--neg-shadow);
+}
+
+.fingerprint-scan-dialog__input:focus-visible {
+  outline: 2px solid var(--text-accent);
+  outline-offset: 2px;
+}
+
+.fingerprint-scan-dialog__feedback {
+  margin: 0;
+  min-height: 1.25em;
+  font-size: 0.85rem;
+  color: var(--lcd-on);
+}
+
+.fingerprint-scan-dialog__feedback:not([hidden]) {
+  text-shadow: var(--monitor-stat-value-glow, none);
+}
+
+.fingerprint-scan-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.fingerprint-scan-dialog__btn {
+  font: inherit;
+  cursor: pointer;
+  padding: 0.4rem 0.75rem;
+  border: var(--border-comic);
+  border-radius: 10px;
+  background: var(--recessed-gradient);
+  color: var(--text-contrast);
+  box-shadow: var(--neg-shadow);
+}
+
+.fingerprint-scan-dialog__btn--primary {
+  background: linear-gradient(180deg, var(--highlight-medium), var(--pal-blue-5));
+  box-shadow: var(--hard-shadow);
+}
+
+.fingerprint-scan-dialog__btn:focus-visible {
+  outline: 2px solid var(--text-accent);
+  outline-offset: 2px;
+}

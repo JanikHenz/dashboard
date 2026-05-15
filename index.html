@@ -222,6 +222,27 @@
               <div class="fingerprint">
               </div>
             </button>
+            <dialog class="fingerprint-scan-dialog" aria-labelledby="fingerprint-scan-dialog-title">
+              <form class="fingerprint-scan-dialog__form" id="fingerprint-scan-auth-form">
+                <h2 id="fingerprint-scan-dialog-title" class="fingerprint-scan-dialog__title">Spass-Zugang</h2>
+                <p class="fingerprint-scan-dialog__hint">Scan durch. Passwort eingeben (nur lokal im Browser).</p>
+                <label class="fingerprint-scan-dialog__label">
+                  Passwort
+                  <input
+                    class="fingerprint-scan-dialog__input"
+                    type="password"
+                    name="password"
+                    autocomplete="off"
+                    maxlength="64"
+                  >
+                </label>
+                <p class="fingerprint-scan-dialog__feedback" id="fingerprint-scan-dialog-feedback" hidden role="status"></p>
+                <div class="fingerprint-scan-dialog__actions">
+                  <button type="submit" class="fingerprint-scan-dialog__btn fingerprint-scan-dialog__btn--primary">Pruefen</button>
+                  <button type="button" class="fingerprint-scan-dialog__btn" id="fingerprint-scan-dialog-close">Schliessen</button>
+                </div>
+              </form>
+            </dialog>
           </div>
           <div class="safety-switch-space">
             <div class="safety-switch">

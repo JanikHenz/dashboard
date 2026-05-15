@@ -1,5 +1,8 @@
 const DEFAULT_SCAN_MS = 4000;
 
+/** Nur Spielerei im Frontend, kein echtes Geheimnis. */
+const FINGERPRINT_FUN_PASSWORD = 'unernst';
+
 function parseScanDurationMs(scanEl) {
   const raw = getComputedStyle(scanEl).getPropertyValue('--fingerprint-scan-duration').trim();
   if (!raw) return DEFAULT_SCAN_MS;
@@ -11,8 +14,15 @@ function parseScanDurationMs(scanEl) {
 }
 
 export function initFingerprintScan() {
-  const scan = document.querySelector('.fingerprint-scan-space .scan');
-  if (!scan) return;
+  const root = document.querySelector('.fingerprint-scan-space');
+  const scan = root?.querySelector('.scan');
+  const dialog = root?.querySelector('.fingerprint-scan-dialog');
+  const form = document.getElementById('fingerprint-scan-auth-form');
+  const feedback = document.getElementById('fingerprint-scan-dialog-feedback');
+  const closeBtn = document.getElementById('fingerprint-scan-dialog-close');
+  const passwordInput = form?.querySelector('input[name="password"]');
+
+  if (!scan || !dialog || !form || !feedback || !passwordInput) return;
 
   let scanTimer = null;
 
@@ -22,10 +32,19 @@ export function initFingerprintScan() {
     scanTimer = null;
   }
 
+  function resetDialogUi() {
+    form.reset();
+    feedback.textContent = '';
+    feedback.hidden = true;
+    passwordInput.removeAttribute('aria-invalid');
+  }
+
   function finishScan() {
     clearScanTimer();
     scan.classList.remove('is-scanning');
-    window.alert('Fingerabdruck-Scan abgeschlossen.');
+    resetDialogUi();
+    dialog.showModal();
+    window.queueMicrotask(() => passwordInput.focus());
   }
 
   function startScan() {
@@ -35,6 +54,32 @@ export function initFingerprintScan() {
     const ms = parseScanDurationMs(scan);
     scanTimer = window.setTimeout(finishScan, ms);
   }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = new FormData(form).get('password');
+    const entered = String(raw ?? '').trim();
+    if (entered === FINGERPRINT_FUN_PASSWORD) {
+      feedback.textContent = 'Stimmt. Willkommen.';
+      feedback.hidden = false;
+      passwordInput.removeAttribute('aria-invalid');
+      window.setTimeout(() => {
+        dialog.close();
+      }, 700);
+      return;
+    }
+    feedback.textContent = 'Nicht das richtige Passwort.';
+    feedback.hidden = false;
+    passwordInput.setAttribute('aria-invalid', 'true');
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    dialog.close();
+  });
+
+  dialog.addEventListener('close', () => {
+    resetDialogUi();
+  });
 
   scan.addEventListener('click', startScan);
 }
