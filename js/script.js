@@ -8,8 +8,10 @@ import { createWsClient } from './client/wsClient.js';
 import { MESSAGE_TYPES, SCOPES } from './client/protocol.js';
 import { initSafetySwitch } from './client/safetySwitch.js';
 import { initFingerprintScan } from './client/fingerprintScan.js';
+import { clearDetailPageUnlock } from './client/detailAccess.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  clearDetailPageUnlock();
   const monitoringPanel = createMonitoringPanel();
   let wsClient = null;
   const sendRefresh = (scope) => {

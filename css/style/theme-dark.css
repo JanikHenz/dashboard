@@ -160,8 +160,8 @@ body.dark-mode {
   --toggle-segment-start: var(--hue-blue-g2);
   --toggle-segment-mid: var(--hue-purple-sh);
   --toggle-segment-end: var(--hue-blue-hl);
-  --knurl-light: var(--hue-orange-hl);
-  --knurl-dark: var(--hue-orange-g1);
+  --knurl-light: var(--hue-neutral-g2);
+  --knurl-dark: var(--hue-neutral-sh);
   --slider-thumb: var(--hue-red-g1);
   --slider-thumb-alt: var(--hue-green-g1);
   --lcd-bg: var(--hue-green-hl);
