@@ -1,3 +1,5 @@
+import { setDetailPageUnlocked } from './detailAccess.js';
+
 const DEFAULT_SCAN_MS = 4000;
 
 /** Nur Spielerei im Frontend, kein echtes Geheimnis. */
@@ -60,6 +62,7 @@ export function initFingerprintScan() {
     const raw = new FormData(form).get('password');
     const entered = String(raw ?? '').trim();
     if (entered === FINGERPRINT_FUN_PASSWORD) {
+      setDetailPageUnlocked();
       feedback.textContent = 'Stimmt. Willkommen.';
       feedback.hidden = false;
       passwordInput.removeAttribute('aria-invalid');

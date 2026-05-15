@@ -30,6 +30,14 @@ app.get('/', (_req, res) => {
   res.sendFile(path.join(projectRoot, 'index.html'));
 });
 
+app.get('/index.html', (_req, res) => {
+  res.sendFile(path.join(projectRoot, 'index.html'));
+});
+
+app.get('/app-detail.html', (_req, res) => {
+  res.sendFile(path.join(projectRoot, 'app-detail.html'));
+});
+
 const prometheusFallbackUrls = [
   PROMETHEUS_BASE_URL,
   `http://${PC_IP}:30090`,

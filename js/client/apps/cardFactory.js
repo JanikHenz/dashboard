@@ -1,7 +1,14 @@
+import { isDetailPageUnlocked } from '../detailAccess.js';
+
 function createStatusIndicator(deployment) {
   const statusIndicator = document.createElement('div');
   statusIndicator.className = 'status-indicator';
   if (!deployment) {
+    statusIndicator.classList.add('unknown');
+    return statusIndicator;
+  }
+
+  if (deployment.error) {
     statusIndicator.classList.add('unknown');
     return statusIndicator;
   }
@@ -11,12 +18,9 @@ function createStatusIndicator(deployment) {
   return statusIndicator;
 }
 
-export function createAppCard({ app, deployment, isSelected, onSelect }) {
+export function createAppCard({ app, deployment }) {
   const appDiv = document.createElement('div');
   appDiv.className = 'app';
-  if (isSelected) {
-    appDiv.classList.add('selected');
-  }
 
   const threed = document.createElement('div');
   threed.className = 'threed';
@@ -49,7 +53,18 @@ export function createAppCard({ app, deployment, isSelected, onSelect }) {
 
   appDiv.addEventListener('click', (event) => {
     if (event.target.tagName === 'A' || event.target.closest('a')) return;
-    onSelect(app);
+    if (!isDetailPageUnlocked()) {
+      window.alert(
+        'Bitte zuerst den Fingerabdruck-Sensor auf der Monitoring-Seite nutzen und das richtige Passwort eingeben.'
+      );
+      return;
+    }
+    const q = new URLSearchParams({
+      namespace: app.namespace,
+      deployment: app.deployment
+    });
+    const detailUrl = new URL(`app-detail.html?${q.toString()}`, window.location.href);
+    window.location.assign(detailUrl.href);
   });
 
   return appDiv;

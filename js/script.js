@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   initSafetySwitch({ onRequestRefresh: () => sendRefresh(SCOPES.STATUS) });
   initFingerprintScan();
-  const appsPanel = createAppsPanel({ onRequestAppsRefresh: () => sendRefresh(SCOPES.APPS) });
+  const appsPanel = createAppsPanel();
   const powerPanel = createPowerPanel({
     onRequestRefresh: () => sendRefresh(SCOPES.STATUS),
     updateTimerDisplay

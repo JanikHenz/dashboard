@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App-Details</title>
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/apps.css" rel="stylesheet">
+  <script type="module" src="js/app-detail.js"></script>
+</head>
+
+<body class="app-detail-page">
+  <main class="app-detail__main">
+    <header class="app-detail__header">
+      <a class="app-detail__back" id="detail-back-link" href="#">Zurueck zu den Apps</a>
+      <div class="app-detail__titles">
+        <h1 id="detail-page-title">App-Details</h1>
+        <p class="app-detail__sub" id="detail-page-sub"></p>
+      </div>
+    </header>
+
+    <div class="app-detail__grid">
+      <div class="replica-control">
+        <span class="screw screw--top-left screw--tilt"></span>
+        <span class="screw screw--top-right"></span>
+        <span class="screw screw--bottom-left"></span>
+        <span class="screw screw--bottom-right screw--tilt"></span>
+        <h2 id="detail-cpu-title">CPU</h2>
+        <div class="app-name" id="detail-cpu-meta"></div>
+        <div class="replica-info">
+          <span class="replica-count" id="detail-cpu-count">— / —</span>
+          <span class="replica-label" id="detail-cpu-label">req / limit</span>
+        </div>
+        <div class="replica-slider">
+          <input type="range" min="50" max="8000" step="50" value="250" id="detail-cpu-slider" class="slider" disabled>
+          <span class="slider-value" id="detail-cpu-slider-value">250m</span>
+        </div>
+      </div>
+
+      <div class="replica-control">
+        <span class="screw screw--top-left"></span>
+        <span class="screw screw--top-right screw--tilt"></span>
+        <span class="screw screw--bottom-left screw--tilt"></span>
+        <span class="screw screw--bottom-right"></span>
+        <h2 id="detail-memory-title">Memory</h2>
+        <div class="app-name" id="detail-memory-meta"></div>
+        <div class="replica-info">
+          <span class="replica-count" id="detail-memory-count">— / —</span>
+          <span class="replica-label" id="detail-memory-label">req / limit</span>
+        </div>
+        <div class="replica-slider">
+          <input type="range" min="64" max="16384" step="64" value="256" id="detail-memory-slider" class="slider" disabled>
+          <span class="slider-value" id="detail-memory-slider-value">256Mi</span>
+        </div>
+      </div>
+
+      <div class="replica-control">
+        <span class="screw screw--top-left"></span>
+        <span class="screw screw--top-right"></span>
+        <span class="screw screw--bottom-left"></span>
+        <span class="screw screw--bottom-right screw--tilt"></span>
+        <h2 id="detail-replica-title">Replicas</h2>
+        <div class="app-name" id="detail-replica-meta"></div>
+        <div class="replica-info">
+          <span class="replica-count" id="detail-replica-count">-/-</span>
+          <span class="replica-label" id="detail-replica-label">bereit / gesamt</span>
+        </div>
+        <div class="replica-slider">
+          <input type="range" min="0" max="12" step="1" value="1" id="detail-replica-slider" class="slider" disabled>
+          <span class="slider-value" id="detail-replica-slider-value">1</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

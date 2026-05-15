@@ -61,6 +61,36 @@ function registerRoutes(app, services) {
     }
   });
 
+  app.post('/api/k8s/resources', async (req, res) => {
+    if (!kubernetesService.isAvailable()) {
+      res.status(503).json({ error: 'Kubernetes API unavailable' });
+      return;
+    }
+
+    const { namespace, deployment, cpuRequest, memoryRequest } = req.body || {};
+    if (!namespace || !deployment) {
+      res.status(400).json({ error: 'namespace and deployment are required' });
+      return;
+    }
+    if (
+      (cpuRequest === undefined || cpuRequest === null || cpuRequest === '')
+      && (memoryRequest === undefined || memoryRequest === null || memoryRequest === '')
+    ) {
+      res.status(400).json({ error: 'cpuRequest and/or memoryRequest required' });
+      return;
+    }
+
+    try {
+      res.json(await kubernetesService.updatePrimaryContainerRequests(namespace, deployment, {
+        cpuRequest,
+        memoryRequest
+      }));
+    } catch (error) {
+      console.error('Resource patch error:', error);
+      res.status(500).json({ error: error.message || 'Resource update failed' });
+    }
+  });
+
   app.get('/api/monitoring/overview', async (req, res) => {
     const payload = await prometheusService.getOverview(req.query.range, req.query.step);
     if (payload.error) {

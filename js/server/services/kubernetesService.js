@@ -125,12 +125,37 @@ function createKubernetesService() {
     return { success: true, replicas: parseInt(replicas, 10) };
   }
 
+  async function updatePrimaryContainerRequests(namespace, deploymentName, { cpuRequest, memoryRequest }) {
+    ensureClient();
+    const dep = await readDeployment(namespace, deploymentName);
+    const containers = dep?.spec?.template?.spec?.containers;
+    if (!Array.isArray(containers) || containers.length === 0) {
+      throw new Error('Deployment has no containers');
+    }
+    const c = containers[0];
+    c.resources = c.resources || {};
+    c.resources.requests = { ...c.resources.requests };
+    if (cpuRequest !== undefined && cpuRequest !== null && cpuRequest !== '') {
+      c.resources.requests.cpu = String(cpuRequest);
+    }
+    if (memoryRequest !== undefined && memoryRequest !== null && memoryRequest !== '') {
+      c.resources.requests.memory = String(memoryRequest);
+    }
+    await k8sAppsApi.replaceNamespacedDeployment({
+      name: deploymentName,
+      namespace,
+      body: dep
+    });
+    return { success: true };
+  }
+
   return {
     init,
     isAvailable,
     getMode,
     readDeployment,
-    scaleDeployment
+    scaleDeployment,
+    updatePrimaryContainerRequests
   };
 }
 

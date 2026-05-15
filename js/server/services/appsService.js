@@ -2,6 +2,27 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
+function extractPrimaryContainerResources(deployment) {
+  const c = deployment?.spec?.template?.spec?.containers?.[0];
+  const r = c?.resources;
+  if (!r) {
+    return {
+      cpuRequest: null,
+      cpuLimit: null,
+      memoryRequest: null,
+      memoryLimit: null
+    };
+  }
+  const req = r.requests || {};
+  const lim = r.limits || {};
+  return {
+    cpuRequest: req.cpu ?? null,
+    cpuLimit: lim.cpu ?? null,
+    memoryRequest: req.memory ?? null,
+    memoryLimit: lim.memory ?? null
+  };
+}
+
 function createAppsService({ projectRoot, kubernetesService }) {
   function loadYamlData() {
     const fileContents = fs.readFileSync(path.join(projectRoot, 'apps.yml'), 'utf8');
@@ -38,7 +59,8 @@ function createAppsService({ projectRoot, kubernetesService }) {
             readyReplicas: status.readyReplicas || 0,
             availableReplicas: status.availableReplicas || 0,
             unavailableReplicas: status.unavailableReplicas || 0,
-            desiredReplicas: spec.replicas || 1
+            desiredReplicas: spec.replicas || 1,
+            ...extractPrimaryContainerResources(deployment)
           };
         } catch (err) {
           console.error(`Error fetching ${namespace}/${app.deployment}:`, err.message);
