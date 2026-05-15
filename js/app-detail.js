@@ -11,7 +11,6 @@ import {
   syncSliderValueLabel
 } from './client/apps/replicaControl.js';
 
-/** Immer die letzten N Zeilen pro Pod (neueste zuerst im Ausschnitt). */
 const POD_LOG_TAIL_LINES = 200;
 
 function deploymentKey(namespace, deployment) {
@@ -72,6 +71,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const rep = panelElements('detail-replica');
   const logsPanels = document.getElementById('detail-logs-panels');
   const logsRefresh = document.getElementById('detail-logs-refresh');
+  const nodesList = document.getElementById('detail-nodes-list');
+  const nodesEmpty = document.getElementById('detail-nodes-empty');
+
+  function renderPodNodes(podPlacements) {
+    if (!nodesList || !nodesEmpty) return;
+    nodesList.replaceChildren();
+    const rows = Array.isArray(podPlacements) ? podPlacements : [];
+    if (rows.length === 0) {
+      nodesEmpty.hidden = false;
+      nodesEmpty.textContent = 'Keine Pods fuer dieses Deployment gefunden.';
+      return;
+    }
+    nodesEmpty.hidden = true;
+    rows.forEach((row) => {
+      const li = document.createElement('li');
+      li.className = 'app-detail__nodes-item';
+      const podSpan = document.createElement('span');
+      podSpan.className = 'app-detail__pod-name';
+      podSpan.textContent = row.pod || '—';
+      li.appendChild(podSpan);
+      li.appendChild(document.createTextNode(' \u2192 '));
+      const nodeSpan = document.createElement('span');
+      nodeSpan.className = 'app-detail__pod-node';
+      nodeSpan.textContent = row.node || '(noch kein Node)';
+      li.appendChild(nodeSpan);
+      if (row.phase && row.phase !== 'Running') {
+        const ph = document.createElement('span');
+        ph.className = 'app-detail__pod-phase';
+        ph.textContent = ` (${row.phase})`;
+        li.appendChild(ph);
+      }
+      nodesList.appendChild(li);
+    });
+  }
 
   function renderLogsPlaceholder(message) {
     if (!logsPanels) return;
@@ -141,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (titleEl) titleEl.textContent = 'Daten nicht verfuegbar';
       if (subEl) subEl.textContent = err.message || 'API-Fehler';
       setPanelsDisabled(true);
+      renderPodNodes([]);
       renderLogsPlaceholder('Deployments-API fehlgeschlagen.');
       return;
     }
@@ -151,10 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dep || dep.error) {
       if (titleEl) titleEl.textContent = 'Deployment nicht gefunden';
       setPanelsDisabled(true);
+      renderPodNodes([]);
       renderLogsPlaceholder('Deployment nicht gefunden oder nicht lesbar.');
       return;
     }
 
+    renderPodNodes(dep.podPlacements);
     try {
       const appsRes = await fetch('/api/apps');
       if (appsRes.ok) {

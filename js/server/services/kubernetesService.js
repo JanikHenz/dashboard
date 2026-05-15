@@ -220,6 +220,28 @@ function createKubernetesService() {
     return { pods, tailLines: maxTail };
   }
 
+  async function listPodsForDeployment(namespace, deploymentName) {
+    ensureClient();
+    const dep = await readDeployment(namespace, deploymentName);
+    const selector = matchLabelsToSelector(dep?.spec?.selector?.matchLabels);
+    if (!selector) {
+      return [];
+    }
+
+    const podListRaw = await k8sCoreApi.listNamespacedPod({
+      namespace,
+      labelSelector: selector
+    });
+    const podList = podListRaw?.items !== undefined ? podListRaw : pickK8sResource(podListRaw);
+    const items = Array.isArray(podList?.items) ? podList.items : [];
+
+    return items.map((pod) => ({
+      pod: pod?.metadata?.name || '',
+      node: pod?.spec?.nodeName || null,
+      phase: pod?.status?.phase || null
+    })).filter((row) => row.pod);
+  }
+
   return {
     init,
     isAvailable,
@@ -227,7 +249,8 @@ function createKubernetesService() {
     readDeployment,
     scaleDeployment,
     updatePrimaryContainerRequests,
-    getDeploymentPodLogs
+    getDeploymentPodLogs,
+    listPodsForDeployment
   };
 }
 

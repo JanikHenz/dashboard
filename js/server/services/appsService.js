@@ -54,12 +54,19 @@ function createAppsService({ projectRoot, kubernetesService }) {
           const deployment = await kubernetesService.readDeployment(ns, deploymentName);
           const status = deployment?.status || {};
           const spec = deployment?.spec || {};
+          let podPlacements = [];
+          try {
+            podPlacements = await kubernetesService.listPodsForDeployment(ns, deploymentName);
+          } catch (podErr) {
+            console.error(`Pods for ${ns}/${deploymentName}:`, podErr.message);
+          }
           deploymentStatus[`${ns}/${deploymentName}`] = {
             replicas: status.replicas || 0,
             readyReplicas: status.readyReplicas || 0,
             availableReplicas: status.availableReplicas || 0,
             unavailableReplicas: status.unavailableReplicas || 0,
             desiredReplicas: spec.replicas || 1,
+            podPlacements,
             ...extractPrimaryContainerResources(deployment)
           };
         } catch (err) {
