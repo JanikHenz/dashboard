@@ -154,8 +154,8 @@ body {
   --echarts-memory-area: color-mix(in srgb, var(--hue-purple-g1) 30%, transparent);
   --echarts-network-line: var(--hue-orange-g1);
   --echarts-network-area: color-mix(in srgb, var(--hue-orange-g1) 30%, transparent);
-  --echarts-power-line: var(--hue-neutral-g2);
-  --echarts-power-area: color-mix(in srgb, var(--hue-neutral-g2) 32%, transparent);
+  --echarts-power-line: var(--hue-red-g1);
+  --echarts-power-area: color-mix(in srgb, var(--hue-red-g1) 32%, transparent);
   --icon-power: var(--hue-neutral-hl);
   --toggle-pointer: var(--hue-red-g1);
   --toggle-segment-start: var(--hue-blue-g2);

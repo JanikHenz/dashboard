@@ -53,16 +53,15 @@
 }
 
 .monitor-stat-label {
-  letter-spacing: 1.5px;
   color: var(--lcd-on);
-  font-size: 160%;
+  font-size: 100%;
   opacity: 0.85;
 }
 
 .monitor-stat-value {
   color: var(--lcd-on);
   line-height: 1;
-  font-size: 160%;
+  font-size: 100%;
   text-shadow: var(--monitor-stat-value-glow);
   font-variant-numeric: tabular-nums;
 }

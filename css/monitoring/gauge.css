@@ -127,12 +127,10 @@
 .gauge-value {
   position: absolute;
   left: 50%;
-  top: 66%;
+  top: 60%;
   transform: translateX(-50%);
-  min-width: 4.4ch;
   text-align: center;
-  letter-spacing: 1px;
-  font-size: clamp(1.2rem, 2.8vw, 2rem);
+  font-size: 100%;
   color: var(--text-contrast);
   -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
 }
@@ -142,8 +140,8 @@
   left: 50%;
   bottom: 9%;
   transform: translateX(-50%);
-  letter-spacing: 2px;
-  font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+  text-align: center;
+  font-size: 100%;
   color: var(--text-main);
   -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
 }

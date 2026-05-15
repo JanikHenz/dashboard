@@ -179,10 +179,13 @@
 }
 
 .safety-switch-cover {
-  position: absolute;
+  position: relative;
   inset: 18% 8% 4% 12%;
   z-index: 10;
   appearance: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
   margin: 0;
   border: clamp(5px, 0.7vw, 9px) solid var(--outline-color);
@@ -200,6 +203,7 @@
   transform: translateZ(22px) rotateY(0deg);
   transform-style: preserve-3d;
   backface-visibility: visible;
+  box-sizing: border-box;
   transition:
     transform 0.55s cubic-bezier(0.42, 0, 0.18, 1),
     box-shadow 0.45s ease;
@@ -219,4 +223,38 @@
   outline: 3px solid var(--text-accent);
   outline-offset: 4px;
   border-radius: 18px;
+}
+
+.attention-icon {
+  aspect-ratio: 1;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 104px solid #f9da4c;
+}
+
+/* Der obere Strich des Ausrufezeichens */
+.attention-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(50%), translateX(50%);
+  transform-origin: center center;
+  width: 10%;
+  height: 50%;
+  background-color: #111;
+  border-radius: 5px;
+}
+
+/* Der untere Punkt des Ausrufezeichens */
+.attention-icon::after {
+  content: '';
+  position: absolute;
+  top: 80px; 
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: #111;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }

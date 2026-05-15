@@ -1,24 +1,44 @@
 # Dashboard
 
-Selbst gehostete Web-Oberflaeche fuer ein Homelab-Dashboard mit Fokus auf drei Bereiche:
+Selbst gehostete Web-Oberfläche für ein Homelab-Dashboard mit Fokus auf drei Bereiche:
 
-- **Power/Status** (PC online/offline, Uptime, Power-Button)
-- **Monitoring** (Header-Kennzahlen + Zeitreihen-Charts aus Prometheus)
-- **Apps/Kubernetes** (Service-Karten + Replica-Scaling)
+- **Power & Status** (PC online/offline, Uptime, Power-Button)
+- **Monitoring** (Kennzahlen im Header, CPU-Gauge, Fingerabdruck-Scan-Deko, Safety-Switch, Zeitreihen-Charts aus Prometheus)
+- **Apps / Kubernetes** (Service-Karten, Replica-Scaling)
 
-Die Anwendung nutzt **pures HTML/CSS/JavaScript** im Frontend und ein schlankes **Node.js/Express-Backend** mit WebSocket-Push.
+Frontend: **HTML, CSS und JavaScript** ohne Framework und ohne Build-Schritt. Backend: **Node.js** mit **Express** und **WebSockets** für Live-Updates.
 
-## Architektur auf einen Blick
+## Schnellstart
+
+```bash
+npm install
+node js/server.js
+```
+
+Standard-Port: **8080** (siehe `js/server/config.js` bzw. Umgebungsvariable `PORT`). Anschließend im Browser z. B. `http://localhost:8080` öffnen.
+
+## Funktionen (Kurz)
+
+| Bereich | Inhalt |
+|--------|--------|
+| **Apps** | Karten aus `apps.yml`, Status aus Kubernetes, Replica-Slider → `POST /api/k8s/scale` |
+| **Monitoring** | Prometheus-Overview (CPU, RAM, GPU, Netzwerk, Disk, Nodes), vier ECharts-Zeitreihen, Header mit LCD-Kacheln, Gauge, klickbarer Fingerabdruck-Scan (CSS-Animation + optionales Alert nach Ablauf), Safety-Switch mit Abdeckung für Hard-Shutdown |
+| **Power** | LED-Status, Uptime-Timer (7-Segment), Power-Button → `GET /api/press-button` |
+| **Global** | Hell/Dunkel-Theme (`themeSwitcher.js`), Wechsel zwischen Apps- und Monitoring-Ansicht (`pageSwitcher.js`) |
+
+## Architektur
 
 ### Frontend
 
-- `index.html`: statisches UI-Layout mit zwei Seiten in einer Shell (Apps und Monitoring)
+- **`index.html`**: Shell mit zwei Inhalten (Apps-Hauptansicht, Monitoring-Seite inkl. Header und Charts).
+- **`css/style.css`**: Schrift, Paletten (`style/root.css`), Themes (`theme-light.css` / `theme-dark.css`), Layout.
+- **`css/monitoring.css`**: Monitoring-spezifische Module (Header, Gauge, Fingerabdruck-Scan, Safety-Switch, Charts, Hilfsklassen).
 
 ### Farbschema (CSS)
 
-Jede chromatische Familie sowie **Neutral** haben **fuenf physische Helligkeitsstufen** in `:root` als `--pal-{name}-1` (hell) bis `--pal-{name}-5` (dunkel), definiert in `css/style/root.css`.
+Jede chromatische Familie sowie **Neutral** haben **fünf physische Helligkeitsstufen** in `:root` als `--pal-{name}-1` (hell) bis `--pal-{name}-5` (dunkel), definiert in `css/style/root.css`.
 
-Die **Verwendung** dieser Stufen haengt vom Modus ab. Semantische Rollen (pro Familie) setzen `body` bzw. `body.dark-mode` in `css/style/theme-light.css` / `theme-dark.css`:
+Die **Verwendung** dieser Stufen hängt vom Modus ab. Semantische Rollen setzen `body` bzw. `body.dark-mode` in `css/style/theme-light.css` / `theme-dark.css`:
 
 | Stufe | Hell (`body`) | Dunkel (`body.dark-mode`) |
 |-------|----------------|---------------------------|
@@ -28,120 +48,136 @@ Die **Verwendung** dieser Stufen haengt vom Modus ab. Semantische Rollen (pro Fa
 | 4 | **Schatten** (`-sh`) | **Gradient 2** (`-g2`) |
 | 5 | *unbenutzt* | **Schatten** (`-sh`) |
 
-API pro Familie: `--hue-{neutral,blue,green,yellow,orange,red,purple}-{hl|g1|g2|sh}` verweist immer auf die passende `--pal-*-n` fuer den aktuellen Modus.
+API pro Familie: `--hue-{neutral,blue,green,yellow,orange,red,purple}-{hl|g1|g2|sh}` verweist auf die passende `--pal-*-n` für den aktuellen Modus.
 
-Komponenten und Semantik-Tokens (`--text-main`, `--chart-grid`, …) nutzen diese Rollen oder `color-mix` darauf. Wo das Layout absichtlich die **hellste physische Stufe** braucht (z. B. helle Gitterlinien im Dark-Chart), kann weiterhin `--pal-blue-1` o. ae. direkt gesetzt werden.
+**ECharts:** Achsen, Gitter, Tooltip und Titel lesen CSS-Variablen aus (`getComputedStyle(document.body)`). Pro Metrik gibt es `--echarts-{cpu|memory|network|power}-{line|area}` in den Theme-Dateien. Beim Theme-Wechsel ruft `monitoringPanel.reapplyTheme()` die zuletzt gültigen Daten erneut auf (zusätzlich zum Monitoring-Refresh).
 
-**ECharts:** Achsen, Gitter, Tooltip und Titel lesen weiterhin `getPalette()` aus (`--text-accent`, `--chart-grid`, …). Pro Metrik gibt es `--echarts-{cpu|memory|network|power}-{line|area}` in den Theme-Dateien (Linie = jeweils `--hue-*-g1`, Flaeche = `color-mix` darauf). `chartOptions.js` wertet sie per `getComputedStyle(document.body)` aus. Beim Theme-Wechsel ruft `monitoringPanel.reapplyTheme()` die zuletzt gueltigen Daten erneut auf, damit die Kurven sofort umschalten (zusaetzlich zum bestehenden Monitoring-Refresh).
+### Einstieg & Client-Module
 
-Einstieg Styles: `css/style.css` importiert `style/root.css` (Paletten), dann Theme und Layout.
-- `js/script.js`: Einstiegspunkt, verbindet alle Panels und startet den WebSocket-Client
-- `js/client/powerPanel.js`: Power-Button, LED-Status und Timer-Update
-- `js/client/monitoringPanel.js`: aktualisiert Header-Werte und ECharts-Diagramme
-- `js/client/appsPanel.js`: rendert App-Karten und steuert Replica-Slider
-- `js/client/wsClient.js`: WebSocket-Verbindung (`/ws`) inkl. Reconnect und Refresh-Requests
+- **`js/script.js`**: `DOMContentLoaded`, WebSocket, verbindet Panels und Helfer (`initSafetySwitch`, `initFingerprintScan`, …).
+- **`js/client/wsClient.js`**: WebSocket `/ws`, Reconnect, Refresh mit `scope`.
+- **`js/client/powerPanel.js`**: Power-Button, LED, Status-Anwendung.
+- **`js/client/timerDisplay.js`**: 7-Segment-Uptime.
+- **`js/client/monitoringPanel.js`**: Header + ECharts aus Monitoring-Payload.
+- **`js/client/monitoring/`**: `config.js` (Chart-Liste, Header-Bindings), `header.js`, `chartOptions.js`, `style.js`.
+- **`js/client/appsPanel.js`**, **`js/client/apps/`**: Karten (`cardFactory.js`), Scale-API (`scaleApi.js`, `replicaControl.js`).
+- **`js/client/themeSwitcher.js`**, **`js/client/pageSwitcher.js`**: Theme und Seitenwechsel.
+- **`js/client/safetySwitch.js`**: Abdeckung, Auto-Close, Hard-Shutdown-Flow (Bestätigung, `POST /api/hard-shutdown`).
+- **`js/client/fingerprintScan.js`**: Scan-Animation per Klasse `is-scanning`, Dauer aus CSS `--fingerprint-scan-duration`, Abschluss-Hinweis per `alert` (anpassbar im Code).
+- **`js/client/protocol.js`**: `MESSAGE_TYPES`, `SCOPES` für WebSocket-Nachrichten.
 
 ### Backend
 
-- `js/server.js`: Bootstrap, Service-Erzeugung, API- und WebSocket-Registrierung
-- `js/server/routes/registerRoutes.js`: REST-Endpunkte (`/api/status`, `/api/monitoring/overview`, `/api/k8s/*`, `/api/apps`, `/api/press-button`)
-- `js/server/websocket.js`: Scope-basierte Broadcasts fuer Status/Monitoring/Apps
-- `js/server/websocketScopes.js`: ordnet Scopes den Services und Message-Formaten zu
-
-### Services
-
-- `js/server/services/pcStatusService.js`: Ping + Uptime-Aufbereitung
-- `js/server/services/prometheusService.js`: Prometheus-Queries fuer Monitoring-Zeitreihen und Uptime
-- `js/server/services/appsService.js`: liest `apps.yml` und kombiniert Daten mit Deployment-Status
-- `js/server/services/kubernetesService.js`: Zugriff auf Kubernetes API (Deployments, Scale)
-- `js/server/services/powerService.js`: Power-Trigger Richtung Pi/Hardware
+- **`js/server.js`**: Express-App, statische Auslieferung (`/`, `/css`, `/js`, `/img`), Services, Intervalle für WebSocket-Broadcasts.
+- **`js/server/routes/registerRoutes.js`**: REST-Endpunkte (siehe unten).
+- **`js/server/websocket.js`**, **`js/server/websocketScopes.js`**: Scope-basierte Push-Updates.
+- **`js/server/services/`**:
+  - `pcStatusService.js`: Erreichbarkeit / Uptime-Aufbereitung
+  - `prometheusService.js`: PromQL / Monitoring-Overview
+  - `appsService.js`: `apps.yml` + Kubernetes-Deployments
+  - `kubernetesService.js`: API-Zugriff, Scale
+  - `powerService.js`: Power-Button und Hard-Shutdown Richtung Pi/Hardware (`pigpio-client`)
 
 ## Datenfluss
 
 ### 1) Status (Power + Timer)
 
-1. Backend fragt periodisch `pcStatusService.getPayload()`.
+1. Backend ruft periodisch `pcStatusService.getPayload()` auf.
 2. WebSocket sendet `type: "status"` an Clients.
-3. Frontend verarbeitet Nachricht in `script.js`.
-4. `powerPanel.applyStatus()` setzt LED-Farbe und aktualisiert Uptime-Anzeige.
+3. `powerPanel.applyStatus()` setzt LED und Uptime.
 
 ### 2) Monitoring (Header + Charts)
 
-1. `prometheusService.getOverview()` fuehrt PromQL-Queries aus (CPU, RAM, GPU, Netzwerk, Disk, Nodes).
-2. Ergebnis kommt als `type: "monitoring"` ueber WebSocket.
-3. `monitoringPanel.applyPayload()`:
-   - schreibt Header-Kennzahlen (`renderHeader()` aus `js/client/monitoring/header.js`)
-   - aktualisiert die vier Zeitreihen-Charts (ECharts)
-4. Das Mapping zwischen Metrik-Key und Header-DOM-Element steht in `js/client/monitoring/config.js` (`monitorHeaderBindings`).
+1. `prometheusService.getOverview()` führt PromQL aus (optional `range`, `step` per Query).
+2. WebSocket: `type: "monitoring"`.
+3. `monitoringPanel.applyPayload()` aktualisiert Header (`renderHeader`) und die vier Zeitreihen-Charts.
+4. Mapping Metrik → DOM: `js/client/monitoring/config.js` (`monitorHeaderBindings`).
 
-### 3) Apps (Cards + Scaling)
+### 3) Apps (Karten + Scaling)
 
-1. `appsService` liest `apps.yml` und verbindet App-Definitionen mit K8s-Deployment-Status.
-2. WebSocket sendet `type: "appsState"`.
-3. `appsPanel.applyAppsState()` rendert Karten und Replica-Infos.
-4. Slider-Aenderung ruft `/api/k8s/scale` auf und triggert danach ein Refresh.
-
-## Wo wird was "gebaut"?
-
-- **Monitoring-Header-Markup (HTML):** `index.html` (`<header id="monitoring-header">`)
-- **Monitoring-Header-Werte (JS):** `js/client/monitoring/header.js`
-- **Monitoring-Datenquelle:** `js/server/services/prometheusService.js`
-- **Verkabelung der Monitoring-Pipeline:** `js/client/monitoringPanel.js`, `js/server/websocketScopes.js`
+1. `appsService` liest `apps.yml` und kombiniert mit Deployment-Status.
+2. WebSocket: `type: "appsState"`.
+3. `appsPanel.applyAppsState()` rendert Karten; Slider nutzt `POST /api/k8s/scale` und anschließend Refresh.
 
 ## Konfiguration
 
-Relevante Werte in `js/server/config.js`:
+Zentrale Werte in **`js/server/config.js`** (teilweise per Umgebungsvariable überschreibbar):
 
-- `PORT` (Default `8080`)
-- `PC_IP` und `PI_IP`
-- `PROMETHEUS_BASE_URL`
-- Broadcast-Intervalle:
-  - `STATUS_BROADCAST_MS`
-  - `MONITORING_BROADCAST_MS`
-  - `APPS_BROADCAST_MS`
+| Variable / Konstante | Bedeutung |
+|----------------------|-----------|
+| `PORT` | HTTP-Port (Default `8080`) |
+| `PC_IP` | Ziel für Status/Prometheus-Fallbacks |
+| `PI_IP` | Ziel für Power-/Shutdown-Steuerung |
+| `PROMETHEUS_BASE_URL` | Basis-URL Prometheus |
+| `STATUS_BROADCAST_MS` | Intervall Status-Push (Default `5000`) |
+| `MONITORING_BROADCAST_MS` | Intervall Monitoring-Push (Default `2500`) |
+| `APPS_BROADCAST_MS` | Intervall Apps-Push (Default `5000`) |
 
-Zusatz: Das Dashboard versucht Prometheus ueber mehrere Fallback-URLs zu erreichen.
+Prometheus wird bei Bedarf über **Fallback-URLs** (siehe `js/server.js`) versucht.
 
-## API- und WebSocket-Ueberblick
+## REST-API
 
-### REST
+| Methode | Pfad | Zweck |
+|---------|------|--------|
+| `GET` | `/api/status` | PC-Status / Uptime |
+| `GET` | `/api/press-button` | Power-Impuls triggern |
+| `POST` | `/api/hard-shutdown` | Hard-Shutdown (vom Safety-Switch) |
+| `GET` | `/api/monitoring/overview` | Monitoring-JSON (Query: `range`, `step`) |
+| `GET` | `/api/apps` | Liste aus `apps.yml` |
+| `GET` | `/api/k8s/deployments` | Deployment-Übersicht |
+| `POST` | `/api/k8s/scale` | Body: `namespace`, `deployment`, `replicas` |
 
-- `GET /api/status`
-- `GET /api/press-button`
-- `GET /api/monitoring/overview`
-- `GET /api/apps`
-- `GET /api/k8s/deployments`
-- `POST /api/k8s/scale`
+## WebSocket (`/ws`)
 
-### WebSocket (`/ws`)
-
-- Initial push bei Verbindung: `status`, `monitoring`, `appsState`
-- Periodische Broadcasts fuer alle Scopes
-- Client kann Refresh senden (`type: "refresh"`, optional mit `scope`)
+- Nach Verbindung: Push für `status`, `monitoring`, `appsState`.
+- Regelmäßige Broadcasts pro Scope.
+- Client: `type: "refresh"` mit optionalem `scope` (`status`, `monitoring`, `apps`, `all`) — siehe `js/client/protocol.js`.
 
 ## Projektstruktur (vereinfacht)
 
 ```text
 dashboard/
-├── index.html
+├── Readme.md
+├── package.json
 ├── apps.yml
+├── index.html
 ├── css/
+│   ├── style.css
+│   ├── monitoring.css
+│   ├── apps.css
+│   ├── timer.css
+│   ├── mode.css
+│   ├── power.css
+│   ├── style/          # root, themes, layout
+│   └── monitoring/     # header, gauge, fingerprint-scan, safety-switch, charts, …
 ├── img/
 └── js/
     ├── script.js
+    ├── server.js              # HTTP/WebSocket-Einstieg
     ├── client/
     │   ├── wsClient.js
     │   ├── powerPanel.js
+    │   ├── timerDisplay.js
     │   ├── monitoringPanel.js
+    │   ├── themeSwitcher.js
+    │   ├── pageSwitcher.js
     │   ├── appsPanel.js
+    │   ├── safetySwitch.js
+    │   ├── fingerprintScan.js
+    │   ├── protocol.js
+    │   ├── apps/
     │   └── monitoring/
-    │       ├── config.js
-    │       ├── header.js
-    │       └── chartOptions.js
     └── server/
         ├── config.js
         ├── websocket.js
         ├── websocketScopes.js
+        ├── protocol.js
         ├── routes/registerRoutes.js
         └── services/
 ```
+
+Hinweis: Zum Starten **`node js/server.js`** im Projektroot verwenden.
+
+## Lizenz
+
+ISC (siehe `package.json`).
