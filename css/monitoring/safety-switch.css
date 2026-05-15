@@ -179,7 +179,7 @@
 }
 
 .safety-switch-cover {
-  position: relative;
+  position: absolute;
   inset: 18% 8% 4% 12%;
   z-index: 10;
   appearance: none;
@@ -226,35 +226,43 @@
 }
 
 .attention-icon {
-  aspect-ratio: 1;
-  border-left: 60px solid transparent;
-  border-right: 60px solid transparent;
-  border-bottom: 104px solid #f9da4c;
+  position: relative;
+  flex-shrink: 0;
+  width: 50%;
+  max-width: 100%;
+  aspect-ratio: 1 / 0.8660254;
+  background-color: #f9da4c;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 /* Der obere Strich des Ausrufezeichens */
 .attention-icon::before {
   content: '';
   position: absolute;
-  top: 50%;
+  top: 46%;
   left: 50%;
-  transform: translateY(50%), translateX(50%);
+  transform: translate(-50%, -50%);
   transform-origin: center center;
-  width: 10%;
-  height: 50%;
+  width: 11%;
+  min-width: 2px;
+  height: 36%;
+  min-height: 4px;
   background-color: #111;
-  border-radius: 5px;
+  border-radius: 999px;
 }
 
 /* Der untere Punkt des Ausrufezeichens */
 .attention-icon::after {
   content: '';
   position: absolute;
-  top: 80px; 
-  left: -5px;
-  width: 10px;
-  height: 10px;
+  left: 50%;
+  bottom: 13%;
+  transform: translateX(-50%);
+  width: 11%;
+  min-width: 3px;
+  max-width: 0.65rem;
+  aspect-ratio: 1;
   background-color: #111;
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.08em 0.22em rgba(0, 0, 0, 0.3);
 }
