@@ -34,7 +34,7 @@ Standard-Port: **8080** (siehe `js/server/config.js` bzw. Umgebungsvariable `POR
 - **`app-detail.html`**: Pro-Deployment-Ansicht (drei Replica-Controls nebeneinander im linken Drittel, Pod-Logs im rechten Bereich). Wird von Express unter `/app-detail.html` ausgeliefert.
 - **`css/style.css`**: Schrift, Paletten (`style/root.css`), Themes (`theme-light.css` / `theme-dark.css`), Layout.
 - **`css/monitoring.css`**: Monitoring-spezifische Module (Header, Gauge, Fingerabdruck-Scan, Safety-Switch, Charts, Hilfsklassen).
-- **`css/apps.css`**: App-Karten, App-Detail-Layout, Replica-Control-Widgets, Log-Panel.
+- **`css/apps.css`**: Bundle für App-Karten (`apps/cards.css`), Replica-Control (`apps/replica-control.css`) und App-Detail (`apps/detail.css`).
 
 ### Farbschema (CSS)
 
@@ -61,6 +61,7 @@ API pro Familie: `--hue-{neutral,blue,green,yellow,orange,red,purple}-{hl|g1|g2|
 - **`js/client/detailAccess.js`**: Freischalt-Flag für die Detailseite (`sessionStorage`).
 - **`js/client/wsClient.js`**: WebSocket `/ws`, Reconnect, Refresh mit `scope`.
 - **`js/client/powerPanel.js`**: Power-Button, LED, Status-Anwendung.
+- **`js/client/timerMarkup.js`**: erzeugt das 7-Segment-Markup in `index.html`.
 - **`js/client/timerDisplay.js`**: 7-Segment-Uptime.
 - **`js/client/monitoringPanel.js`**: Header + ECharts aus Monitoring-Payload.
 - **`js/client/monitoring/`**: `config.js` (Chart-Liste, Header-Bindings), `header.js`, `chartOptions.js`, `style.js`.
@@ -153,6 +154,7 @@ dashboard/
 │   ├── style.css
 │   ├── monitoring.css
 │   ├── apps.css
+│   ├── apps/           # cards, replica-control, detail
 │   ├── timer.css
 │   ├── mode.css
 │   ├── power.css
@@ -166,6 +168,7 @@ dashboard/
     ├── client/
     │   ├── wsClient.js
     │   ├── powerPanel.js
+    │   ├── timerMarkup.js
     │   ├── timerDisplay.js
     │   ├── monitoringPanel.js
     │   ├── themeSwitcher.js

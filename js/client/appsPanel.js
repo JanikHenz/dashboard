@@ -30,7 +30,10 @@ export function createAppsPanel(_options = {}) {
     if (!elements.grid) return;
 
     if (data.error && (!Array.isArray(data.apps) || data.apps.length === 0)) {
-      elements.grid.innerHTML = '<p style="color:red; grid-column: 1 / -1; text-align: center;">Could not load apps.</p>';
+      const errorMessage = document.createElement('p');
+      errorMessage.className = 'apps-error';
+      errorMessage.textContent = 'Could not load apps.';
+      elements.grid.replaceChildren(errorMessage);
       return;
     }
 

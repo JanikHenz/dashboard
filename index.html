@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Dashboard</title>
   <link href="css/style.css" rel="stylesheet">
   <link href="css/monitoring.css" rel="stylesheet">
   <link href="css/timer.css" rel="stylesheet">
@@ -28,79 +28,7 @@
               <span class="screw screw--top-right screw--tilt" ></span>
               <div class="header-left">
                 <div class="timer">
-                  <div class="segment">
-                    <!-- DAYS -->
-                    <div class="group">
-                      <div class="digits">
-                        <div class="digit" id="d0">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                        <div class="digit" id="d1">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="separator">:</div>
-                    <!-- HOURS -->
-                    <div class="group">
-                      <div class="digits">
-                        <div class="digit" id="h0">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                        <div class="digit" id="h1">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="separator">:</div>
-                    <!-- MINUTES -->
-                    <div class="group">
-                      <div class="digits">
-                        <div class="digit" id="m0">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                        <div class="digit" id="m1">
-                          <div class="seg seg-a"></div>
-                          <div class="seg seg-b"></div>
-                          <div class="seg seg-c"></div>
-                          <div class="seg seg-d"></div>
-                          <div class="seg seg-e"></div>
-                          <div class="seg seg-f"></div>
-                          <div class="seg seg-g"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="segment" data-timer-segment></div>
                 </div>
               </div>
               <div class="header-center">
@@ -188,7 +116,7 @@
             </div>
           </div>
           <div class="gauge-space">
-            <div class="gauge" id="cpu-gauge" style="--gauge-value: 0;">
+            <div class="gauge" id="cpu-gauge">
               <div class="gauge-ticks" ></div>
               <div class="gauge-ticks gauge-ticks-major" ></div>
               <div class="gauge-needle-wrap" >

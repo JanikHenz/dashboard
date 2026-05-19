@@ -11,6 +11,7 @@
 }
 
 .gauge {
+  --gauge-value: 0;
   position: relative;
   height: 95%;
   aspect-ratio: 1;

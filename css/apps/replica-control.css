@@ -1,0 +1,144 @@
+/*=========== Replica Control =====*/
+.replica-control {
+  position: relative;
+  background: var(--panel-gradient);
+  border: var(--border-comic);
+  box-shadow: var(--hard-shadow);
+  border-radius: 30px;
+  padding: 1vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  overflow-y: hidden;
+  container-type: inline-size;
+  flex-shrink: 0;
+  min-width: 6rem;
+}
+
+.replica-control h2 {
+  font-family: var(--comic-font);
+  font-size: clamp(1.5rem, 1.5vw, 10vw);
+  color: var(--text-main);
+  text-align: center;
+}
+
+.replica-control .app-name {
+  font-family: var(--comic-font);
+  font-size: clamp(1rem, 0.9vw, 5vw);
+  color: var(--on);
+  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
+  paint-order: stroke fill;
+  text-shadow: var(--text-shadow-strong);
+  text-align: center;
+  word-break: break-word;
+}
+
+.replica-info {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.replica-count {
+  font-family: var(--comic-font);
+  font-size: 2rem;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
+  paint-order: stroke fill;
+  text-shadow: var(--text-shadow-strong);
+}
+
+.replica-label {
+  font-family: var(--comic-font);
+  font-size: 1rem;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-soft) var(--text-stroke-color);
+  paint-order: stroke fill;
+  text-shadow: var(--text-shadow-soft);
+}
+
+/*=========== Slider =====*/
+.replica-slider {
+  display: flex;
+  flex-direction: column;
+  width: min(5rem, 35%);
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+  overflow: visible;
+  background: var(--recessed-gradient);
+  border: var(--border-comic);
+  border-radius: 10px;
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  writing-mode: vertical-lr;
+  display: flex;
+  direction: rtl;
+  width: 6px;
+  height: 100%;
+  flex: 1;
+  cursor: pointer;
+  overflow: visible;
+  background: transparent;
+  border: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100cqw;
+  aspect-ratio: 3/1;
+  background:
+    var(--emboss-sheen),
+    var(--slider-thumb);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: height 0.2s ease;
+  border: var(--border-comic);
+}
+
+.slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 75cqw;
+  background:
+    var(--emboss-sheen),
+    var(--slider-thumb-alt);
+  cursor: pointer;
+  border-radius: 5px;
+  border: var(--border-comic);
+}
+
+.slider::-moz-range-track {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.slider::-moz-range-progress {
+  background: transparent;
+  border: none;
+}
+
+.slider-value {
+  font-family: var(--comic-font);
+  font-size: 1.5rem;
+  color: var(--text-main);
+  -webkit-text-stroke: var(--text-stroke-strong) var(--text-stroke-color);
+  paint-order: stroke fill;
+  text-shadow: var(--text-shadow-strong);
+  text-align: center;
+}

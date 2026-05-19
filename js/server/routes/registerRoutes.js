@@ -1,3 +1,11 @@
+function ensureKubernetesAvailable(kubernetesService, res) {
+  if (kubernetesService.isAvailable()) {
+    return true;
+  }
+  res.status(503).json({ error: 'Kubernetes API unavailable' });
+  return false;
+}
+
 function registerRoutes(app, services) {
   const {
     pcStatusService,
@@ -29,10 +37,7 @@ function registerRoutes(app, services) {
   });
 
   app.get('/api/k8s/deployments', async (_req, res) => {
-    if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API unavailable' });
-      return;
-    }
+    if (!ensureKubernetesAvailable(kubernetesService, res)) return;
     try {
       res.json(await appsService.getDeployments());
     } catch (error) {
@@ -42,10 +47,7 @@ function registerRoutes(app, services) {
   });
 
   app.post('/api/k8s/scale', async (req, res) => {
-    if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API unavailable' });
-      return;
-    }
+    if (!ensureKubernetesAvailable(kubernetesService, res)) return;
 
     const { namespace, deployment, replicas } = req.body;
     if (!namespace || !deployment || replicas === undefined) {
@@ -62,10 +64,7 @@ function registerRoutes(app, services) {
   });
 
   app.post('/api/k8s/resources', async (req, res) => {
-    if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API unavailable' });
-      return;
-    }
+    if (!ensureKubernetesAvailable(kubernetesService, res)) return;
 
     const { namespace, deployment, cpuRequest, memoryRequest } = req.body || {};
     if (!namespace || !deployment) {
@@ -92,10 +91,7 @@ function registerRoutes(app, services) {
   });
 
   app.get('/api/k8s/pod-logs', async (req, res) => {
-    if (!kubernetesService.isAvailable()) {
-      res.status(503).json({ error: 'Kubernetes API unavailable' });
-      return;
-    }
+    if (!ensureKubernetesAvailable(kubernetesService, res)) return;
     const namespace = req.query.namespace;
     const deployment = req.query.deployment;
     const tailLines = req.query.tailLines;

@@ -9,8 +9,10 @@ import { MESSAGE_TYPES, SCOPES } from './client/protocol.js';
 import { initSafetySwitch } from './client/safetySwitch.js';
 import { initFingerprintScan } from './client/fingerprintScan.js';
 import { clearDetailPageUnlock } from './client/detailAccess.js';
+import { initTimerMarkup } from './client/timerMarkup.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  initTimerMarkup();
   clearDetailPageUnlock();
   const monitoringPanel = createMonitoringPanel();
   let wsClient = null;
