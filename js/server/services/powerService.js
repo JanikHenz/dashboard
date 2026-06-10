@@ -37,7 +37,7 @@ function createPowerService({ piIp }) {
   }
 
   function hardShutdown() {
-    return pressPowerPin(5000);
+    return pressPowerPin(10000);
   }
 
   return {

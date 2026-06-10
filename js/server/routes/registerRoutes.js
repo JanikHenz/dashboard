@@ -121,11 +121,11 @@ function registerRoutes(app, services) {
     res.json(payload);
   });
 
-  app.get('/api/apps', (_req, res) => {
+  app.get('/api/apps', async (_req, res) => {
     try {
-      res.json(appsService.getAppsList());
+      res.json(await appsService.getAppsList());
     } catch (error) {
-      console.error('Error reading apps.yml:', error);
+      console.error('Error loading apps from Kubernetes:', error);
       res.status(500).json([]);
     }
   });

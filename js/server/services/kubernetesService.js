@@ -31,6 +31,8 @@ function validateClusterServer(serverUrl) {
 function createKubernetesService() {
   let k8sAppsApi = null;
   let k8sCoreApi = null;
+  let k8sNetworkingApi = null;
+  let k8sCustomObjectsApi = null;
   let mode = 'disabled';
 
   async function tryInitializeClient(k8s, loadConfig, targetMode, successMessage, unavailableMessage) {
@@ -50,6 +52,8 @@ function createKubernetesService() {
 
     const appsApi = kubeConfig.makeApiClient(k8s.AppsV1Api);
     const coreApi = kubeConfig.makeApiClient(k8s.CoreV1Api);
+    const networkingApi = kubeConfig.makeApiClient(k8s.NetworkingV1Api);
+    const customObjectsApi = kubeConfig.makeApiClient(k8s.CustomObjectsApi);
     try {
       await appsApi.listDeploymentForAllNamespaces({ limit: 1 });
     } catch (error) {
@@ -61,6 +65,8 @@ function createKubernetesService() {
 
     k8sAppsApi = appsApi;
     k8sCoreApi = coreApi;
+    k8sNetworkingApi = networkingApi;
+    k8sCustomObjectsApi = customObjectsApi;
     mode = targetMode;
     console.log(successMessage);
     return true;
@@ -89,18 +95,20 @@ function createKubernetesService() {
 
     k8sAppsApi = null;
     k8sCoreApi = null;
+    k8sNetworkingApi = null;
+    k8sCustomObjectsApi = null;
     mode = 'disabled';
     console.log('K8s features are disabled');
   }
 
   function ensureClient() {
-    if (!k8sAppsApi || !k8sCoreApi) {
+    if (!k8sAppsApi || !k8sCoreApi || !k8sNetworkingApi || !k8sCustomObjectsApi) {
       throw new Error('Kubernetes API unavailable');
     }
   }
 
   function isAvailable() {
-    return Boolean(k8sAppsApi && k8sCoreApi);
+    return Boolean(k8sAppsApi && k8sCoreApi && k8sNetworkingApi && k8sCustomObjectsApi);
   }
 
   function getMode() {
@@ -220,6 +228,38 @@ function createKubernetesService() {
     return { pods, tailLines: maxTail };
   }
 
+  async function listAllDeployments() {
+    ensureClient();
+    const response = await k8sAppsApi.listDeploymentForAllNamespaces();
+    const body = pickK8sResource(response);
+    return Array.isArray(body?.items) ? body.items : [];
+  }
+
+  async function listAllIngresses() {
+    ensureClient();
+    const response = await k8sNetworkingApi.listIngressForAllNamespaces();
+    const body = pickK8sResource(response);
+    return Array.isArray(body?.items) ? body.items : [];
+  }
+
+  async function listAllServices() {
+    ensureClient();
+    const response = await k8sCoreApi.listServiceForAllNamespaces();
+    const body = pickK8sResource(response);
+    return Array.isArray(body?.items) ? body.items : [];
+  }
+
+  async function listAllIngressRoutes() {
+    ensureClient();
+    const response = await k8sCustomObjectsApi.listClusterCustomObject({
+      group: 'traefik.io',
+      version: 'v1alpha1',
+      plural: 'ingressroutes'
+    });
+    const body = pickK8sResource(response);
+    return Array.isArray(body?.items) ? body.items : [];
+  }
+
   async function listPodsForDeployment(namespace, deploymentName) {
     ensureClient();
     const dep = await readDeployment(namespace, deploymentName);
@@ -247,6 +287,10 @@ function createKubernetesService() {
     isAvailable,
     getMode,
     readDeployment,
+    listAllDeployments,
+    listAllIngresses,
+    listAllIngressRoutes,
+    listAllServices,
     scaleDeployment,
     updatePrimaryContainerRequests,
     getDeploymentPodLogs,

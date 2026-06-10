@@ -25,16 +25,21 @@ export function createAppCard({ app, deployment }) {
   const threed = document.createElement('div');
   threed.className = 'threed';
 
-  const icon = document.createElement('div');
+  const icon = document.createElement(app.url ? 'a' : 'div');
   icon.className = 'icon';
 
-  const link = document.createElement('a');
-  link.href = app.url;
-  link.target = '_blank';
+  if (app.url) {
+    icon.href = app.url;
+    icon.target = '_blank';
+    icon.rel = 'noopener noreferrer';
+  }
 
-  const img = document.createElement('img');
-  img.src = app.icon;
-  img.alt = app.name;
+  if (app.icon) {
+    const img = document.createElement('img');
+    img.src = app.icon;
+    img.alt = app.name;
+    icon.appendChild(img);
+  }
 
   const nameTag = document.createElement('div');
   nameTag.className = 'nameTag';
@@ -42,9 +47,6 @@ export function createAppCard({ app, deployment }) {
   const appName = document.createElement('label');
   appName.className = 'appName';
   appName.textContent = app.name;
-
-  link.appendChild(img);
-  icon.appendChild(link);
   threed.appendChild(icon);
   appDiv.appendChild(threed);
   appDiv.appendChild(nameTag);
