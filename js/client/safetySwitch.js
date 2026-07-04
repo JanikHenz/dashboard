@@ -35,13 +35,6 @@ export function initSafetySwitch({ onRequestRefresh } = {}) {
     window.setTimeout(closeCover, collapseDelayMs);
   }
 
-  async function isServerOnline() {
-    const response = await fetch('/api/status');
-    if (!response.ok) return false;
-    const payload = await response.json();
-    return payload?.is_on === true;
-  }
-
   async function triggerHardShutdown() {
     const confirmed = confirm('Server wirklich hart herunterfahren?');
     if (!confirmed) {
@@ -51,13 +44,6 @@ export function initSafetySwitch({ onRequestRefresh } = {}) {
 
     isSendingShutdown = true;
     try {
-      const serverOnline = await isServerOnline();
-      if (!serverOnline) {
-        alert('Der Server ist bereits aus oder nicht erreichbar.');
-        resetSwitch();
-        return;
-      }
-
       const response = await fetch('/api/hard-shutdown', { method: 'POST' });
       if (!response.ok) {
         alert('Hard Shutdown konnte nicht ausgelöst werden.');
